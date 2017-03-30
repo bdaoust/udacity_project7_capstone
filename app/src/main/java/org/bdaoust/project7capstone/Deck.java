@@ -58,6 +58,10 @@ public class Deck {
     }
 
     public void removeCardCopies(int multiverseId){
+        if(mCards.containsKey(multiverseId)){
+            mCards.remove(multiverseId);
+            mNumbCopies.remove(multiverseId);
+        }
     }
 
     public ArrayList<Card> getCards(){

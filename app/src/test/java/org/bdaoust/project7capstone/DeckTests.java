@@ -112,6 +112,44 @@ public class DeckTests {
 
     @Test
     public void testRemoveCardCopies(){
+        int multiverseId;
+        Card card1;
+        Card card2;
+        Card card3;
+        ArrayList<Card> cards;
 
+        mDeck = new Deck(mDeckName);
+
+        multiverseId = 191089; //Lightning Bolt (Magic 2010)
+        card1 = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card1, 6);
+
+        multiverseId = 191076; //Fireball (Magic 2010)
+        card2 = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card2, 3);
+
+        multiverseId = 1824; //Maze of Ith (The Dark)
+        card3 = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card3, 25);
+
+        mDeck.removeCardCopies(191076); //Removing all copies of Fireball (Magic 2010)
+        cards = mDeck.getCards();
+        assertEquals(2, cards.size());
+        assertEquals(0, mDeck.getNumbCopies(191076));
+        assertEquals(card1, cards.get(0));
+        assertEquals(card3, cards.get(1));
+
+        mDeck.removeCardCopies(1824); //Removing all copies of Maze of Ith (The Dark)
+        cards = mDeck.getCards();
+        assertEquals(1, cards.size());
+        assertEquals(0, mDeck.getNumbCopies(1824));
+        assertEquals(card1, cards.get(0));
+
+        //Attempt to remove a Card that is not part of the Deck (which should have no effect)
+        mDeck.removeCardCopies(1234);
+        cards = mDeck.getCards();
+        assertEquals(1, cards.size());
+        assertEquals(0, mDeck.getNumbCopies(1824));
+        assertEquals(card1, cards.get(0));
     }
 }
