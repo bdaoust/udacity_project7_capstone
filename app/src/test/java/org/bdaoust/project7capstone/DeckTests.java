@@ -10,6 +10,7 @@ import io.magicthegathering.javasdk.resource.Card;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class DeckTests {
 
@@ -98,5 +99,19 @@ public class DeckTests {
         assertEquals(1, mDeck.getNumbCopies(191089));
         assertEquals(9, mDeck.getNumbCopies(191076));
         assertEquals(3, mDeck.getNumbCopies(1824));
+
+        //Test adding a negative number of cards
+        try{
+            mDeck.addCardCopies(card1, -5);
+            fail("An IllegalArgumentException should have been thrown.");
+        } catch (IllegalArgumentException e){
+
+        }
+
+    }
+
+    @Test
+    public void testRemoveCardCopies(){
+
     }
 }

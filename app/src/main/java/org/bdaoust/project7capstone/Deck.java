@@ -34,7 +34,7 @@ public class Deck {
 
         multiverseId = card.getMultiverseid();
         if(numb < 0){
-            throw new IllegalArgumentException("The number of copies must can't be negative");
+            throw new IllegalArgumentException("The number of copies can't be negative");
         }
 
         if(mCards.containsKey(multiverseId)){
