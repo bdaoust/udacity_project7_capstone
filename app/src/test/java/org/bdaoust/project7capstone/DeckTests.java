@@ -73,7 +73,7 @@ public class DeckTests {
         assertEquals(1, mDeck.getNumbCopies(191089));
         assertEquals(2, mDeck.getNumbCopies(191076));
 
-        multiverseId = 1824; //Maze of Ith (The Dark)
+        multiverseId = 3263; //Phyrexian Dreadnought (Mirage)
         card3 = CardAPI.getCard(multiverseId);
         mDeck.addCardCopies(card3, 3);
         cards = mDeck.getCards();
@@ -85,7 +85,7 @@ public class DeckTests {
         //Check that the Deck has the right number of copies for each card.
         assertEquals(1, mDeck.getNumbCopies(191089));
         assertEquals(2, mDeck.getNumbCopies(191076));
-        assertEquals(3, mDeck.getNumbCopies(1824));
+        assertEquals(3, mDeck.getNumbCopies(3263));
 
         //Add more copies of Fireball (Magic 2010)
         mDeck.addCardCopies(card2, 7);
@@ -98,13 +98,13 @@ public class DeckTests {
         //Check that the Deck has the right number of copies for each card.
         assertEquals(1, mDeck.getNumbCopies(191089));
         assertEquals(9, mDeck.getNumbCopies(191076));
-        assertEquals(3, mDeck.getNumbCopies(1824));
+        assertEquals(3, mDeck.getNumbCopies(3263));
 
         //Test adding a negative number of cards
         try{
             mDeck.addCardCopies(card1, -5);
             fail("An IllegalArgumentException should have been thrown.");
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException ignored){
 
         }
     }
@@ -127,7 +127,7 @@ public class DeckTests {
         card2 = CardAPI.getCard(multiverseId);
         mDeck.addCardCopies(card2, 3);
 
-        multiverseId = 1824; //Maze of Ith (The Dark)
+        multiverseId = 3263; //Phyrexian Dreadnought (Mirage)
         card3 = CardAPI.getCard(multiverseId);
         mDeck.addCardCopies(card3, 25);
 
@@ -138,17 +138,17 @@ public class DeckTests {
         assertEquals(card1, cards.get(0));
         assertEquals(card3, cards.get(1));
 
-        mDeck.removeCardCopies(1824); //Removing all copies of Maze of Ith (The Dark)
+        mDeck.removeCardCopies(3263); //Removing all copies of Phyrexian Dreadnought (Mirage)
         cards = mDeck.getCards();
         assertEquals(1, cards.size());
-        assertEquals(0, mDeck.getNumbCopies(1824));
+        assertEquals(0, mDeck.getNumbCopies(3263));
         assertEquals(card1, cards.get(0));
 
         //Attempt to remove a Card that is not part of the Deck (which should have no effect)
         mDeck.removeCardCopies(1234);
         cards = mDeck.getCards();
         assertEquals(1, cards.size());
-        assertEquals(0, mDeck.getNumbCopies(1824));
+        assertEquals(0, mDeck.getNumbCopies(3263));
         assertEquals(card1, cards.get(0));
     }
 
@@ -169,7 +169,7 @@ public class DeckTests {
         card2 = CardAPI.getCard(multiverseId);
         mDeck.addCardCopies(card2, 3);
 
-        multiverseId = 1824; //Maze of Ith (The Dark)
+        multiverseId = 3263; //Phyrexian Dreadnought (Mirage)
         card3 = CardAPI.getCard(multiverseId);
 
         assertEquals(5, mDeck.getNumbCopies(191089));
@@ -191,7 +191,7 @@ public class DeckTests {
         //If the Card isn't part of the Deck it should be added
         mDeck.setCardCopies(card3, 5);
         assertEquals(13, mDeck.getNumbCopies(191076));
-        assertEquals(5, mDeck.getNumbCopies(1824));
+        assertEquals(5, mDeck.getNumbCopies(3263));
         assertEquals(2, mDeck.getCards().size());
 
         //Test setting a negative number of cards
