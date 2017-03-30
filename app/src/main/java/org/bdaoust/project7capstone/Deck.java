@@ -45,8 +45,27 @@ public class Deck {
         }
     }
 
-    public void setCardCopies(Card card, int numb){
+    public void setCardCopies(@NonNull Card card, int numb){
+        int multiverseId;
 
+        multiverseId = card.getMultiverseid();
+        if(numb < 0){
+            throw new IllegalArgumentException("The number of copies can't be negative");
+        }
+
+        if(numb > 0){
+            if(mCards.containsKey(multiverseId)){
+                mNumbCopies.put(multiverseId, numb);
+            } else {
+                mCards.put(multiverseId, card);
+                mNumbCopies.put(multiverseId, numb);
+            }
+        } else {
+            if(mCards.containsKey(multiverseId)){
+                mCards.remove(multiverseId);
+                mNumbCopies.remove(multiverseId);
+            }
+        }
     }
 
     public int getNumbCopies(int multiverseId){
