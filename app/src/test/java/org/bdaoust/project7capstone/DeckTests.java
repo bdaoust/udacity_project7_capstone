@@ -198,7 +198,7 @@ public class DeckTests {
         try{
             mDeck.setCardCopies(card3, -1);
             fail("An IllegalArgumentException should have been thrown.");
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException ignored){
 
         }
     }
