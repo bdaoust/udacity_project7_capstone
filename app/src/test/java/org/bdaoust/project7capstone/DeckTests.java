@@ -40,6 +40,16 @@ public class DeckTests {
     }
 
     @Test
+    public void testGetSetLastUpdatedTimestamp(){
+        long lastUpdatedTimestamp;
+
+        lastUpdatedTimestamp = 123456;
+        mDeck = new Deck(mDeckName);
+        mDeck.setLastUpdatedTimestamp(lastUpdatedTimestamp);
+        assertEquals(123456, mDeck.getLastUpdatedTimestamp());
+    }
+
+    @Test
     public void testAddCardCopies(){
         int multiverseId;
         Card card1;

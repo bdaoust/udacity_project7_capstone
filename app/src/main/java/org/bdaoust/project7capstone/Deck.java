@@ -12,6 +12,7 @@ import io.magicthegathering.javasdk.resource.Card;
 public class Deck {
 
     private String mDeckName;
+    private long mLastUpdatedTimestamp;
     private HashMap<Integer, Card> mCards;
     private HashMap<Integer, Integer> mNumbCopies;
 
@@ -27,6 +28,14 @@ public class Deck {
 
     public void setDeckName(String deckName){
         mDeckName = deckName;
+    }
+
+    public long getLastUpdatedTimestamp(){
+        return mLastUpdatedTimestamp;
+    }
+
+    public void setLastUpdatedTimestamp(long lastUpdatedTimestamp){
+        mLastUpdatedTimestamp = lastUpdatedTimestamp;
     }
 
     public void addCardCopies(@NonNull Card card, int numb){
