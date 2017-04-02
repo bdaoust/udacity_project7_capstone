@@ -212,4 +212,37 @@ public class DeckTests {
 
         }
     }
+
+    @Test
+    public void testGetNumbCards(){
+        mDeck = new Deck(mDeckName);
+
+        assertEquals(0, mDeck.getNumbCards());
+
+        int multiverseId;
+        Card card1;
+        Card card2;
+        Card card3;
+
+        mDeck = new Deck(mDeckName);
+
+        multiverseId = 191089; //Lightning Bolt (Magic 2010)
+        card1 = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card1, 17);
+        assertEquals(17, mDeck.getNumbCards());
+
+        multiverseId = 191076; //Fireball (Magic 2010)
+        card2 = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card2, 5);
+        assertEquals(22, mDeck.getNumbCards());
+
+        multiverseId = 3263; //Phyrexian Dreadnought (Mirage)
+        card3 = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card3, 7);
+        assertEquals(29, mDeck.getNumbCards());
+
+        //Change the number of Phyrexian Dreadnought (Mirage) copies
+        mDeck.setCardCopies(card3, 5);
+        assertEquals(27, mDeck.getNumbCards());
+    }
 }

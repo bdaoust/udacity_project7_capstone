@@ -106,4 +106,15 @@ public class Deck {
 
         return sortedCards;
     }
+
+    public int getNumbCards(){
+        int numbCards;
+
+        numbCards = 0;
+        for(int numbCopies: mNumbCopies.values()){
+            numbCards += numbCopies;
+        }
+
+        return numbCards;
+    }
 }
