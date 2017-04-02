@@ -7,6 +7,8 @@ public class SampleDeck extends Deck{
     public SampleDeck(){
         super("Feel the Burn");
 
+        this.setLastUpdatedTimestamp(1491006413000l);
+
         Card card;
 
         card = new Card();
