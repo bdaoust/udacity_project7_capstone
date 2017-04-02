@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,8 @@ public class DecksFragment extends Fragment{
         @Override
         public void onBindViewHolder(CustomViewHolder holder, int position) {
             holder.deckName.setText(mDecks[position].getDeckName() + " " + position);
+            holder.numbCards.setText(mDecks[position].getNumbCards() + " cards - ");
+            holder.lastUpdated.setText(DateUtils.formatDateTime(getContext(), mDecks[position].getLastUpdatedTimestamp(), DateUtils.FORMAT_SHOW_YEAR));
         }
 
         @Override
@@ -66,11 +69,15 @@ public class DecksFragment extends Fragment{
     private class CustomViewHolder extends RecyclerView.ViewHolder{
 
         public TextView deckName;
+        public TextView numbCards;
+        public TextView lastUpdated;
 
         public CustomViewHolder(View itemView) {
             super(itemView);
 
             deckName = (TextView) itemView.findViewById(R.id.deckName);
+            numbCards = (TextView) itemView.findViewById(R.id.numbCards);
+            lastUpdated = (TextView) itemView.findViewById(R.id.lastUpdated);
         }
     }
 }
