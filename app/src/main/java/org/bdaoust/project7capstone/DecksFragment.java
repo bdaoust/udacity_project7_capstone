@@ -1,5 +1,6 @@
 package org.bdaoust.project7capstone;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -46,11 +47,23 @@ public class DecksFragment extends Fragment{
 
         @Override
         public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            CustomViewHolder customViewHolder;
             View view;
 
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.deck_list_item, parent, false);
+            customViewHolder = new CustomViewHolder(view);
 
-            return new CustomViewHolder(view);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent;
+
+                    intent = new Intent(getContext(), DeckDetailsActivity.class);
+                    startActivity(intent);
+                }
+            });
+
+            return customViewHolder;
         }
 
         @Override
