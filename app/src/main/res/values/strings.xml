@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MTG Manager</string>
+
+    <string name="action_create_deck">Create Deck</string>
 </resources>
