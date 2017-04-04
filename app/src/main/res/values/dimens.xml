@@ -4,4 +4,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="create_deck_header_text_size">18sp</dimen>
+    <dimen name="create_deck_dialog_padding">8dp</dimen>
+    <dimen name="create_deck_input_width">280dp</dimen>
+    <dimen name="create_deck_input_text_size">16sp</dimen>
 </resources>

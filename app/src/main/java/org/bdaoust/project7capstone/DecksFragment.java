@@ -3,6 +3,7 @@ package org.bdaoust.project7capstone;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,12 +17,14 @@ import android.widget.TextView;
 public class DecksFragment extends Fragment{
 
     RecyclerView mRecyclerView;
+    CreateDeckDialogFragment mCreateDeckDialogFragment;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView;
         Deck[] decks;
+        FloatingActionButton createDeckFAB;
 
         rootView = inflater.inflate(R.layout.fragment_decks, container, false);
 
@@ -33,6 +36,16 @@ public class DecksFragment extends Fragment{
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.deckList);
         mRecyclerView.setAdapter(new CustomAdapter(decks));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        mCreateDeckDialogFragment = new CreateDeckDialogFragment();
+
+        createDeckFAB = (FloatingActionButton) rootView.findViewById(R.id.createDeckFAB);
+        createDeckFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCreateDeckDialogFragment.show(getFragmentManager(), "CreateDeck");
+            }
+        });
 
         return rootView;
     }
