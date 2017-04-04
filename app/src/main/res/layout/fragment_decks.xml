@@ -7,7 +7,10 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/deckList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/createDeckFAB"
@@ -16,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
         android:src="@drawable/ic_add_black_48dp"
         android:contentDescription="@string/action_create_deck"/>
 </FrameLayout>

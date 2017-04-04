@@ -5,7 +5,5 @@
     android:name="org.bdaoust.project7capstone.DecksFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-    android:layout_marginRight="@dimen/activity_horizontal_margin"
     tools:context="org.bdaoust.project7capstone.DecksFragment"
     tools:layout="@layout/fragment_decks" />
