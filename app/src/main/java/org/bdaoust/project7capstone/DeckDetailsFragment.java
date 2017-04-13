@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -35,7 +38,28 @@ public class DeckDetailsFragment extends Fragment{
 
         mIsLargeLayout = getResources().getBoolean(R.bool.large_layout);
 
+        setHasOptionsMenu(true);
+
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_deck_details, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_edit:
+                return true;
+            case R.id.action_delete:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private class CustomAdapter extends RecyclerView.Adapter<CustomViewHolder>{
