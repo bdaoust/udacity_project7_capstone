@@ -4,6 +4,8 @@ package org.bdaoust.project7capstone;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,7 +19,8 @@ import io.magicthegathering.javasdk.resource.Card;
 
 public class DeckDetailsFragment extends Fragment{
 
-    RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
+    private boolean mIsLargeLayout;
 
     @Nullable
     @Override
@@ -29,6 +32,8 @@ public class DeckDetailsFragment extends Fragment{
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.cardsList);
         mRecyclerView.setAdapter(new CustomAdapter(new SampleDeck()));
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
+        mIsLargeLayout = getResources().getBoolean(R.bool.large_layout);
 
         return rootView;
     }
@@ -47,6 +52,13 @@ public class DeckDetailsFragment extends Fragment{
             View view;
 
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_list_item, parent, false);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showCardDetails();
+                }
+            });
+
             customViewHolder = new CustomViewHolder(view);
 
             return customViewHolder;
@@ -73,5 +85,26 @@ public class DeckDetailsFragment extends Fragment{
 
             cardImage = (ImageView) itemView.findViewById(R.id.cardImage);
         }
+    }
+
+    private void showCardDetails(){
+        CardDetailsDialogFragment cardDetailsDialogFragment;
+        FragmentManager fragmentManager;
+
+        cardDetailsDialogFragment = new CardDetailsDialogFragment();
+        fragmentManager = getFragmentManager();
+
+        if(mIsLargeLayout){
+            cardDetailsDialogFragment.show(getFragmentManager(), "CardDetails");
+        } else {
+            FragmentTransaction fragmentTransaction;
+
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            fragmentTransaction.add(android.R.id.content, cardDetailsDialogFragment)
+                .addToBackStack(null)
+                .commit();
+        }
+
     }
 }

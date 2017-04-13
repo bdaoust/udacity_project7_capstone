@@ -1,0 +1,70 @@
+package org.bdaoust.project7capstone;
+
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
+
+import io.magicthegathering.javasdk.resource.Card;
+
+public class CardDetailsDialogFragment extends DialogFragment{
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView;
+        Deck deck;
+        ArrayList<Card> cards;
+        Card card;
+
+        ImageView cardImage;
+        TextView cardName;
+        TextView cardQuantity;
+        TextView cardCMC;
+        TextView cardTypes;
+        TextView cardOracleText;
+        TextView cardPowerToughness;
+        TextView cardLoyalty;
+        TextView cardExpansion;
+        TextView cardArtist;
+
+        rootView = inflater.inflate(R.layout.fragment_card_details_dialog, container, false);
+
+        cardImage = (ImageView) rootView.findViewById(R.id.cardImage);
+        cardName = (TextView) rootView.findViewById(R.id.cardName);
+        cardQuantity = (TextView) rootView.findViewById(R.id.cardQuantity);;
+        cardCMC = (TextView) rootView.findViewById(R.id.cardCMC);
+        cardTypes = (TextView) rootView.findViewById(R.id.cardTypes);;
+        cardOracleText = (TextView) rootView.findViewById(R.id.cardOracleText);;
+        cardPowerToughness = (TextView) rootView.findViewById(R.id.cardPowerToughness);;
+        cardLoyalty = (TextView) rootView.findViewById(R.id.cardLoyalty);;
+        cardExpansion = (TextView) rootView.findViewById(R.id.cardExpansion);;
+        cardArtist = (TextView) rootView.findViewById(R.id.cardArtist);;
+
+        deck = new SampleDeck();
+        cards = deck.getCards();
+        card = cards.get(0);
+
+        Glide.with(getContext()).load(card.getImageUrl()).into(cardImage);
+        cardName.setText(card.getName());
+        cardQuantity.setText(String.valueOf(deck.getNumbCopies(card.getMultiverseid())));
+        cardCMC.setText(String.valueOf(card.getCmc()));
+        cardTypes.setText(card.getType());
+        cardOracleText.setText(card.getText());
+        cardPowerToughness.setText(card.getPower() + "/" + card.getToughness());
+        cardLoyalty.setText("This will be Null???");
+        cardExpansion.setText(card.getSetName());
+        cardArtist.setText(card.getArtist());
+
+        return rootView;
+    }
+}
