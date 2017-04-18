@@ -1,6 +1,7 @@
 package org.bdaoust.project7capstone;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -54,6 +55,11 @@ public class DeckDetailsFragment extends Fragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_edit:
+                Intent intent;
+
+                intent = new Intent(getContext(), EditDeckActivity.class);
+                startActivity(intent);
+
                 return true;
             case R.id.action_delete:
                 return true;

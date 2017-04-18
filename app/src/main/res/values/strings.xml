@@ -2,6 +2,7 @@
     <string name="app_name">MTG Manager</string>
 
     <string name="action_create_deck">Create Deck</string>
+    <string name="action_search_cards">Search for Cards</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_save">Save</string>
 
