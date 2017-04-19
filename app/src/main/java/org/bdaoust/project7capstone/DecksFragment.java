@@ -18,6 +18,7 @@ public class DecksFragment extends Fragment{
 
     RecyclerView mRecyclerView;
     CreateDeckDialogFragment mCreateDeckDialogFragment;
+    View mEmptyDeckListView;
 
     @Nullable
     @Override
@@ -27,6 +28,7 @@ public class DecksFragment extends Fragment{
         FloatingActionButton createDeckFAB;
 
         rootView = inflater.inflate(R.layout.fragment_decks, container, false);
+        mEmptyDeckListView = rootView.findViewById(R.id.emptyDeckList);
 
         decks = new Deck[5];
         for(int i=0; i<decks.length; i++){
@@ -56,6 +58,10 @@ public class DecksFragment extends Fragment{
 
         public CustomAdapter(Deck[] decks){
             mDecks = decks;
+
+            if(mDecks.length == 0){
+                mEmptyDeckListView.setVisibility(View.VISIBLE);
+            }
         }
 
         @Override

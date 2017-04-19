@@ -9,4 +9,6 @@
     <dimen name="create_deck_dialog_padding">8dp</dimen>
     <dimen name="create_deck_input_width">280dp</dimen>
     <dimen name="create_deck_input_text_size">16sp</dimen>
+
+    <dimen name="emptyListTextSize">28sp</dimen>
 </resources>
