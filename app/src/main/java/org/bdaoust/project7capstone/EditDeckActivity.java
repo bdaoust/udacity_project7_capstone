@@ -2,6 +2,7 @@ package org.bdaoust.project7capstone;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +19,8 @@ import io.magicthegathering.javasdk.resource.Card;
 
 public class EditDeckActivity extends AppCompatActivity{
 
-    RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
+    private FloatingActionButton mSearchCardsFAB;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,6 +32,18 @@ public class EditDeckActivity extends AppCompatActivity{
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(new CustomAdapter(new SampleDeck()));
+
+        mSearchCardsFAB = (FloatingActionButton) findViewById(R.id.searchCardsFAB);
+
+        mSearchCardsFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SearchCardsDialogFragment searchCardsDialogFragment;
+
+                searchCardsDialogFragment = new SearchCardsDialogFragment();
+                searchCardsDialogFragment.show(getSupportFragmentManager(), "SEARCH_CARDS");
+            }
+        });
     }
 
     private class CustomAdapter extends RecyclerView.Adapter<CustomViewHolder>{
