@@ -1,6 +1,5 @@
 package org.bdaoust.project7capstone;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -75,10 +74,7 @@ public class DecksFragment extends Fragment{
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent;
-
-                    intent = new Intent(getContext(), DeckDetailsActivity.class);
-                    startActivity(intent);
+                    ((OnDeckSelectedListener)getActivity()).onDeckSelected((int)view.getTag());
                 }
             });
 
@@ -90,6 +86,7 @@ public class DecksFragment extends Fragment{
             holder.deckName.setText(mDecks[position].getDeckName() + " " + position);
             holder.numbCards.setText(mDecks[position].getNumbCards() + " cards - ");
             holder.lastUpdated.setText(DateUtils.formatDateTime(getContext(), mDecks[position].getLastUpdatedTimestamp(), DateUtils.FORMAT_SHOW_YEAR));
+            holder.itemView.setTag(position);
         }
 
         @Override
@@ -111,5 +108,9 @@ public class DecksFragment extends Fragment{
             numbCards = (TextView) itemView.findViewById(R.id.numbCards);
             lastUpdated = (TextView) itemView.findViewById(R.id.lastUpdated);
         }
+    }
+
+    public interface OnDeckSelectedListener {
+        void onDeckSelected(int someDeckId);
     }
 }
