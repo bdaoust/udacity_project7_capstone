@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mtg="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp">
-    <View
+    <org.bdaoust.project7capstone.MTGDeckPieChart
         android:id="@+id/deckPieChart"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="#ff00ff"
-        android:layout_marginRight="8dp"/>
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="#fafafa"
+        mtg:whitePercentage="16.67"
+        mtg:bluePercentage="16.67"
+        mtg:blackPercentage="16.67"
+        mtg:redPercentage="16.67"
+        mtg:greenPercentage="16.67"
+        android:layout_marginEnd="8dp"/>
     <TextView
         android:id="@+id/deckName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_toRightOf="@id/deckPieChart"
+        android:layout_toEndOf="@id/deckPieChart"
         android:text="Deck Name..." />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/deckPieChart"
+        android:layout_toEndOf="@id/deckPieChart"
         android:layout_below="@id/deckName"
         android:orientation="horizontal">
         <TextView
