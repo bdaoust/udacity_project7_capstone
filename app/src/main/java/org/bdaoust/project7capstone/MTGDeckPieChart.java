@@ -99,7 +99,8 @@ public class MTGDeckPieChart extends SurfaceView {
 
         //Border Paint
         mBorderPaint = new Paint();
-        mBorderPaint.setARGB(255, 238, 238, 238); //Material Grey 200
+        //mBorderPaint.setARGB(255, 238, 238, 238); //Material Grey 200
+        mBorderPaint.setARGB(255, 224, 224, 224); //Material Grey 300
         mBorderPaint.setAntiAlias(true);
 
         mBorderWidth = 2;

@@ -26,10 +26,10 @@
             android:layout_height="@dimen/card_list_item_numb_copies_height"
             android:layout_marginStart="@dimen/card_list_item_numb_copies_margin"
             android:layout_marginTop="@dimen/card_list_item_numb_copies_margin"
-            android:background="@color/card_list_item_numb_copies_background_color"
+            android:background="@drawable/card_numb_copies_background"
             android:gravity="center"
             android:text="@string/card_list_item_numb_copies_placeholder"
-            android:textColor="@color/card_list_item_numb_text_color"
+            android:textColor="@color/card_list_item_numb_copies_text_color"
             android:textSize="@dimen/card_list_item_numb_copies_text_size"
             android:textStyle="bold" />
 
