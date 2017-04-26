@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_list_item_width">150dp</dimen>
+    <dimen name="card_list_item_height">208dp</dimen>
+
+    <dimen name="deck_list_fragment_width">230dp</dimen>
+</resources>

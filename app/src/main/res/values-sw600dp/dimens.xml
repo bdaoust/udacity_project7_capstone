@@ -1,0 +1,3 @@
+<resources>
+    <dimen name="deck_list_fragment_width">280dp</dimen>
+</resources>

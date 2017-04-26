@@ -31,12 +31,20 @@ public class DeckDetailsFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView;
+        GridLayoutManager gridLayoutManager;
+        CustomAdapter customAdapter;
+        Deck deck;
+        int numbColumns;
 
         rootView = inflater.inflate(R.layout.fragment_deck_details, container, false);
+        numbColumns = getResources().getInteger(R.integer.card_list_column_count);
+        gridLayoutManager = new GridLayoutManager(getContext(), numbColumns);
+        deck = new SampleDeck();
+        customAdapter = new CustomAdapter(deck);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.cardsList);
-        mRecyclerView.setAdapter(new CustomAdapter(new SampleDeck()));
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        mRecyclerView.setAdapter(customAdapter);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
 
         mIsLargeLayout = getResources().getBoolean(R.bool.large_layout);
 

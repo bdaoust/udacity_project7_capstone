@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/fragment_decks"
         android:name="org.bdaoust.project7capstone.DecksFragment"
-        android:layout_width="300dp"
+        android:layout_width="@dimen/deck_list_fragment_width"
         android:layout_height="match_parent"
         tools:context="org.bdaoust.project7capstone.DecksFragment"
         tools:layout="@layout/fragment_decks" />

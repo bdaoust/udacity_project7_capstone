@@ -13,8 +13,8 @@
     <dimen name="cards_list_margin_horizontal">4dp</dimen>
     <dimen name="cards_list_margin_vertical">8dp</dimen>
 
-    <dimen name="card_list_item_width">180dp</dimen>
-    <dimen name="card_list_item_height">250dp</dimen>
+    <dimen name="card_list_item_width">150dp</dimen>
+    <dimen name="card_list_item_height">208dp</dimen>
     <dimen name="card_list_item_padding">4dp</dimen>
     <dimen name="card_list_item_numb_copies_width">20dp</dimen>
     <dimen name="card_list_item_numb_copies_height">20dp</dimen>
