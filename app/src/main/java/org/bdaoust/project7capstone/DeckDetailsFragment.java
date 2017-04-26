@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -99,6 +100,7 @@ public class DeckDetailsFragment extends Fragment{
             Card card = mDeck.getCards().get(position);
 
             Glide.with(getContext()).load(card.getImageUrl()).into(holder.cardImage);
+            holder.cardNumbCopies.setText(String.valueOf(mDeck.getNumbCopies(card.getMultiverseid())));
         }
 
         @Override
@@ -109,11 +111,13 @@ public class DeckDetailsFragment extends Fragment{
 
     private class CustomViewHolder extends RecyclerView.ViewHolder{
         public ImageView cardImage;
+        public TextView cardNumbCopies;
 
         public CustomViewHolder(View itemView){
             super(itemView);
 
             cardImage = (ImageView) itemView.findViewById(R.id.cardImage);
+            cardNumbCopies = (TextView) itemView.findViewById(R.id.cardNumbCopies);
         }
     }
 

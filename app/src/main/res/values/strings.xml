@@ -8,4 +8,6 @@
 
     <string name="hint_deck_name">Deck Name</string>
     <string name="empty_deck_list">You don\'t have any decks</string>
+
+    <string name="card_list_item_numb_copies_placeholder">99</string>
 </resources>

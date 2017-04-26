@@ -3,8 +3,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-    android:layout_marginRight="@dimen/activity_horizontal_margin">
+    android:layout_marginLeft="@dimen/cards_list_margin_horizontal"
+    android:layout_marginRight="@dimen/cards_list_margin_horizontal"
+    android:layout_marginTop="@dimen/cards_list_margin_vertical"
+    android:layout_marginBottom="@dimen/cards_list_margin_vertical">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cardsList"
