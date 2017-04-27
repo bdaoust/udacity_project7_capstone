@@ -9,5 +9,30 @@
     <string name="hint_deck_name">Deck Name</string>
     <string name="empty_deck_list">You don\'t have any decks</string>
 
+    <string name="card_details_label_name">Name:</string>
+    <string name="card_details_label_quantity">Quantity:</string>
+    <string name="card_details_label_converted_mana_cost">CMC:</string>
+    <string name="card_details_label_types">Types:</string>
+    <string name="card_details_label_oracle_text">Oracle Text:</string>
+    <string name="card_details_label_flavor_text">Flavor Text</string>
+    <string name="card_details_label_power_toughness">P/T:</string>
+    <string name="card_details_label_loyalty">Loyalty</string>
+    <string name="card_details_label_expansion">Expansion:</string>
+    <string name="card_details_label_artist">Artist:</string>
+
+
+    <!-- Placeholder Text -->
     <string name="card_list_item_numb_copies_placeholder">99</string>
+    <string name="card_details_name_placeholder">[Card Name]</string>
+    <string name="card_details_quantity_placeholder">99</string>
+    <string name="card_details_cmc_placeholder">99</string>
+    <string name="card_details_types_placeholder">[Type - Subtype]</string>
+    <string name="card_details_oracle_text_placeholder">[This is a long Oracle Text,  This is a long Oracle Text, This is a long Oracle Text, This is a long Oracle Text, This is a long Oracle Text, This is a long Oracle Text]</string>
+    <string name="card_details_flavor_text_placeholder">[Flavor Text]</string>
+    <string name="card_details_power_toughness_placeholder">99/99</string>
+    <string name="card_details_loyalty_placeholder">99</string>
+    <string name="card_details_expansion_placeholder">[Expansion Name]</string>
+    <string name="card_details_artist_placeholder">[Artist Name]</string>
+
+
 </resources>

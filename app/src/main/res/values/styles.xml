@@ -12,4 +12,13 @@
         <item name="colorAccent">@color/otherColorAccent</item>
     </style>
 
+    <style name="CardDetailsGridItem">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_marginBottom">4dp</item>
+    </style>
+
+    <style name="CardDetailsGridLabelItem" parent="CardDetailsGridItem">
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginRight">16dp</item>
+    </style>
 </resources>

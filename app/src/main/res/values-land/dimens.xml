@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_details_image_width">170dp</dimen>
+    <dimen name="card_details_image_height">240dp</dimen>
+    <dimen name="card_details_text_value_width">170dp</dimen>
+</resources>

@@ -2,4 +2,8 @@
 <resources>
     <dimen name="card_list_item_width">200dp</dimen>
     <dimen name="card_list_item_height">278dp</dimen>
+
+    <dimen name="card_details_image_width">240dp</dimen>
+    <dimen name="card_details_image_height">340dp</dimen>
+    <dimen name="card_details_text_value_width">290dp</dimen>
 </resources>

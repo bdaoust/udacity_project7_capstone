@@ -11,4 +11,7 @@
     <color name="card_list_item_numb_copies_background_color">#999</color>
     <color name="card_list_item_numb_copies_border_color">#666</color>
     <color name="card_list_item_numb_copies_text_color">@android:color/white</color>
+
+    <color name="card_details_background_color">@android:color/white</color>
+    <color name="card_details_grid_layout_background_color">#666</color>
 </resources>

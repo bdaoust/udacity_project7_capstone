@@ -1,3 +1,9 @@
 <resources>
     <dimen name="deck_list_fragment_width">280dp</dimen>
+
+    <dimen name="card_details_grid_layout_width">580dp</dimen>
+
+    <dimen name="card_details_image_width">260dp</dimen>
+    <dimen name="card_details_image_height">368dp</dimen>
+    <dimen name="card_details_text_value_width">400dp</dimen>
 </resources>

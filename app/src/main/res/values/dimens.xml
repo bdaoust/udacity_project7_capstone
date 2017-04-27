@@ -22,4 +22,12 @@
     <dimen name="card_list_item_numb_copies_text_size">12sp</dimen>
 
     <dimen name="emptyListTextSize">28sp</dimen>
+
+    <dimen name="card_details_gridlayout_padding">8dp</dimen>
+    <dimen name="card_details_image_width">212dp</dimen>
+    <dimen name="card_details_image_height">300dp</dimen>
+    <dimen name="card_details_image_margin">8dp</dimen>
+    <dimen name="card_details_text_label_width">90dp</dimen>
+    <dimen name="card_details_text_value_width">190dp</dimen>
+
 </resources>
