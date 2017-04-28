@@ -6,4 +6,6 @@
     <dimen name="card_details_image_width">260dp</dimen>
     <dimen name="card_details_image_height">368dp</dimen>
     <dimen name="card_details_text_value_width">400dp</dimen>
+
+    <dimen name="edit_deck_cardview_width">700dp</dimen>
 </resources>
