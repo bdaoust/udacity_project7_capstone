@@ -1,12 +1,17 @@
 <resources>
     <string name="app_name">MTG Manager</string>
 
-    <string name="action_create_deck">Create Deck</string>
-    <string name="action_search_cards">Search for Cards</string>
+    <string name="action_create_deck">Create deck</string>
+    <string name="action_search_cards">Search for cards</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_save">Save</string>
+    <string name="action_increment_card_copies">Increment number of card copies</string>
+    <string name="action_decrement_card_copies">Decrement number of card copies</string>
+    <string name="action_delete_card_copies">Delete card copies</string>
+    <string name="action_add_card">Add card to deck</string>
 
     <string name="hint_deck_name">Deck Name</string>
+    <string name="hint_card_name">Card Name</string>
     <string name="empty_deck_list">You don\'t have any decks</string>
 
     <string name="deck_extra_info">%1$d cards - %2$s</string>
@@ -37,11 +42,7 @@
     <string name="edit_card_list_item_set_name_placeholder">Battle for Zendikar</string>
     <string name="edit_card_list_item_card_name_placeholder">Akoum Hellkite</string>
     <string name="edit_card_list_item_numb_copies_placeholder">3</string>
-
-    <!-- Content Description -->
-    <string name="edit_card_list_item_increment_button_description">Increment number of card copies</string>
-    <string name="edit_card_list_item_decrement_button_description">Decrement number of card copies</string>
-    <string name="edit_card_list_item_delete_button_description">Delete card copies</string>
     <string name="deck_list_deck_name_placeholder">[Deck Name]</string>
+    <string name="search_card_list_item_card_name_placeholder">[Card Name]</string>
 
 </resources>

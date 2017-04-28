@@ -6,4 +6,7 @@
     <dimen name="card_details_image_width">240dp</dimen>
     <dimen name="card_details_image_height">340dp</dimen>
     <dimen name="card_details_text_value_width">290dp</dimen>
+
+    <dimen name="search_cards_list_container_width">300dp</dimen>
+    <dimen name="search_cards_list_container_height">400dp</dimen>
 </resources>

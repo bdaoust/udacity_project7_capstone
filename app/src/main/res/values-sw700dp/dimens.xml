@@ -2,4 +2,7 @@
 <resources>
     <dimen name="card_list_item_width">200dp</dimen>
     <dimen name="card_list_item_height">278dp</dimen>
+
+    <dimen name="search_cards_list_container_width">600dp</dimen>
+    <dimen name="search_cards_list_container_height">700dp</dimen>
 </resources>

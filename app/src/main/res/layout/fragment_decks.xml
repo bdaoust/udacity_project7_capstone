@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="@string/empty_deck_list"
             android:textColor="@color/empty_list_text_color"
-            android:textSize="@dimen/emptyListTextSize"
+            android:textSize="@dimen/empty_list_text_size"
             android:textStyle="bold"/>
     </LinearLayout>
 

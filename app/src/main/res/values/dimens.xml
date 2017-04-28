@@ -10,6 +10,10 @@
     <dimen name="create_deck_input_width">280dp</dimen>
     <dimen name="create_deck_input_text_size">16sp</dimen>
 
+    <dimen name="search_cards_input_text_size">16sp</dimen>
+    <dimen name="search_cards_list_container_width">260dp</dimen>
+    <dimen name="search_cards_list_container_height">400dp</dimen>
+
     <dimen name="cards_list_margin_horizontal">4dp</dimen>
     <dimen name="cards_list_margin_vertical">8dp</dimen>
 
@@ -21,7 +25,7 @@
     <dimen name="card_list_item_numb_copies_margin">5dp</dimen>
     <dimen name="card_list_item_numb_copies_text_size">12sp</dimen>
 
-    <dimen name="emptyListTextSize">28sp</dimen>
+    <dimen name="empty_list_text_size">28sp</dimen>
 
     <dimen name="card_details_gridlayout_padding">8dp</dimen>
     <dimen name="card_details_image_width">212dp</dimen>
@@ -52,5 +56,13 @@
 
     <dimen name="card_details_grid_item_margin_bottom">4dp</dimen>
     <dimen name="card_details_grid_label_item_margin_end">16dp</dimen>
+    <dimen name="search_card_list_item_margin_vertical">8dp</dimen>
+    <dimen name="search_card_list_item_image_width">70dp</dimen>
+    <dimen name="search_card_list_item_image_height">98dp</dimen>
+    <dimen name="search_card_list_item_card_name_padding_start">8dp</dimen>
+
+    <dimen name="search_cards_dialog_padding">8dp</dimen>
+    <dimen name="search_cards_dialog_input_width">300dp</dimen>
+    <dimen name="search_cards_dialog_input_height">12dp</dimen>
 
 </resources>
