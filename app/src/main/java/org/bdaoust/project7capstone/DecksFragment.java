@@ -83,9 +83,20 @@ public class DecksFragment extends Fragment{
 
         @Override
         public void onBindViewHolder(CustomViewHolder holder, int position) {
-            holder.deckName.setText(mDecks[position].getDeckName() + " " + position);
-            holder.numbCards.setText(mDecks[position].getNumbCards() + " cards - ");
-            holder.lastUpdated.setText(DateUtils.formatDateTime(getContext(), mDecks[position].getLastUpdatedTimestamp(), DateUtils.FORMAT_SHOW_YEAR));
+            Deck deck;
+            String extraInfo;
+            String lastUpdated;
+            long lastUpdatedTimestamp;
+            int numbCards;
+
+            deck = mDecks[position];
+            numbCards = deck.getNumbCards();
+            lastUpdatedTimestamp = deck.getLastUpdatedTimestamp();
+            lastUpdated = DateUtils.formatDateTime(getContext(),lastUpdatedTimestamp, DateUtils.FORMAT_SHOW_YEAR);
+            extraInfo = getResources().getString(R.string.deck_extra_info, numbCards, lastUpdated);
+
+            holder.deckName.setText(deck.getDeckName() + " " + position);
+            holder.deckExtraInfo.setText(extraInfo);
             holder.itemView.setTag(position);
         }
 
@@ -98,15 +109,13 @@ public class DecksFragment extends Fragment{
     private class CustomViewHolder extends RecyclerView.ViewHolder{
 
         public TextView deckName;
-        public TextView numbCards;
-        public TextView lastUpdated;
+        public TextView deckExtraInfo;
 
         public CustomViewHolder(View itemView) {
             super(itemView);
 
             deckName = (TextView) itemView.findViewById(R.id.deckName);
-            numbCards = (TextView) itemView.findViewById(R.id.numbCards);
-            lastUpdated = (TextView) itemView.findViewById(R.id.lastUpdated);
+            deckExtraInfo = (TextView) itemView.findViewById(R.id.deckExtraInfo);
         }
     }
 

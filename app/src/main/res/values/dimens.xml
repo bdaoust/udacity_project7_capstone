@@ -42,4 +42,12 @@
     <dimen name="edit_card_list_item_card_name_text_size">18sp</dimen>
     <dimen name="edit_card_list_item_set_name_text_size">16sp</dimen>
 
+    <dimen name="mtg_deck_pie_chart_size">40dp</dimen>
+    <dimen name="mtg_deck_pie_chart_margin_end">8dp</dimen>
+
+    <dimen name="deck_list_deck_name_text_size">18sp</dimen>
+    <dimen name="deck_list_item_margin_bottom">8dp</dimen>
+
+    <dimen name="deck_extra_info_text_size">12sp</dimen>
+
 </resources>

@@ -5,8 +5,8 @@
     <color name="colorAccent">#FFFF00</color>
     <color name="otherColorAccent">#FF5252</color>
     
-    <color name="emptyListBackground">#DDD</color>
-    <color name="emptyListTextColor">#999</color>
+    <color name="empty_list_background">#DDD</color>
+    <color name="empty_list_text_color">#999</color>
 
     <color name="icon_button_tint_color">#333</color>
     <color name="icon_button_disabled_tint_color">#aaa</color>
@@ -19,4 +19,6 @@
     <color name="card_details_grid_layout_background_color">#666</color>
 
     <color name="edit_card_list_item_numb_copies_text_color">#333</color>
+
+    <color name="mtg_deck_pie_chart_background_color">#FAFAFA</color>
 </resources>

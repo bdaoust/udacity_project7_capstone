@@ -9,6 +9,8 @@
     <string name="hint_deck_name">Deck Name</string>
     <string name="empty_deck_list">You don\'t have any decks</string>
 
+    <string name="deck_extra_info">%1$d cards - %2$s</string>
+
     <string name="card_details_label_name">Name:</string>
     <string name="card_details_label_quantity">Quantity:</string>
     <string name="card_details_label_converted_mana_cost">CMC:</string>
@@ -19,7 +21,6 @@
     <string name="card_details_label_loyalty">Loyalty</string>
     <string name="card_details_label_expansion">Expansion:</string>
     <string name="card_details_label_artist">Artist:</string>
-
 
     <!-- Placeholder Text -->
     <string name="card_list_item_numb_copies_placeholder">99</string>
@@ -41,5 +42,6 @@
     <string name="edit_card_list_item_increment_button_description">Increment number of card copies</string>
     <string name="edit_card_list_item_decrement_button_description">Decrement number of card copies</string>
     <string name="edit_card_list_item_delete_button_description">Delete card copies</string>
+    <string name="deck_list_deck_name_placeholder">[Deck Name]</string>
 
 </resources>
