@@ -33,6 +33,13 @@
     <string name="card_details_loyalty_placeholder">99</string>
     <string name="card_details_expansion_placeholder">[Expansion Name]</string>
     <string name="card_details_artist_placeholder">[Artist Name]</string>
+    <string name="edit_card_list_item_set_name_placeholder">Battle for Zendikar</string>
+    <string name="edit_card_list_item_card_name_placeholder">Akoum Hellkite</string>
+    <string name="edit_card_list_item_numb_copies_placeholder">3</string>
 
+    <!-- Content Description -->
+    <string name="edit_card_list_item_increment_button_description">Increment number of card copies</string>
+    <string name="edit_card_list_item_decrement_button_description">Decrement number of card copies</string>
+    <string name="edit_card_list_item_delete_button_description">Delete card copies</string>
 
 </resources>

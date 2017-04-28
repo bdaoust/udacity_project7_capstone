@@ -30,4 +30,16 @@
     <dimen name="card_details_text_label_width">90dp</dimen>
     <dimen name="card_details_text_value_width">190dp</dimen>
 
+    <dimen name="icon_button_size">48dp</dimen>
+
+    <dimen name="edit_card_list_item_padding">8dp</dimen>
+    <dimen name="edit_card_list_item_controls_width">48dp</dimen>
+    <dimen name="edit_card_list_item_controls_height">140dp</dimen>
+    <dimen name="edit_card_list_item_image_width">100dp</dimen>
+    <dimen name="edit_card_list_item_image_height">140dp</dimen>
+    <dimen name="edit_card_list_item_image_margin_end">8dp</dimen>
+    <dimen name="edit_card_list_item_numb_copies_text_size">36sp</dimen>
+    <dimen name="edit_card_list_item_card_name_text_size">18sp</dimen>
+    <dimen name="edit_card_list_item_set_name_text_size">16sp</dimen>
+
 </resources>
