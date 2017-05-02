@@ -169,10 +169,10 @@ public class MTGDeckPieChart extends SurfaceView {
 
         //Adjusting the left, top, right, bottom positions (which will be used to draw the
         // pie chart), to account for the border width
-        mLeft = getLeft() + mBorderWidth;
-        mTop = getTop() + mBorderWidth;
-        mRight = getRight() - mBorderWidth;
-        mBottom = getBottom() - mBorderWidth;
+        mLeft = 0 + mBorderWidth;
+        mTop = 0 + mBorderWidth;
+        mRight = w - mBorderWidth;
+        mBottom = h - mBorderWidth;
     }
 
     @Override
