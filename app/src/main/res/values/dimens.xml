@@ -65,4 +65,7 @@
     <dimen name="search_cards_dialog_input_width">300dp</dimen>
     <dimen name="search_cards_dialog_input_height">12dp</dimen>
 
+    <dimen name="deck_list_item_padding_horizontal">16dp</dimen>
+    <dimen name="deck_list_item_padding_vertical">8dp</dimen>
+
 </resources>
