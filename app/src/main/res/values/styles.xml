@@ -22,9 +22,8 @@
         <item name="android:layout_marginEnd">@dimen/card_details_grid_label_item_margin_end</item>
     </style>
 
-    <style name="IconButton">
+    <style name="IconButton" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:scaleType">center</item>
-        <item name="android:background">@android:color/transparent</item>
         <item name="android:tint">@color/icon_button_tint_color</item>
     </style>
 </resources>
