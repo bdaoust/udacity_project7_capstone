@@ -12,7 +12,7 @@
         android:id="@+id/deckPieChart"
         android:layout_width="@dimen/mtg_deck_pie_chart_size"
         android:layout_height="@dimen/mtg_deck_pie_chart_size"
-        android:background="@color/mtg_deck_pie_chart_background_color"
+        android:background="@android:color/transparent"
         mtg:whitePercentage="16.67"
         mtg:bluePercentage="16.67"
         mtg:blackPercentage="16.67"

@@ -103,6 +103,11 @@ public class MTGDeckPieChart extends SurfaceView {
         mBorderPaint.setAntiAlias(true);
 
         mBorderWidth = 2;
+
+        //Added a call to setZOrderOnTop(true) in order to make the part of the SurfaceView that is not
+        //drawn transparent. Based on a solution provided by
+        // Bajji (http://stackoverflow.com/questions/31599167/surfaceview-transparency-not-working-properly)
+        setZOrderOnTop(true);
     }
 
     public float getWhitePercentage(){
