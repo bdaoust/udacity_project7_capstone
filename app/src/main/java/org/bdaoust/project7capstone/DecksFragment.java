@@ -18,6 +18,9 @@ public class DecksFragment extends Fragment{
     RecyclerView mRecyclerView;
     CreateDeckDialogFragment mCreateDeckDialogFragment;
     View mEmptyDeckListView;
+    int selectedPosition = 0;
+
+    private static final String SELECTED_KEY = "selected_position";
 
     @Nullable
     @Override
@@ -48,6 +51,12 @@ public class DecksFragment extends Fragment{
             }
         });
 
+        // Solution for keeping track of the selected position is based on
+        // Project Sunshine (https://github.com/udacity/Sunshine-Version-2/blob/sunshine_master/app/src/main/java/com/example/android/sunshine/app/ForecastFragment.java)
+        if(savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)){
+            selectedPosition = savedInstanceState.getInt(SELECTED_KEY);
+        }
+
         return rootView;
     }
 
@@ -74,12 +83,23 @@ public class DecksFragment extends Fragment{
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    int position;
+
+                    position = (int)view.getTag();
+                    if(position != selectedPosition){
+                        notifyItemChanged(selectedPosition);
+                        selectedPosition = position;
+                        view.setSelected(true);
+                    }
                     ((OnDeckSelectedListener)getActivity()).onDeckSelected((int)view.getTag());
                 }
             });
 
             return customViewHolder;
         }
+
+
+
 
         @Override
         public void onBindViewHolder(CustomViewHolder holder, int position) {
@@ -98,12 +118,19 @@ public class DecksFragment extends Fragment{
             holder.deckName.setText(deck.getDeckName() + " " + position);
             holder.deckExtraInfo.setText(extraInfo);
             holder.itemView.setTag(position);
+
+            if(position == selectedPosition){
+                holder.itemView.setSelected(true);
+            } else {
+                holder.itemView.setSelected(false);
+            }
         }
 
         @Override
         public int getItemCount() {
             return mDecks.length;
         }
+
     }
 
     private class CustomViewHolder extends RecyclerView.ViewHolder{
@@ -121,5 +148,12 @@ public class DecksFragment extends Fragment{
 
     public interface OnDeckSelectedListener {
         void onDeckSelected(int someDeckId);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(SELECTED_KEY, selectedPosition);
+
+        super.onSaveInstanceState(outState);
     }
 }
