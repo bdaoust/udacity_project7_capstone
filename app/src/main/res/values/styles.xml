@@ -25,5 +25,6 @@
     <style name="IconButton" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:scaleType">center</item>
         <item name="android:tint">@color/icon_button_tint_color</item>
+        <item name="android:background">@drawable/icon_button_touch_selector</item>
     </style>
 </resources>

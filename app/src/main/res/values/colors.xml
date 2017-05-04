@@ -23,4 +23,6 @@
     <color name="search_cards_dialog_input_container_background_color">#FFF</color>
 
     <color name="selected_item_background_color">#FF8A80</color>
+
+    <color name="selected_icon_button_background_color">#FFCDD2</color>
 </resources>
