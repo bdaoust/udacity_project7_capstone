@@ -120,6 +120,14 @@ public class EditDeckActivity extends AppCompatActivity{
                 }
             });
 
+            holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mDeck.removeCardCopies(card.getMultiverseid());
+                    notifyDataSetChanged();
+                }
+            });
+
         }
 
 
@@ -138,6 +146,7 @@ public class EditDeckActivity extends AppCompatActivity{
         public TextView setName;
         public ImageButton decrementButton;
         public ImageButton incrementButton;
+        public ImageButton deleteButton;
 
         public CustomViewHolder(View itemView) {
             super(itemView);
@@ -148,6 +157,7 @@ public class EditDeckActivity extends AppCompatActivity{
             setName = (TextView) itemView.findViewById(R.id.setName);
             decrementButton = (ImageButton) itemView.findViewById(R.id.actionDecrementCardCopies);
             incrementButton = (ImageButton) itemView.findViewById(R.id.actionIncrementCardCopies);
+            deleteButton = (ImageButton) itemView.findViewById(R.id.actionDeleteCardCopies);
         }
     }
 }
