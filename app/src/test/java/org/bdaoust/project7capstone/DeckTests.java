@@ -16,6 +16,7 @@ public class DeckTests {
 
     private String mDeckName;
     private Deck mDeck;
+    private float mDelta = 0.25f;
 
     @Before
     public void setup(){
@@ -244,5 +245,238 @@ public class DeckTests {
         //Change the number of Phyrexian Dreadnought (Mirage) copies
         mDeck.setCardCopies(card3, 5);
         assertEquals(27, mDeck.getNumbCards());
+    }
+
+    @Test
+    public void testGetColorPercentages_0Cards(){
+        Deck.ColorPercentages colorPercentages;
+
+        mDeck = new Deck(mDeckName);
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(0, colorPercentages.black, mDelta);
+        assertEquals(0, colorPercentages.blue, mDelta);
+        assertEquals(0, colorPercentages.green, mDelta);
+        assertEquals(0, colorPercentages.red, mDelta);
+        assertEquals(0, colorPercentages.white, mDelta);
+    }
+
+    @Test
+    public void testGetColorPercentages_1Card(){
+        Deck.ColorPercentages colorPercentages;
+        Card card;
+        int multiverseId;
+
+        //**************** Land ********************/
+        mDeck = new Deck(mDeckName);
+        multiverseId = 191401; //Mountain (Magic 2010)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(0, colorPercentages.black, mDelta);
+        assertEquals(0, colorPercentages.blue, mDelta);
+        assertEquals(0, colorPercentages.green, mDelta);
+        assertEquals(0, colorPercentages.red, mDelta);
+        assertEquals(0, colorPercentages.white, mDelta);
+
+        //**************** Special Land ********************/
+        mDeck = new Deck(mDeckName);
+        multiverseId = 136196; //Dryad Arbor (Future Sight)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(0, colorPercentages.black, mDelta);
+        assertEquals(0, colorPercentages.blue, mDelta);
+        assertEquals(100, colorPercentages.green, mDelta);
+        assertEquals(0, colorPercentages.red, mDelta);
+        assertEquals(0, colorPercentages.white, mDelta);
+
+        //**************** Black card ********************/
+        mDeck = new Deck(mDeckName);
+        multiverseId = 190566; //Hypnotic Specter (Magic 2010)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(100, colorPercentages.black, mDelta);
+        assertEquals(0, colorPercentages.blue, mDelta);
+        assertEquals(0, colorPercentages.green, mDelta);
+        assertEquals(0, colorPercentages.red, mDelta);
+        assertEquals(0, colorPercentages.white, mDelta);
+
+        //**************** Blue card ********************/
+        mDeck = new Deck(mDeckName);
+        multiverseId = 129633; //Mahamoti Djinn (Tenth Edition)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(0, colorPercentages.black, mDelta);
+        assertEquals(100, colorPercentages.blue, mDelta);
+        assertEquals(0, colorPercentages.green, mDelta);
+        assertEquals(0, colorPercentages.red, mDelta);
+        assertEquals(0, colorPercentages.white, mDelta);
+
+        //**************** Green card ********************/
+        mDeck = new Deck(mDeckName);
+        multiverseId = 2576; //Lhurgoyf (Ice Age)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(0, colorPercentages.black, mDelta);
+        assertEquals(0, colorPercentages.blue, mDelta);
+        assertEquals(100, colorPercentages.green, mDelta);
+        assertEquals(0, colorPercentages.red, mDelta);
+        assertEquals(0, colorPercentages.white, mDelta);
+
+        //**************** Red card ********************/
+        mDeck = new Deck(mDeckName);
+        multiverseId = 191089; //Lightning Bolt (Magic 2010)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(0, colorPercentages.black, mDelta);
+        assertEquals(0, colorPercentages.blue, mDelta);
+        assertEquals(0, colorPercentages.green, mDelta);
+        assertEquals(100, colorPercentages.red, mDelta);
+        assertEquals(0, colorPercentages.white, mDelta);
+
+        //**************** White card ********************/
+        mDeck = new Deck(mDeckName);
+        multiverseId = 382853; //Balance (Vintage Masters)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(0, colorPercentages.black, mDelta);
+        assertEquals(0, colorPercentages.blue, mDelta);
+        assertEquals(0, colorPercentages.green, mDelta);
+        assertEquals(0, colorPercentages.red, mDelta);
+        assertEquals(100, colorPercentages.white, mDelta);
+
+        //**************** Green/White card ********************/
+        mDeck = new Deck(mDeckName);
+        multiverseId = 87988; //Selesnya Guildmage (Ravnica: City of Guilds)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(0, colorPercentages.black, mDelta);
+        assertEquals(0, colorPercentages.blue, mDelta);
+        assertEquals(50, colorPercentages.green, mDelta);
+        assertEquals(0, colorPercentages.red, mDelta);
+        assertEquals(50, colorPercentages.white, mDelta);
+
+        //**************** 5 color card ********************/
+        mDeck = new Deck(mDeckName);
+        multiverseId = 179496; //Progenitus (Conflux)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(20, colorPercentages.black, mDelta);
+        assertEquals(20, colorPercentages.blue, mDelta);
+        assertEquals(20, colorPercentages.green, mDelta);
+        assertEquals(20, colorPercentages.red, mDelta);
+        assertEquals(20, colorPercentages.white, mDelta);
+    }
+
+    @Test
+    public void testGetColorPercentages_2Cards(){
+        Deck.ColorPercentages colorPercentages;
+        Card card;
+        int multiverseId;
+
+        //***************** Two black cards *****************/
+        mDeck = new Deck(mDeckName);
+        multiverseId = 190566; //Hypnotic Specter (Magic 2010)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+        multiverseId = 129659; //Nightmare (Tenth Edition)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(100, colorPercentages.black, mDelta);
+        assertEquals(0, colorPercentages.blue, mDelta);
+        assertEquals(0, colorPercentages.green, mDelta);
+        assertEquals(0, colorPercentages.red, mDelta);
+        assertEquals(0, colorPercentages.white, mDelta);
+
+        //***************** One green card and one green/red card *****************/
+        mDeck = new Deck(mDeckName);
+        multiverseId = 2576; //Lhurgoyf (Ice Age)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+        multiverseId = 185053; //Bloodbraid Elf (Alara Reborn)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(0, colorPercentages.black, mDelta);
+        assertEquals(0, colorPercentages.blue, mDelta);
+        assertEquals(75, colorPercentages.green, mDelta);
+        assertEquals(25, colorPercentages.red, mDelta);
+        assertEquals(0, colorPercentages.white, mDelta);
+
+        //***************** One green/white card and one 5 color card *****************/
+        mDeck = new Deck(mDeckName);
+        multiverseId = 87988; //Selesnya Guildmage (Ravnica: City of Guilds)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+        multiverseId = 179496; //Progenitus (Conflux)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(10, colorPercentages.black, mDelta);
+        assertEquals(10, colorPercentages.blue, mDelta);
+        assertEquals(35, colorPercentages.green, mDelta);
+        assertEquals(10, colorPercentages.red, mDelta);
+        assertEquals(35, colorPercentages.white, mDelta);
+    }
+
+    @Test
+    public void testGetColorPercentages_3Cards(){
+        Deck.ColorPercentages colorPercentages;
+        Card card;
+        int multiverseId;
+
+        //***************** One red/green card, one artifact, and one red/green/white card *****************/
+        mDeck = new Deck(mDeckName);
+        multiverseId = 185053; //Bloodbraid Elf (Alara Reborn)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+        multiverseId = 420593; //Aether Vial (Masterpiece Series: Kaladesh Inventions)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+        multiverseId = 180265; //Knotvine Mystic (Conflux)
+        card = CardAPI.getCard(multiverseId);
+        mDeck.addCardCopies(card, 1);
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(0, colorPercentages.black, mDelta);
+        assertEquals(0, colorPercentages.blue, mDelta);
+        assertEquals(27.78, colorPercentages.green, mDelta);
+        assertEquals(27.78, colorPercentages.red, mDelta);
+        assertEquals(11.11, colorPercentages.white, mDelta);
+    }
+
+    @Test
+    public void testGetColorPercentages_SampleDeck(){
+        Deck.ColorPercentages colorPercentages;
+
+        mDeck = new SampleDeck();
+
+        colorPercentages = mDeck.getColorPercentages();
+        assertEquals(0, colorPercentages.black, mDelta);
+        assertEquals(0, colorPercentages.blue, mDelta);
+        assertEquals(0, colorPercentages.green, mDelta);
+        assertEquals(56.92, colorPercentages.red, mDelta);
+        assertEquals(0, colorPercentages.white, mDelta);
     }
 }
