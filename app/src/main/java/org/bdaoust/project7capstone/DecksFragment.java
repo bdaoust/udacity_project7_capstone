@@ -99,13 +99,12 @@ public class DecksFragment extends Fragment{
         }
 
 
-
-
         @Override
         public void onBindViewHolder(CustomViewHolder holder, int position) {
             Deck deck;
             String extraInfo;
             String lastUpdated;
+            Deck.ColorPercentages colorPercentages;
             long lastUpdatedTimestamp;
             int numbCards;
 
@@ -124,6 +123,13 @@ public class DecksFragment extends Fragment{
             } else {
                 holder.itemView.setSelected(false);
             }
+
+            colorPercentages = deck.getColorPercentages();
+            holder.mtgDeckPieChart.setBlackPercentage(colorPercentages.black);
+            holder.mtgDeckPieChart.setBluePercentage(colorPercentages.blue);
+            holder.mtgDeckPieChart.setGreenPercentage(colorPercentages.green);
+            holder.mtgDeckPieChart.setRedPercentage(colorPercentages.red);
+            holder.mtgDeckPieChart.setWhitePercentage(colorPercentages.white);
         }
 
         @Override
@@ -137,12 +143,14 @@ public class DecksFragment extends Fragment{
 
         public TextView deckName;
         public TextView deckExtraInfo;
+        public MTGDeckPieChart mtgDeckPieChart;
 
         public CustomViewHolder(View itemView) {
             super(itemView);
 
             deckName = (TextView) itemView.findViewById(R.id.deckName);
             deckExtraInfo = (TextView) itemView.findViewById(R.id.deckExtraInfo);
+            mtgDeckPieChart = (MTGDeckPieChart) itemView.findViewById(R.id.deckPieChart);
         }
     }
 
