@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity implements DecksFragment.OnDeckSelectedListener{
 
@@ -12,10 +13,15 @@ public class MainActivity extends AppCompatActivity implements DecksFragment.OnD
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Toolbar toolbar;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mIsLargeLayout = getResources().getBoolean(R.bool.large_layout);
+
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         if(mIsLargeLayout) {
             if (savedInstanceState == null) {

@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:divider="?android:dividerHorizontal"
-    android:showDividers="middle"
-    android:orientation="horizontal">
-    <fragment
-        android:id="@+id/fragment_decks"
-        android:name="org.bdaoust.project7capstone.DecksFragment"
-        android:layout_width="@dimen/deck_list_fragment_width"
-        android:layout_height="match_parent"
-        tools:context="org.bdaoust.project7capstone.DecksFragment"
-        tools:layout="@layout/fragment_decks" />
-    <FrameLayout
-        android:id="@+id/deckDetailsContainer"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/app_bar" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:divider="?android:dividerHorizontal"
+        android:orientation="horizontal"
+        android:showDividers="middle">
+
+        <fragment
+            android:id="@+id/fragment_decks"
+            android:name="org.bdaoust.project7capstone.DecksFragment"
+            android:layout_width="@dimen/deck_list_fragment_width"
+            android:layout_height="match_parent"
+            tools:context="org.bdaoust.project7capstone.DecksFragment"
+            tools:layout="@layout/fragment_decks" />
+
+        <FrameLayout
+            android:id="@+id/deckDetailsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
 

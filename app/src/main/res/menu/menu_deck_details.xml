@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_edit"
-        android:title="Edit"
-        android:icon="@drawable/ic_mode_edit_white_48dp"
-        app:showAsAction="always" />
+        android:title="@string/action_edit_deck"
+        android:icon="@drawable/ic_mode_edit_white_36dp"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_delete"
-        android:title="Delete"
+        android:title="@string/action_delete_deck"
         app:showAsAction="never"/>
 </menu>

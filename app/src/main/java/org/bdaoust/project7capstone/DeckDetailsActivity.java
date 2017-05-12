@@ -1,11 +1,12 @@
 package org.bdaoust.project7capstone;
 
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 public class DeckDetailsActivity extends AppCompatActivity{
 
@@ -13,7 +14,19 @@ public class DeckDetailsActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Toolbar toolbar;
+        ActionBar actionBar;
+
         setContentView(R.layout.activity_deck_details);
+
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
+
+        if(actionBar != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("[Deck Name]");
+        }
 
         if(savedInstanceState == null){
             FragmentManager fragmentManager;
@@ -28,4 +41,5 @@ public class DeckDetailsActivity extends AppCompatActivity{
             fragmentTransaction.commit();
         }
     }
+
 }

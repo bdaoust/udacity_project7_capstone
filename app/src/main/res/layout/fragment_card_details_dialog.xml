@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/card_details_background_color">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <include layout="@layout/app_bar" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@color/card_details_background_color">
 
-        <ImageView
-            android:id="@+id/cardImage"
-            android:layout_width="@dimen/card_details_image_width"
-            android:layout_height="@dimen/card_details_image_height"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/card_details_image_margin"
-            tools:ignore="ContentDescription" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <include layout="@layout/card_details_grid_layout" />
+            <ImageView
+                android:id="@+id/cardImage"
+                android:layout_width="@dimen/card_details_image_width"
+                android:layout_height="@dimen/card_details_image_height"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/card_details_image_margin"
+                tools:ignore="ContentDescription" />
 
-    </LinearLayout>
-</ScrollView>
+            <include layout="@layout/card_details_grid_layout" />
+
+        </LinearLayout>
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>

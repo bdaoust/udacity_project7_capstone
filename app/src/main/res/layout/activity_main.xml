@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_decks"
-    android:name="org.bdaoust.project7capstone.DecksFragment"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="org.bdaoust.project7capstone.DecksFragment"
-    tools:layout="@layout/fragment_decks" />
+    android:layout_height="match_parent">
+
+    <include layout="@layout/app_bar" />
+
+    <fragment xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/fragment_decks"
+        android:name="org.bdaoust.project7capstone.DecksFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        tools:context="org.bdaoust.project7capstone.DecksFragment"
+        tools:layout="@layout/fragment_decks" />
+</android.support.design.widget.CoordinatorLayout>

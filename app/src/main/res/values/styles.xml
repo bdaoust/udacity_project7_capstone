@@ -6,6 +6,15 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back_white_36dp</item>
+    </style>
+
+    <style name="EditScreenTheme" parent="AppTheme">
+        <item name="android:homeAsUpIndicator">@drawable/ic_clear_white_36dp</item>
     </style>
 
     <style name="OtherColorAccentTheme" parent="AppTheme">
@@ -27,4 +36,5 @@
         <item name="android:tint">@color/icon_button_tint_color</item>
         <item name="android:background">@drawable/icon_button_touch_selector</item>
     </style>
+
 </resources>

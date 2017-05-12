@@ -1,9 +1,9 @@
 package org.bdaoust.project7capstone;
 
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +25,7 @@ public class CardDetailsDialogFragment extends DialogFragment{
         Deck deck;
         ArrayList<Card> cards;
         Card card;
+        Toolbar toolbar;
 
         ImageView cardImage;
         TextView cardName;
@@ -41,14 +42,14 @@ public class CardDetailsDialogFragment extends DialogFragment{
 
         cardImage = (ImageView) rootView.findViewById(R.id.cardImage);
         cardName = (TextView) rootView.findViewById(R.id.cardName);
-        cardQuantity = (TextView) rootView.findViewById(R.id.cardQuantity);;
+        cardQuantity = (TextView) rootView.findViewById(R.id.cardQuantity);
         cardCMC = (TextView) rootView.findViewById(R.id.cardCMC);
-        cardTypes = (TextView) rootView.findViewById(R.id.cardTypes);;
-        cardOracleText = (TextView) rootView.findViewById(R.id.cardOracleText);;
-        cardPowerToughness = (TextView) rootView.findViewById(R.id.cardPowerToughness);;
-        cardLoyalty = (TextView) rootView.findViewById(R.id.cardLoyalty);;
-        cardExpansion = (TextView) rootView.findViewById(R.id.cardExpansion);;
-        cardArtist = (TextView) rootView.findViewById(R.id.cardArtist);;
+        cardTypes = (TextView) rootView.findViewById(R.id.cardTypes);
+        cardOracleText = (TextView) rootView.findViewById(R.id.cardOracleText);
+        cardPowerToughness = (TextView) rootView.findViewById(R.id.cardPowerToughness);
+        cardLoyalty = (TextView) rootView.findViewById(R.id.cardLoyalty);
+        cardExpansion = (TextView) rootView.findViewById(R.id.cardExpansion);
+        cardArtist = (TextView) rootView.findViewById(R.id.cardArtist);
 
         deck = new SampleDeck();
         cards = deck.getCards();
@@ -64,6 +65,18 @@ public class CardDetailsDialogFragment extends DialogFragment{
         cardLoyalty.setText("This will be Null???");
         cardExpansion.setText(card.getSetName());
         cardArtist.setText(card.getArtist());
+
+        toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        if(toolbar != null){
+            toolbar.setTitle(card.getName());
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_36dp);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
+        }
 
         return rootView;
     }

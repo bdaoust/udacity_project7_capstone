@@ -19,8 +19,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".DeckDetailsActivity"/>
-        <activity android:name=".EditDeckActivity"/>
+        <activity android:name=".DeckDetailsActivity" android:parentActivityName=".MainActivity"/>
+        <activity android:name=".EditDeckActivity" android:parentActivityName=".DeckDetailsActivity"/>
     </application>
 
 </manifest>
