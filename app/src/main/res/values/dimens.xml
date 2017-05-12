@@ -68,4 +68,6 @@
     <dimen name="deck_list_item_padding_horizontal">16dp</dimen>
     <dimen name="deck_list_item_padding_vertical">8dp</dimen>
 
+    <dimen name="icon_button_ripple_radius">25dp</dimen>
+
 </resources>
