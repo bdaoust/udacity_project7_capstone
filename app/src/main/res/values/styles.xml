@@ -7,6 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+        <!-- Hide the ActionBar so that the AppTheme can still depend on the Theme.AppCompat.Light.DarkActionBar for the purposes
+        of styling the Toolbar. Based on the following solution: http://stackoverflow.com/questions/26503149/how-do-i-style-appcompat-v7-toolbar-like-theme-appcompat-light-darkactionbar -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
