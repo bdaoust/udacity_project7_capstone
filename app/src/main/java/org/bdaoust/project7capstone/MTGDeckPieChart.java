@@ -24,7 +24,8 @@ public class MTGDeckPieChart extends SurfaceView {
     private float mTop;
     private float mRight;
     private float mBottom;
-    private float mBorderWidth = 2;
+    private float mPadding;
+    private float mBorderWidth;
 
     private final static String KEY_WHITE = "white";
     private final static String KEY_BLUE = "blue";
@@ -99,10 +100,11 @@ public class MTGDeckPieChart extends SurfaceView {
 
         //Border Paint
         mBorderPaint = new Paint();
-        mBorderPaint.setARGB(255, 238, 238, 238); //Material Grey 200
+        mBorderPaint.setARGB(128, 189, 189, 189); //Material Grey 400 (semi transparent)
         mBorderPaint.setAntiAlias(true);
 
-        mBorderWidth = 2;
+        mBorderWidth = 1;
+        mPadding = 4;
 
         //Added a call to setZOrderOnTop(true) in order to make the part of the SurfaceView that is not
         //drawn transparent. Based on a solution provided by
@@ -170,14 +172,14 @@ public class MTGDeckPieChart extends SurfaceView {
 
         mCenterX = w/2.0f;
         mCenterY = h/2.0f;
-        mRadius = w/2.0f;
+        mRadius = w/2.0f - mPadding;
 
         //Adjusting the left, top, right, bottom positions (which will be used to draw the
-        // pie chart), to account for the border width
-        mLeft = 0 + mBorderWidth;
-        mTop = 0 + mBorderWidth;
-        mRight = w - mBorderWidth;
-        mBottom = h - mBorderWidth;
+        // pie chart), to account for the border width and padding.
+        mLeft = 0 + mBorderWidth + mPadding;
+        mTop = 0 + mBorderWidth + mPadding;
+        mRight = w - mBorderWidth - mPadding;
+        mBottom = h - mBorderWidth - mPadding;
     }
 
     @Override
