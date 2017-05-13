@@ -18,18 +18,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/cardImage"
-        android:layout_toStartOf="@+id/actionAddCard"
+        android:layout_marginEnd="@dimen/icon_button_size"
         android:paddingStart="@dimen/search_card_list_item_card_name_padding_horizontal"
         android:paddingEnd="@dimen/search_card_list_item_card_name_padding_horizontal"
-        android:text="@string/search_card_list_item_card_name_placeholder" />
+        android:text="@string/search_card_list_item_card_name_placeholder"
+        tools:ignore="RelativeOverlap" />
 
     <Spinner
         android:id="@+id/setNames"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/icon_button_size"
         android:layout_below="@id/cardName"
-        android:layout_toEndOf="@id/cardImage"
-        android:layout_toStartOf="@+id/actionAddCard"/>
+        android:layout_toEndOf="@id/cardImage" />
 
     <ImageButton
         android:id="@+id/actionAddCard"
