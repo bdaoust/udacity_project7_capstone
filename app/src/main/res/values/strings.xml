@@ -28,9 +28,9 @@
     <string name="card_details_label_converted_mana_cost">CMC:</string>
     <string name="card_details_label_types">Types:</string>
     <string name="card_details_label_oracle_text">Oracle Text:</string>
-    <string name="card_details_label_flavor_text">Flavor Text</string>
+    <string name="card_details_label_flavor_text">Flavor Text:</string>
     <string name="card_details_label_power_toughness">P/T:</string>
-    <string name="card_details_label_loyalty">Loyalty</string>
+    <string name="card_details_label_loyalty">Loyalty:</string>
     <string name="card_details_label_expansion">Expansion:</string>
     <string name="card_details_label_artist">Artist:</string>
 
