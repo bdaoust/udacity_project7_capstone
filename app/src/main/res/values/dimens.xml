@@ -59,7 +59,7 @@
     <dimen name="search_card_list_item_margin_vertical">8dp</dimen>
     <dimen name="search_card_list_item_image_width">70dp</dimen>
     <dimen name="search_card_list_item_image_height">98dp</dimen>
-    <dimen name="search_card_list_item_card_name_padding_start">8dp</dimen>
+    <dimen name="search_card_list_item_card_name_padding_horizontal">8dp</dimen>
 
     <dimen name="search_cards_dialog_padding">8dp</dimen>
     <dimen name="search_cards_dialog_input_width">300dp</dimen>

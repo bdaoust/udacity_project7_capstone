@@ -19,7 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/cardImage"
         android:layout_toStartOf="@+id/actionAddCard"
-        android:paddingStart="@dimen/search_card_list_item_card_name_padding_start"
+        android:paddingStart="@dimen/search_card_list_item_card_name_padding_horizontal"
+        android:paddingEnd="@dimen/search_card_list_item_card_name_padding_horizontal"
         android:text="@string/search_card_list_item_card_name_placeholder" />
 
     <Spinner
