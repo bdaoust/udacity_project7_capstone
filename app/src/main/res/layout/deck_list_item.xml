@@ -15,7 +15,7 @@
         android:layout_marginEnd="@dimen/mtg_deck_pie_chart_margin_end"/>
     <TextView
         android:id="@+id/deckName"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/deck_list_deck_name_text_size"
         android:textStyle="bold"
