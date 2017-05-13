@@ -20,6 +20,8 @@
     <string name="empty_deck_list">You don\'t have any decks</string>
 
     <string name="deck_extra_info">%1$d cards - %2$s</string>
+    <string name="deck_color_breakdown">Deck contents: %1$d percent Black, %2$d percent Blue,
+        %3$d percent Green, %4$d percent Red, %5$d percent White, %6$d Colorless</string>
 
     <string name="card_details_label_name">Name:</string>
     <string name="card_details_label_quantity">Quantity:</string>
@@ -38,7 +40,9 @@
     <string name="card_details_quantity_placeholder">99</string>
     <string name="card_details_cmc_placeholder">99</string>
     <string name="card_details_types_placeholder">[Type - Subtype]</string>
-    <string name="card_details_oracle_text_placeholder">[This is a long Oracle Text,  This is a long Oracle Text, This is a long Oracle Text, This is a long Oracle Text, This is a long Oracle Text, This is a long Oracle Text]</string>
+    <string name="card_details_oracle_text_placeholder">[This is a long Oracle Text,  This is a
+        long Oracle Text, This is a long Oracle Text, This is a long Oracle Text, This is a long
+        Oracle Text, This is a long Oracle Text]</string>
     <string name="card_details_flavor_text_placeholder">[Flavor Text]</string>
     <string name="card_details_power_toughness_placeholder">99/99</string>
     <string name="card_details_loyalty_placeholder">99</string>

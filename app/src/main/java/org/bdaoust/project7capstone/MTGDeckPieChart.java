@@ -110,6 +110,8 @@ public class MTGDeckPieChart extends SurfaceView {
         //drawn transparent. Based on a solution provided by
         // Bajji (http://stackoverflow.com/questions/31599167/surfaceview-transparency-not-working-properly)
         setZOrderOnTop(true);
+
+        updateContentDescription();
     }
 
     public float getWhitePercentage(){
@@ -117,7 +119,7 @@ public class MTGDeckPieChart extends SurfaceView {
     }
 
     public void setWhitePercentage(float percentage){
-        setPercentage(KEY_WHITE, percentage);
+        setColorPercentage(KEY_WHITE, percentage);
     }
 
     public float getBluePercentage(){
@@ -125,7 +127,7 @@ public class MTGDeckPieChart extends SurfaceView {
     }
 
     public void setBluePercentage(float percentage){
-        setPercentage(KEY_BLUE, percentage);
+        setColorPercentage(KEY_BLUE, percentage);
     }
 
     public float getBlackPercentage(){
@@ -133,7 +135,7 @@ public class MTGDeckPieChart extends SurfaceView {
     }
 
     public void setBlackPercentage(float percentage){
-        setPercentage(KEY_BLACK, percentage);
+        setColorPercentage(KEY_BLACK, percentage);
     }
 
     public float getRedPercentage(){
@@ -141,7 +143,7 @@ public class MTGDeckPieChart extends SurfaceView {
     }
 
     public void setRedPercentage(float percentage){
-        setPercentage(KEY_RED, percentage);
+        setColorPercentage(KEY_RED, percentage);
     }
 
     public float getGreenPercentage(){
@@ -149,7 +151,12 @@ public class MTGDeckPieChart extends SurfaceView {
     }
 
     public void setGreenPercentage(float percentage){
-        setPercentage(KEY_GREEN, percentage);
+        setColorPercentage(KEY_GREEN, percentage);
+    }
+
+    private void setColorPercentage(String key, float percentage){
+        setPercentage(key, percentage);
+        updateContentDescription();
     }
 
     private void setPercentage(String key, float percentage){
@@ -234,5 +241,19 @@ public class MTGDeckPieChart extends SurfaceView {
 
     private float calcSweepAngle(float percentage){
         return (percentage/100f)*360f;
+    }
+
+    private void updateContentDescription(){
+        String deckColorBreakdown;
+        int colorlessPercentage;
+
+        colorlessPercentage = (int)(100 - getBlackPercentage() - getBluePercentage() - getGreenPercentage()
+                - getRedPercentage() - getWhitePercentage());
+
+        deckColorBreakdown = getResources().getString(R.string.deck_color_breakdown,
+                (int)getBlackPercentage(), (int)getBluePercentage(), (int)getGreenPercentage(),
+                (int)getRedPercentage(), (int)getWhitePercentage(), colorlessPercentage);
+
+        setContentDescription(deckColorBreakdown);
     }
 }
