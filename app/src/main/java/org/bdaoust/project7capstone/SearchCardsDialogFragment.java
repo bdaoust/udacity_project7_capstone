@@ -53,7 +53,7 @@ public class SearchCardsDialogFragment extends DialogFragment{
             CustomViewHolder customViewHolder;
             View view;
 
-            view = LayoutInflater.from(getContext()).inflate(R.layout.search_card_list_item, parent, false);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.list_item_search_card, parent, false);
 
             customViewHolder = new CustomViewHolder(view);
 

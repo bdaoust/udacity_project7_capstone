@@ -77,7 +77,7 @@ public class DecksFragment extends Fragment{
             CustomViewHolder customViewHolder;
             View view;
 
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.deck_list_item, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_deck, parent, false);
             customViewHolder = new CustomViewHolder(view);
 
             view.setOnClickListener(new View.OnClickListener() {

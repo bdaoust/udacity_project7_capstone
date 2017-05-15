@@ -90,7 +90,7 @@ public class DeckDetailsFragment extends Fragment{
             CustomViewHolder customViewHolder;
             View view;
 
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_list_item, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_card, parent, false);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

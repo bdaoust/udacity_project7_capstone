@@ -86,7 +86,7 @@ public class EditDeckActivity extends AppCompatActivity{
             CustomViewHolder customViewHolder;
             View view;
 
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.edit_card_list_item, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_edit_card, parent, false);
             customViewHolder = new CustomViewHolder(view);
 
             return customViewHolder;

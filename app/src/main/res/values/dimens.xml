@@ -70,4 +70,7 @@
 
     <dimen name="icon_button_ripple_radius">25dp</dimen>
 
+    <dimen name="card_numb_copies_radius">2dp</dimen>
+    <dimen name="card_numb_copies_stroke_width">1dp</dimen>
+
 </resources>
