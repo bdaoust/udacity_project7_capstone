@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,8 +19,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".DeckDetailsActivity" android:parentActivityName=".MainActivity"/>
-        <activity android:name=".EditDeckActivity" android:parentActivityName=".DeckDetailsActivity"/>
+        <activity android:name=".activities.DeckDetailsActivity" android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.EditDeckActivity" android:parentActivityName=".activities.DeckDetailsActivity"/>
     </application>
 
 </manifest>

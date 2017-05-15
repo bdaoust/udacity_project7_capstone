@@ -1,4 +1,4 @@
-package org.bdaoust.project7capstone;
+package org.bdaoust.project7capstone.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+
+import org.bdaoust.project7capstone.data.Deck;
+import org.bdaoust.project7capstone.R;
+import org.bdaoust.project7capstone.data.SampleDeck;
 
 import java.util.ArrayList;
 

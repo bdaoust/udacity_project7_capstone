@@ -1,4 +1,4 @@
-package org.bdaoust.project7capstone;
+package org.bdaoust.project7capstone.data;
 
 import android.support.annotation.NonNull;
 
@@ -170,11 +170,11 @@ public class Deck {
     }
 
     public class ColorPercentages {
-        float black;
-        float blue;
-        float green;
-        float red;
-        float white;
+        public float black;
+        public float blue;
+        public float green;
+        public float red;
+        public float white;
 
         public void reset() {
             black = 0;

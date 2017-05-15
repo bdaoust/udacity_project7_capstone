@@ -1,4 +1,4 @@
-package org.bdaoust.project7capstone;
+package org.bdaoust.project7capstone.fragments;
 
 
 import android.os.Bundle;
@@ -17,6 +17,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+
+import org.bdaoust.project7capstone.data.Deck;
+import org.bdaoust.project7capstone.R;
+import org.bdaoust.project7capstone.data.SampleDeck;
 
 public class SearchCardsDialogFragment extends DialogFragment{
 

@@ -1,4 +1,4 @@
-package org.bdaoust.project7capstone;
+package org.bdaoust.project7capstone.data;
 
 import io.magicthegathering.javasdk.resource.Card;
 
@@ -7,7 +7,7 @@ public class SampleDeck extends Deck{
     public SampleDeck(){
         super("Feel the Burn");
 
-        this.setLastUpdatedTimestamp(1491006413000l);
+        this.setLastUpdatedTimestamp(1491006413000L);
 
         Card card;
 

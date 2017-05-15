@@ -1,4 +1,4 @@
-package org.bdaoust.project7capstone;
+package org.bdaoust.project7capstone.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.bdaoust.project7capstone.data.Deck;
+import org.bdaoust.project7capstone.ui.MTGDeckPieChart;
+import org.bdaoust.project7capstone.R;
+import org.bdaoust.project7capstone.data.SampleDeck;
 
 public class DecksFragment extends Fragment{
 

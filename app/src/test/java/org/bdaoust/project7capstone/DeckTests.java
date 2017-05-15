@@ -1,5 +1,7 @@
 package org.bdaoust.project7capstone;
 
+import org.bdaoust.project7capstone.data.Deck;
+import org.bdaoust.project7capstone.data.SampleDeck;
 import org.junit.Before;
 import org.junit.Test;
 

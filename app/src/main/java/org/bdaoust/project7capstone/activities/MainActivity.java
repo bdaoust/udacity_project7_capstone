@@ -1,4 +1,4 @@
-package org.bdaoust.project7capstone;
+package org.bdaoust.project7capstone.activities;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
@@ -7,7 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-public class MainActivity extends AppCompatActivity implements DecksFragment.OnDeckSelectedListener{
+import org.bdaoust.project7capstone.fragments.DeckDetailsFragment;
+import org.bdaoust.project7capstone.fragments.DecksFragment;
+import org.bdaoust.project7capstone.R;
+
+public class MainActivity extends AppCompatActivity implements DecksFragment.OnDeckSelectedListener {
 
     private boolean mIsLargeLayout;
 

@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/deck_list_item_padding_horizontal"
     android:paddingTop="@dimen/deck_list_item_padding_vertical">
 
-    <org.bdaoust.project7capstone.MTGDeckPieChart
+    <org.bdaoust.project7capstone.ui.MTGDeckPieChart
         android:id="@+id/deckPieChart"
         android:layout_width="@dimen/mtg_deck_pie_chart_size"
         android:layout_height="@dimen/mtg_deck_pie_chart_size"
