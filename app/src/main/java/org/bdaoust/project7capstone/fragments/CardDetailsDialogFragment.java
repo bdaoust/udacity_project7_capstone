@@ -39,7 +39,7 @@ public class CardDetailsDialogFragment extends DialogFragment{
         TextView cardOracleText;
         TextView cardPowerToughness;
         TextView cardLoyalty;
-        TextView cardExpansion;
+        TextView cardSet;
         TextView cardArtist;
 
         rootView = inflater.inflate(R.layout.fragment_card_details_dialog, container, false);
@@ -52,7 +52,7 @@ public class CardDetailsDialogFragment extends DialogFragment{
         cardOracleText = (TextView) rootView.findViewById(R.id.cardOracleText);
         cardPowerToughness = (TextView) rootView.findViewById(R.id.cardPowerToughness);
         cardLoyalty = (TextView) rootView.findViewById(R.id.cardLoyalty);
-        cardExpansion = (TextView) rootView.findViewById(R.id.cardExpansion);
+        cardSet = (TextView) rootView.findViewById(R.id.cardSet);
         cardArtist = (TextView) rootView.findViewById(R.id.cardArtist);
 
         deck = new SampleDeck();
@@ -67,7 +67,7 @@ public class CardDetailsDialogFragment extends DialogFragment{
         cardOracleText.setText(card.getText());
         cardPowerToughness.setText(card.getPower() + "/" + card.getToughness());
         cardLoyalty.setText("This will be Null???");
-        cardExpansion.setText(card.getSetName());
+        cardSet.setText(card.getSetName());
         cardArtist.setText(card.getArtist());
 
         toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);

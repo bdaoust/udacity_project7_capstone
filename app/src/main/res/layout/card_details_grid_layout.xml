@@ -116,14 +116,14 @@
         style="@style/CardDetailsGridLabelItem"
         android:layout_width="@dimen/card_details_text_label_width"
         android:layout_height="wrap_content"
-        android:text="@string/card_details_label_expansion" />
+        android:text="@string/card_details_label_set" />
 
     <TextView
-        android:id="@+id/cardExpansion"
+        android:id="@+id/cardSet"
         style="@style/CardDetailsGridItem"
         android:layout_width="@dimen/card_details_text_value_width"
         android:layout_height="wrap_content"
-        android:text="@string/card_details_expansion_placeholder" />
+        android:text="@string/card_details_set_placeholder" />
 
     <TextView
         style="@style/CardDetailsGridLabelItem"
