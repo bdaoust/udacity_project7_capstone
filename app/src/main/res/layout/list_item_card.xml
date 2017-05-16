@@ -12,11 +12,13 @@
         android:padding="@dimen/card_list_item_padding"
         tools:ignore="UselessParent">
 
+        <!-- ContentDescription is ignored since it is set in the code instead -->
         <ImageView
             android:id="@+id/cardImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/cardNumbCopies"

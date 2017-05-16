@@ -74,14 +74,38 @@ public class CardDetailsDialogFragment extends DialogFragment{
         if(toolbar != null){
             toolbar.setTitle(card.getName());
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_36dp);
+            toolbar.setNavigationContentDescription(R.string.action_up);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dismiss();
                 }
             });
+
+            // Hide the deckList from the DeckDetailsFragment (on phones) since it can be otherwise
+            // still be "seen" when navigating the app with TalkBack.
+            View deckList;
+
+            deckList = getActivity().findViewById(R.id.cardsList);
+            if(deckList != null){
+                deckList.setVisibility(View.INVISIBLE);
+            }
+
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        View deckList;
+
+        // The CardDetailsDialogFragment is no longer visible, so we can show the deckList view
+        deckList = getActivity().findViewById(R.id.cardsList);
+        if(deckList !=null && (deckList.getVisibility() == View.INVISIBLE)) {
+            deckList.setVisibility(View.VISIBLE);
+        }
     }
 }

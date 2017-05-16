@@ -247,14 +247,27 @@ public class MTGDeckPieChart extends SurfaceView {
 
     private void updateContentDescription(){
         String deckColorBreakdown;
-        int colorlessPercentage;
 
-        colorlessPercentage = (int)(100 - getBlackPercentage() - getBluePercentage() - getGreenPercentage()
-                - getRedPercentage() - getWhitePercentage());
+        //Rounded percentages
+        int rndBlackPercentage;
+        int rndBluePercentage;
+        int rndGreenPercentage;
+        int rndRedPercentage;
+        int rndWhitePercentage;
+        int rndColorlessPercentage;
+
+        rndBlackPercentage = Math.round(getBlackPercentage());
+        rndBluePercentage = Math.round(getBluePercentage());
+        rndGreenPercentage = Math.round(getGreenPercentage());
+        rndRedPercentage = Math.round(getRedPercentage());
+        rndWhitePercentage = Math.round(getWhitePercentage());
+
+        rndColorlessPercentage = 100 - rndBlackPercentage - rndBluePercentage - rndGreenPercentage
+                - rndRedPercentage - rndWhitePercentage;
 
         deckColorBreakdown = getResources().getString(R.string.deck_color_breakdown,
-                (int)getBlackPercentage(), (int)getBluePercentage(), (int)getGreenPercentage(),
-                (int)getRedPercentage(), (int)getWhitePercentage(), colorlessPercentage);
+                rndBlackPercentage, rndBluePercentage, rndGreenPercentage,
+                rndRedPercentage, rndWhitePercentage, rndColorlessPercentage);
 
         setContentDescription(deckColorBreakdown);
     }

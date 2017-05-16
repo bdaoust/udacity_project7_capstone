@@ -49,10 +49,18 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardIt
 
     @Override
     public void onBindViewHolder(CardItemViewHolder holder, int position) {
-        Card card = mDeck.getCards().get(position);
+        Card card;
+        int numbCopies;
+
+        card = mDeck.getCards().get(position);
+        numbCopies = mDeck.getNumbCopies(card.getMultiverseid());
 
         Glide.with(mContext).load(card.getImageUrl()).into(holder.cardImage);
-        holder.cardNumbCopies.setText(String.valueOf(mDeck.getNumbCopies(card.getMultiverseid())));
+        holder.cardNumbCopies.setText(String.valueOf(numbCopies));
+        // Setting the contentDescription on the cardNumbCopies TextView instead of the cardImage
+        // ImageView, otherwise TalkBack will read the name of the card followed by the number
+        // of copies as opposed to the number of copies followed by the name of the card.
+        holder.cardNumbCopies.setContentDescription(numbCopies + card.getName());
     }
 
     @Override

@@ -41,6 +41,7 @@ public class EditDeckActivity extends AppCompatActivity{
             resources = getResources();
             getSupportActionBar().setTitle(resources.getText(R.string.activity_name_edit_deck));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeActionContentDescription(R.string.action_cancel);
         }
 
         mRecyclerView = (RecyclerView)findViewById(R.id.editCardsList);
