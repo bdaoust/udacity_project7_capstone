@@ -40,12 +40,21 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
     @Override
     public void onBindViewHolder(final EditCardItemViewHolder holder, int position) {
         final Card card;
+        int numbCopies;
 
         card = mDeck.getCards().get(position);
+        numbCopies = mDeck.getNumbCopies(card.getMultiverseid());
         Glide.with(holder.itemView.getContext()).load(card.getImageUrl()).into(holder.cardImage);
         holder.cardName.setText(card.getName());
-        holder.cardNumbCopies.setText(String.valueOf(mDeck.getNumbCopies(card.getMultiverseid())));
+        holder.cardNumbCopies.setText(String.valueOf(numbCopies));
         holder.setName.setText(String.valueOf(card.getSetName()));
+
+        if(numbCopies == 1){
+            holder.decrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_disabled_tint_color));
+        }
+        if(numbCopies == 99){
+            holder.incrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_disabled_tint_color));
+        }
 
         holder.incrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
