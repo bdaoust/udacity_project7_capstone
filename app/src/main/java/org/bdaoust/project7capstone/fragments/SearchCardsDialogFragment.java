@@ -77,6 +77,14 @@ public class SearchCardsDialogFragment extends DialogFragment {
         mCardsLists = new ArrayList<>();
         mSearchCardListAdapter = new SearchCardListAdapter(getContext(), mCardsLists);
 
+        mSearchCardListAdapter.setOnCardAddedListener(new SearchCardListAdapter.OnCardAddedListener() {
+            @Override
+            public void onCardAdded(Card card) {
+                ((SearchCardListAdapter.OnCardAddedListener)getActivity()).onCardAdded(card);
+                dismiss();
+            }
+        });
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.searchCardsList);
         recyclerView.setAdapter(mSearchCardListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

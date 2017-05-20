@@ -15,13 +15,19 @@ import android.view.View;
 
 import org.bdaoust.project7capstone.adapters.EditCardListAdapter;
 import org.bdaoust.project7capstone.R;
+import org.bdaoust.project7capstone.adapters.SearchCardListAdapter;
+import org.bdaoust.project7capstone.data.Deck;
 import org.bdaoust.project7capstone.data.SampleDeck;
 import org.bdaoust.project7capstone.fragments.SearchCardsDialogFragment;
 
-public class EditDeckActivity extends AppCompatActivity{
+import io.magicthegathering.javasdk.resource.Card;
+
+public class EditDeckActivity extends AppCompatActivity implements SearchCardListAdapter.OnCardAddedListener{
 
     private RecyclerView mRecyclerView;
     private FloatingActionButton mSearchCardsFAB;
+    private EditCardListAdapter mEditCardListAdapter;
+    private Deck mDeck;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,10 +50,12 @@ public class EditDeckActivity extends AppCompatActivity{
             getSupportActionBar().setHomeActionContentDescription(R.string.action_cancel);
         }
 
+        mDeck = new SampleDeck();
+        mEditCardListAdapter = new EditCardListAdapter(this, mDeck);
         mRecyclerView = (RecyclerView)findViewById(R.id.editCardsList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        mRecyclerView.setAdapter(new EditCardListAdapter(this, new SampleDeck()));
+        mRecyclerView.setAdapter(mEditCardListAdapter);
 
         mSearchCardsFAB = (FloatingActionButton) findViewById(R.id.searchCardsFAB);
 
@@ -70,4 +78,9 @@ public class EditDeckActivity extends AppCompatActivity{
         return true;
     }
 
+    @Override
+    public void onCardAdded(Card card) {
+        mDeck.addCardCopies(card, 1);
+        mEditCardListAdapter.notifyDataSetChanged();
+    }
 }
