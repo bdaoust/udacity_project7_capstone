@@ -1,8 +1,12 @@
 package org.bdaoust.project7capstone.fragments;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.net.ConnectivityManagerCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -94,34 +98,46 @@ public class SearchCardsDialogFragment extends DialogFragment {
     }
 
     private void initiateCardSearch(String searchTerm){
-        mSearchForCardsTask = new SearchForCardsTask(searchTerm, mLastSearchRequestTimestamp);
+        ConnectivityManager connectivityManager;
+        NetworkInfo activeNetwork;
+        boolean isConnected;
 
-        mSearchForCardsTask.setOnSearchCompletedListener(new SearchForCardsTask.OnSearchCompletedListener() {
-            @Override
-            public void OnSearchCompleted(List<List<Card>> cardsList, String searchTerm, long searchRequestTimestamp) {
-                // Compare the search request timestamps to make sure that the contents should be updated.
-                // If searchRequestTimestamp >= lastSearchRequestTimestamp, everything is fine and the content should be
-                // updated. However if searchRequestTimestamp < lastSearchRequestTimestamp then we should ignore the content since
-                // there is a more recent search that was requested. This can happen if for example the user typed slow enough to
-                // not have the search request canceled, but fast enough that one search request doesn't have the time to complete
-                // the search and update the contents before another search is requested.
-                if (searchRequestTimestamp >= mLastSearchRequestTimestamp) {
+        connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        activeNetwork = connectivityManager.getActiveNetworkInfo();
+        isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
-                    if (cardsList.size() == 0) {
-                        Toast.makeText(getContext(), R.string.no_cards_found, Toast.LENGTH_SHORT).show();
-                    } else {
-                        for (List<Card> cards : cardsList) {
-                            mCardsLists.add(cards);
+        if(isConnected) {
+            mSearchForCardsTask = new SearchForCardsTask(searchTerm, mLastSearchRequestTimestamp);
+
+            mSearchForCardsTask.setOnSearchCompletedListener(new SearchForCardsTask.OnSearchCompletedListener() {
+                @Override
+                public void OnSearchCompleted(List<List<Card>> cardsList, String searchTerm, long searchRequestTimestamp) {
+                    // Compare the search request timestamps to make sure that the contents should be updated.
+                    // If searchRequestTimestamp >= lastSearchRequestTimestamp, everything is fine and the content should be
+                    // updated. However if searchRequestTimestamp < lastSearchRequestTimestamp then we should ignore the content since
+                    // there is a more recent search that was requested. This can happen if for example the user typed slow enough to
+                    // not have the search request canceled, but fast enough that one search request doesn't have the time to complete
+                    // the search and update the contents before another search is requested.
+                    if (searchRequestTimestamp >= mLastSearchRequestTimestamp) {
+
+                        if (cardsList.size() == 0) {
+                            Toast.makeText(getContext(), R.string.no_cards_found, Toast.LENGTH_SHORT).show();
+                        } else {
+                            for (List<Card> cards : cardsList) {
+                                mCardsLists.add(cards);
+                            }
+                            mSearchCardListAdapter.notifyDataSetChanged();
                         }
-                        mSearchCardListAdapter.notifyDataSetChanged();
+                    } else {
+                        Log.d(TAG, "Ignoring \"" + searchTerm + "\" search results due to newer search request");
                     }
-                } else {
-                    Log.d(TAG, "Ignoring \"" + searchTerm + "\" search results due to newer search request");
                 }
-            }
-        });
+            });
 
-        mSearchForCardsTask.execute();
+            mSearchForCardsTask.execute();
+        } else {
+            Toast.makeText(getContext(), R.string.no_network_connection, Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

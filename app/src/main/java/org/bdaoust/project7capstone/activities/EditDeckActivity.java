@@ -1,6 +1,9 @@
 package org.bdaoust.project7capstone.activities;
 
+import android.content.Context;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
 
 import org.bdaoust.project7capstone.adapters.EditCardListAdapter;
 import org.bdaoust.project7capstone.R;
@@ -28,6 +32,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
     private FloatingActionButton mSearchCardsFAB;
     private EditCardListAdapter mEditCardListAdapter;
     private Deck mDeck;
+    private Context mContext;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,6 +42,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         ActionBar actionBar;
         Resources resources;
 
+        mContext = this;
         setContentView(R.layout.activity_edit_deck);
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -62,10 +68,21 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         mSearchCardsFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ConnectivityManager connectivityManager;
+                NetworkInfo activeNetwork;
+                boolean isConnected;
+
+                connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+                activeNetwork = connectivityManager.getActiveNetworkInfo();
+                isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
                 SearchCardsDialogFragment searchCardsDialogFragment;
 
-                searchCardsDialogFragment = new SearchCardsDialogFragment();
-                searchCardsDialogFragment.show(getSupportFragmentManager(), "SEARCH_CARDS");
+                if(isConnected) {
+                    searchCardsDialogFragment = new SearchCardsDialogFragment();
+                    searchCardsDialogFragment.show(getSupportFragmentManager(), "SEARCH_CARDS");
+                } else {
+                    Toast.makeText(mContext, R.string.no_network_connection, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
