@@ -51,9 +51,14 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
 
         if(numbCopies == 1){
             holder.decrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_disabled_tint_color));
+        } else {
+            holder.decrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_tint_color));
         }
+
         if(numbCopies == 99){
             holder.incrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_disabled_tint_color));
+        } else {
+            holder.incrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_tint_color));
         }
 
         holder.incrementButton.setOnClickListener(new View.OnClickListener() {
