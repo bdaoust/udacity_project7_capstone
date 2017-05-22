@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import org.bdaoust.project7capstone.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.magicthegathering.javasdk.resource.Card;
@@ -26,10 +27,12 @@ public class SearchCardListAdapter extends RecyclerView.Adapter<SearchCardListAd
     private Context mContext;
     private List<List<Card>> mCardsLists;
     private OnCardAddedListener mOnCardAddedListener;
+    private HashMap<String, Integer> mSpinnerPositionCache;
 
     public SearchCardListAdapter(Context context, List<List<Card>> cardsLists){
         mContext = context;
         mCardsLists = cardsLists;
+        mSpinnerPositionCache = new HashMap<>();
     }
 
     @Override
@@ -50,11 +53,22 @@ public class SearchCardListAdapter extends RecyclerView.Adapter<SearchCardListAd
         ArrayAdapter<CharSequence> adapter;
         ArrayList<CharSequence> setNames;
         final List<Card> cards;
+        Card card;
+        String cardName;
+        int spinnerPosition;
 
         cards = mCardsLists.get(position);
+        spinnerPosition = 0;
 
-        Glide.with(mContext).load(cards.get(0).getImageUrl()).into(holder.cardImage);
-        holder.cardName.setText(cards.get(0).getName());
+        //All cards will have the same name so we can get the name from the first element
+        cardName = cards.get(0).getName();
+        if(mSpinnerPositionCache.containsKey(cardName)) {
+            spinnerPosition = mSpinnerPositionCache.get(cardName);
+        }
+
+        card = cards.get(spinnerPosition);
+        Glide.with(mContext).load(card.getImageUrl()).into(holder.cardImage);
+        holder.cardName.setText(cardName);
 
         setNames = new ArrayList<>();
         for(int i = 0; i < cards.size(); i++){
@@ -64,14 +78,16 @@ public class SearchCardListAdapter extends RecyclerView.Adapter<SearchCardListAd
         adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, setNames);
 
         holder.setNames.setAdapter(adapter);
+        holder.setNames.setSelection(spinnerPosition);
 
         holder.setNames.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int sPosition, long id) {
                 Card card;
 
-                card = cards.get(position);
+                card = cards.get(sPosition);
                 Glide.with(mContext).load(card.getImageUrl()).into(holder.cardImage);
+                mSpinnerPositionCache.put(card.getName(), sPosition);
             }
 
             @Override
@@ -96,6 +112,10 @@ public class SearchCardListAdapter extends RecyclerView.Adapter<SearchCardListAd
     @Override
     public int getItemCount() {
         return mCardsLists.size();
+    }
+
+    public void clearSpinnerPositionCache(){
+        mSpinnerPositionCache.clear();
     }
 
     class SearchCardItemViewHolder extends RecyclerView.ViewHolder {

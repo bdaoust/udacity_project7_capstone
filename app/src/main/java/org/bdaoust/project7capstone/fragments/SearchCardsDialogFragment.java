@@ -6,7 +6,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.net.ConnectivityManagerCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -58,6 +57,7 @@ public class SearchCardsDialogFragment extends DialogFragment {
                 mLastSearchRequestTimestamp = System.currentTimeMillis();
 
                 mCardsLists.clear();
+                mSearchCardListAdapter.clearSpinnerPositionCache();
                 mSearchCardListAdapter.notifyDataSetChanged();
 
                 //In order to reduce unnecessary network requests, the SearchForCardsTask waits (~500ms) before executing a new search. This allows us
