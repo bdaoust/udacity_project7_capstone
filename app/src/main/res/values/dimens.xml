@@ -73,4 +73,6 @@
     <dimen name="card_numb_copies_radius">2dp</dimen>
     <dimen name="card_numb_copies_stroke_width">1dp</dimen>
 
+    <dimen name="progress_bar_size">50dp</dimen>
+
 </resources>

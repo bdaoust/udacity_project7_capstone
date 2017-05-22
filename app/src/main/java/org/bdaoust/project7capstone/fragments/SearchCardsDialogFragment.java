@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.bdaoust.project7capstone.adapters.SearchCardListAdapter;
@@ -32,6 +33,7 @@ public class SearchCardsDialogFragment extends DialogFragment {
     private SearchCardListAdapter mSearchCardListAdapter;
     private SearchForCardsTask mSearchForCardsTask;
     private List<List<Card>> mCardsLists;
+    private ProgressBar mProgressBar;
     private long mLastSearchRequestTimestamp;
 
     private static final String TAG = "SearchCardsDialogFrag";
@@ -45,6 +47,7 @@ public class SearchCardsDialogFragment extends DialogFragment {
 
         rootView = inflater.inflate(R.layout.fragment_search_cards_dialog, container, false);
         inputCardName = (EditText) rootView.findViewById(R.id.inputCardName);
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
         inputCardName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -59,6 +62,7 @@ public class SearchCardsDialogFragment extends DialogFragment {
                 mCardsLists.clear();
                 mSearchCardListAdapter.clearSpinnerPositionCache();
                 mSearchCardListAdapter.notifyDataSetChanged();
+                mProgressBar.setVisibility(View.VISIBLE);
 
                 //In order to reduce unnecessary network requests, the SearchForCardsTask waits (~500ms) before executing a new search. This allows us
                 //to cancel "old" search requests in the event that the user is typing quickly, and that the SearchForCardsTask is still waiting.
@@ -119,7 +123,7 @@ public class SearchCardsDialogFragment extends DialogFragment {
                     // not have the search request canceled, but fast enough that one search request doesn't have the time to complete
                     // the search and update the contents before another search is requested.
                     if (searchRequestTimestamp >= mLastSearchRequestTimestamp) {
-
+                        mProgressBar.setVisibility(View.GONE);
                         if (cardsList.size() == 0) {
                             Toast.makeText(getContext(), R.string.no_cards_found, Toast.LENGTH_SHORT).show();
                         } else {

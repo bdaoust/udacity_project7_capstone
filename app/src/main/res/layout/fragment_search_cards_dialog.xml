@@ -23,13 +23,21 @@
             android:textSize="@dimen/search_cards_input_text_size" />
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="@dimen/search_cards_list_container_width"
         android:layout_height="@dimen/search_cards_list_container_height">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:visibility="gone"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="@dimen/progress_bar_size"
+            android:layout_height="@dimen/progress_bar_size"
+            android:layout_gravity="center_horizontal" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/searchCardsList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-    </LinearLayout>
+    </FrameLayout>
 </LinearLayout>
