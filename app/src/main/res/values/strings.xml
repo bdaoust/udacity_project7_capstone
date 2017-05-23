@@ -20,6 +20,7 @@
     <string name="empty_deck_list">You don\'t have any decks</string>
     <string name="no_cards_found">No cards found</string>
     <string name="no_network_connection">No network connection</string>
+    <string name="error_loading_search_results">Error loading search results</string>
 
     <string name="deck_extra_info">%1$d cards - %2$s</string>
     <string name="deck_color_breakdown">Deck contents: %1$d percent Black, %2$d percent Blue,

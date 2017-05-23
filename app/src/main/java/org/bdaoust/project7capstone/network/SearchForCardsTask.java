@@ -1,6 +1,7 @@
 package org.bdaoust.project7capstone.network;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,15 +10,19 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.magicthegathering.javasdk.api.CardAPI;
+import io.magicthegathering.javasdk.exception.HttpRequestFailedException;
 import io.magicthegathering.javasdk.resource.Card;
 
 public class SearchForCardsTask extends AsyncTask<Void, Void, List<List<Card>>> {
 
+    private final static String TAG = "SearchForCardsTask";
     private final static long SEARCH_DELAY = 500; //ms
     private String mSearchTerm;
     private OnSearchCompletedListener mOnSearchCompletedListener;
+    private OnRequestFailedListener mOnRequestFailedListener;
     private Comparator<List<Card>> mCardsListComparator;
     private boolean mIsWaitingToSearch;
+    private boolean mIsRequestSuccessful;
     private long mSearchRequestTimestamp;
 
     public SearchForCardsTask(String searchTerm, long searchRequestTimestamp) {
@@ -78,35 +83,42 @@ public class SearchForCardsTask extends AsyncTask<Void, Void, List<List<Card>>> 
             // for "ow" might not find the card "Ow" given that there are so many other cards that
             // contain "ow" ("All Hallow's Eve", "Brown Ouphe", "Burrowing", "City of Shadows", etc.)
             // and we want to make sure that we always "find" cards that match the searchTerm exactly.
-            queryOptions = generateQueryOptions(mSearchTerm, true);
-            cards = CardAPI.getAllCards(queryOptions);
+            try {
+                queryOptions = generateQueryOptions(mSearchTerm, true);
+                cards = CardAPI.getAllCards(queryOptions);
 
-            if (cards.size() > 0) {
-                key = mSearchTerm.toLowerCase();
-                cardsMap.put(key, cards);
-            }
-
-            // Now we search for cards where the name contains the searchTerm but it doesn't need
-            // to be an exact match
-            queryOptions = generateQueryOptions(mSearchTerm, false);
-            cards = CardAPI.getAllCards(queryOptions);
-
-            for (Card card : cards) {
-                key = card.getName().toLowerCase();
-
-                // Ignore cards where the name matches the searchTerm exactly, since
-                // those cards have already been added.
-                if(key.equals(mSearchTerm.toLowerCase())){
-                    continue;
+                if (cards.size() > 0) {
+                    key = mSearchTerm.toLowerCase();
+                    cardsMap.put(key, cards);
                 }
-                if (!cardsMap.containsKey(key)) {
-                    cardsMap.put(key, new ArrayList<Card>());
+
+                // Now we search for cards where the name contains the searchTerm but it doesn't need
+                // to be an exact match
+                queryOptions = generateQueryOptions(mSearchTerm, false);
+                cards = CardAPI.getAllCards(queryOptions);
+
+                for (Card card : cards) {
+                    key = card.getName().toLowerCase();
+
+                    // Ignore cards where the name matches the searchTerm exactly, since
+                    // those cards have already been added.
+                    if (key.equals(mSearchTerm.toLowerCase())) {
+                        continue;
+                    }
+                    if (!cardsMap.containsKey(key)) {
+                        cardsMap.put(key, new ArrayList<Card>());
+                    }
+                    cardsMap.get(key).add(card);
                 }
-                cardsMap.get(key).add(card);
+
+                mIsRequestSuccessful = true;
+
+            } catch (HttpRequestFailedException e) {
+                Log.w(TAG, "Request to MTG API failed: " + e.getMessage());
+                mIsRequestSuccessful = false;
             }
 
             cardsLists = new ArrayList<>(cardsMap.values());
-
             Collections.sort(cardsLists, mCardsListComparator);
 
             return cardsLists;
@@ -119,11 +131,16 @@ public class SearchForCardsTask extends AsyncTask<Void, Void, List<List<Card>>> 
     protected void onPostExecute(List<List<Card>> cardsLists) {
         super.onPostExecute(cardsLists);
 
-        if (mOnSearchCompletedListener != null) {
-            mOnSearchCompletedListener.OnSearchCompleted(cardsLists, mSearchTerm, mSearchRequestTimestamp);
+        if(mIsRequestSuccessful) {
+            if (mOnSearchCompletedListener != null) {
+                mOnSearchCompletedListener.onSearchCompleted(cardsLists, mSearchTerm, mSearchRequestTimestamp);
+            }
+        } else {
+            if(mOnRequestFailedListener != null) {
+                mOnRequestFailedListener.onRequestFailed();
+            }
         }
     }
-
 
     public boolean isWaitingToSearch() {
         return mIsWaitingToSearch;
@@ -152,8 +169,16 @@ public class SearchForCardsTask extends AsyncTask<Void, Void, List<List<Card>>> 
         mOnSearchCompletedListener = onSearchCompletedListener;
     }
 
+    public void setOnRequestFailedListener(OnRequestFailedListener onRequestFailedListener) {
+        mOnRequestFailedListener = onRequestFailedListener;
+    }
+
     public interface OnSearchCompletedListener {
-        void OnSearchCompleted(List<List<Card>> cardsLists, String searchTerm, long searchRequestTimestamp);
+        void onSearchCompleted(List<List<Card>> cardsLists, String searchTerm, long searchRequestTimestamp);
+    }
+
+    public interface OnRequestFailedListener {
+        void onRequestFailed();
     }
 
 }

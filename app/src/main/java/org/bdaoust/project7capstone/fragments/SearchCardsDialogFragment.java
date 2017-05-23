@@ -30,13 +30,13 @@ import io.magicthegathering.javasdk.resource.Card;
 
 public class SearchCardsDialogFragment extends DialogFragment {
 
+    private static final String TAG = "SearchCardsDialogFrag";
     private SearchCardListAdapter mSearchCardListAdapter;
     private SearchForCardsTask mSearchForCardsTask;
     private List<List<Card>> mCardsLists;
     private ProgressBar mProgressBar;
     private long mLastSearchRequestTimestamp;
-
-    private static final String TAG = "SearchCardsDialogFrag";
+    private int mToastStringResource;
 
     @Nullable
     @Override
@@ -49,6 +49,12 @@ public class SearchCardsDialogFragment extends DialogFragment {
         inputCardName = (EditText) rootView.findViewById(R.id.inputCardName);
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
+        mToastStringResource = 0;
+
+        if (!isConnected()) {
+            showToastWhenReady(R.string.no_network_connection);
+        }
+
         inputCardName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -57,22 +63,28 @@ public class SearchCardsDialogFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                mLastSearchRequestTimestamp = System.currentTimeMillis();
+                if (isConnected()) {
+                    mLastSearchRequestTimestamp = System.currentTimeMillis();
 
-                mCardsLists.clear();
-                mSearchCardListAdapter.clearSpinnerPositionCache();
-                mSearchCardListAdapter.notifyDataSetChanged();
-                mProgressBar.setVisibility(View.VISIBLE);
+                    mCardsLists.clear();
+                    mSearchCardListAdapter.clearSpinnerPositionCache();
+                    mSearchCardListAdapter.notifyDataSetChanged();
 
-                //In order to reduce unnecessary network requests, the SearchForCardsTask waits (~500ms) before executing a new search. This allows us
-                //to cancel "old" search requests in the event that the user is typing quickly, and that the SearchForCardsTask is still waiting.
-                if (mSearchForCardsTask != null && mSearchForCardsTask.isWaitingToSearch()) {
-                    Log.d(TAG, "Cancelling search for \"" + mSearchForCardsTask.getSearchTerm() + "\" due to newer search request");
-                    mSearchForCardsTask.cancel(true);
-                }
+                    //In order to reduce unnecessary network requests, the SearchForCardsTask waits (~500ms) before executing a new search. This allows us
+                    //to cancel "old" search requests in the event that the user is typing quickly, and that the SearchForCardsTask is still waiting.
+                    if (mSearchForCardsTask != null && mSearchForCardsTask.isWaitingToSearch()) {
+                        Log.d(TAG, "Cancelling search for \"" + mSearchForCardsTask.getSearchTerm() + "\" due to newer search request");
+                        mSearchForCardsTask.cancel(true);
+                    }
 
-                if (count > 0) {
-                    initiateCardSearch(charSequence.toString());
+                    if (count > 0) {
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        initiateCardSearch(charSequence.toString());
+                    } else {
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+                } else {
+                    showToastWhenReady(R.string.no_network_connection);
                 }
             }
 
@@ -88,7 +100,7 @@ public class SearchCardsDialogFragment extends DialogFragment {
         mSearchCardListAdapter.setOnCardAddedListener(new SearchCardListAdapter.OnCardAddedListener() {
             @Override
             public void onCardAdded(Card card) {
-                ((SearchCardListAdapter.OnCardAddedListener)getActivity()).onCardAdded(card);
+                ((SearchCardListAdapter.OnCardAddedListener) getActivity()).onCardAdded(card);
                 dismiss();
             }
         });
@@ -101,47 +113,72 @@ public class SearchCardsDialogFragment extends DialogFragment {
         return rootView;
     }
 
-    private void initiateCardSearch(String searchTerm){
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if(mToastStringResource > 0){
+            Toast.makeText(getContext(), mToastStringResource, Toast.LENGTH_SHORT).show();
+            mToastStringResource = 0;
+        }
+    }
+
+    private void showToastWhenReady(int stringResource) {
+        if(getContext() != null) {
+            Toast.makeText(getContext(), stringResource, Toast.LENGTH_SHORT).show();
+        } else {
+            mToastStringResource = stringResource;
+        }
+    }
+
+    private void initiateCardSearch(String searchTerm) {
+
+        mSearchForCardsTask = new SearchForCardsTask(searchTerm, mLastSearchRequestTimestamp);
+
+        mSearchForCardsTask.setOnSearchCompletedListener(new SearchForCardsTask.OnSearchCompletedListener() {
+            @Override
+            public void onSearchCompleted(List<List<Card>> cardsList, String searchTerm, long searchRequestTimestamp) {
+                // Compare the search request timestamps to make sure that the contents should be updated.
+                // If searchRequestTimestamp >= lastSearchRequestTimestamp, everything is fine and the content should be
+                // updated. However if searchRequestTimestamp < lastSearchRequestTimestamp then we should ignore the content since
+                // there is a more recent search that was requested. This can happen if for example the user typed slow enough to
+                // not have the search request canceled, but fast enough that one search request doesn't have the time to complete
+                // the search and update the contents before another search is requested.
+                if (searchRequestTimestamp >= mLastSearchRequestTimestamp) {
+                    mProgressBar.setVisibility(View.GONE);
+                    if (cardsList.size() == 0) {
+                        showToastWhenReady(R.string.no_cards_found);
+                    } else {
+                        for (List<Card> cards : cardsList) {
+                            mCardsLists.add(cards);
+                        }
+                        mSearchCardListAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    Log.d(TAG, "Ignoring \"" + searchTerm + "\" search results due to newer search request");
+                }
+            }
+        });
+
+        mSearchForCardsTask.setOnRequestFailedListener(new SearchForCardsTask.OnRequestFailedListener() {
+            @Override
+            public void onRequestFailed() {
+                mProgressBar.setVisibility(View.GONE);
+                Toast.makeText(getContext(), R.string.error_loading_search_results, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mSearchForCardsTask.execute();
+    }
+
+    private boolean isConnected() {
         ConnectivityManager connectivityManager;
         NetworkInfo activeNetwork;
-        boolean isConnected;
 
         connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         activeNetwork = connectivityManager.getActiveNetworkInfo();
-        isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
-        if(isConnected) {
-            mSearchForCardsTask = new SearchForCardsTask(searchTerm, mLastSearchRequestTimestamp);
-
-            mSearchForCardsTask.setOnSearchCompletedListener(new SearchForCardsTask.OnSearchCompletedListener() {
-                @Override
-                public void OnSearchCompleted(List<List<Card>> cardsList, String searchTerm, long searchRequestTimestamp) {
-                    // Compare the search request timestamps to make sure that the contents should be updated.
-                    // If searchRequestTimestamp >= lastSearchRequestTimestamp, everything is fine and the content should be
-                    // updated. However if searchRequestTimestamp < lastSearchRequestTimestamp then we should ignore the content since
-                    // there is a more recent search that was requested. This can happen if for example the user typed slow enough to
-                    // not have the search request canceled, but fast enough that one search request doesn't have the time to complete
-                    // the search and update the contents before another search is requested.
-                    if (searchRequestTimestamp >= mLastSearchRequestTimestamp) {
-                        mProgressBar.setVisibility(View.GONE);
-                        if (cardsList.size() == 0) {
-                            Toast.makeText(getContext(), R.string.no_cards_found, Toast.LENGTH_SHORT).show();
-                        } else {
-                            for (List<Card> cards : cardsList) {
-                                mCardsLists.add(cards);
-                            }
-                            mSearchCardListAdapter.notifyDataSetChanged();
-                        }
-                    } else {
-                        Log.d(TAG, "Ignoring \"" + searchTerm + "\" search results due to newer search request");
-                    }
-                }
-            });
-
-            mSearchForCardsTask.execute();
-        } else {
-            Toast.makeText(getContext(), R.string.no_network_connection, Toast.LENGTH_SHORT).show();
-        }
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
 }
