@@ -24,6 +24,7 @@ public class SearchForCardsTask extends AsyncTask<Void, Void, List<List<Card>>> 
     private boolean mIsWaitingToSearch;
     private boolean mIsRequestSuccessful;
     private long mSearchRequestTimestamp;
+    private String mSets;
 
     public SearchForCardsTask(String searchTerm, long searchRequestTimestamp) {
         mSearchTerm = searchTerm;
@@ -43,10 +44,16 @@ public class SearchForCardsTask extends AsyncTask<Void, Void, List<List<Card>>> 
                 return list1CardName.compareTo(list2CardName);
             }
         };
+
+        mSets = "";
     }
 
     public String getSearchTerm() {
         return mSearchTerm;
+    }
+
+    public void setSets(String sets){
+        mSets = sets;
     }
 
     @Override
@@ -161,6 +168,9 @@ public class SearchForCardsTask extends AsyncTask<Void, Void, List<List<Card>>> 
         queryOptions.add("pageSize=100");
         queryOptions.add("contains=multiverseid");
         queryOptions.add("layout=aftermath|double-faced|flip|leveler|normal|split");
+        if(!mSets.equals("")){
+            queryOptions.add("set=" + mSets);
+        }
 
         return queryOptions;
     }
