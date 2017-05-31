@@ -41,8 +41,10 @@ public class MTGCardModel {
         mType = card.getType();
 
         mColors = new ArrayList<>();
-        for(String color: card.getColors()){
-            mColors.add(color);
+        if(card.getColors() != null) {
+            for (String color : card.getColors()) {
+                mColors.add(color);
+            }
         }
     }
 
