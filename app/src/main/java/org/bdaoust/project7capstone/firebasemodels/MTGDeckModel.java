@@ -1,9 +1,10 @@
 package org.bdaoust.project7capstone.firebasemodels;
 
-
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @IgnoreExtraProperties
@@ -24,6 +25,13 @@ public class MTGDeckModel {
 
     public void setMTGCardModels(List<MTGCardModel> mtgCardModels) {
         mMTGCardModels = mtgCardModels;
+
+        Collections.sort(mMTGCardModels, new Comparator<MTGCardModel>() {
+            @Override
+            public int compare(MTGCardModel mtgCardModel1, MTGCardModel mtgCardModel2) {
+                return mtgCardModel1.getName().compareTo(mtgCardModel2.getName());
+            }
+        });
     }
 
     public String getName() {
