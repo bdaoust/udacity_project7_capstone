@@ -24,6 +24,7 @@ public class MTGCardModel {
     private String mType;
 
     public MTGCardModel(){
+        mColors = new ArrayList<>();
     }
 
     public MTGCardModel(Card card){

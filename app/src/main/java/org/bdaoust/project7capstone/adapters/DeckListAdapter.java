@@ -9,19 +9,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.bdaoust.project7capstone.R;
-import org.bdaoust.project7capstone.data.Deck;
+import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 import org.bdaoust.project7capstone.ui.MTGDeckPieChart;
+
+import java.util.List;
 
 public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckItemViewHolder> {
 
     private Context mContext;
-    private Deck[] mDecks;
+    private List<MTGDeckModel> mMTGDecks;
     private int mSelectedPosition;
     private OnDeckClickedListener mOnDeckClickedListener;
 
-    public DeckListAdapter(Context context, Deck[] decks, int selectedPosition){
+    public DeckListAdapter(Context context, List<MTGDeckModel> mtgDecks, int selectedPosition){
         mContext = context;
-        mDecks = decks;
+        mMTGDecks = mtgDecks;
         mSelectedPosition = selectedPosition;
     }
 
@@ -57,20 +59,20 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
 
     @Override
     public void onBindViewHolder(DeckItemViewHolder holder, int position) {
-        Deck deck;
+        MTGDeckModel mtgDeckModel;
         String extraInfo;
         String lastUpdated;
-        Deck.ColorPercentages colorPercentages;
+        MTGDeckModel.ColorPercentages colorPercentages;
         long lastUpdatedTimestamp;
         int numbCards;
 
-        deck = mDecks[position];
-        numbCards = deck.getNumbCards();
-        lastUpdatedTimestamp = deck.getLastUpdatedTimestamp();
+        mtgDeckModel = mMTGDecks.get(position);
+        numbCards = mtgDeckModel.getNumbCards();
+        lastUpdatedTimestamp = mtgDeckModel.getLastUpdatedTimestamp();
         lastUpdated = DateUtils.formatDateTime(mContext,lastUpdatedTimestamp, DateUtils.FORMAT_SHOW_YEAR);
         extraInfo = mContext.getResources().getString(R.string.deck_extra_info, numbCards, lastUpdated);
 
-        holder.deckName.setText(deck.getDeckName() + " " + position);
+        holder.deckName.setText(mtgDeckModel.getName());
         holder.deckExtraInfo.setText(extraInfo);
         holder.itemView.setTag(position);
 
@@ -80,7 +82,7 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
             holder.itemView.setSelected(false);
         }
 
-        colorPercentages = deck.getColorPercentages();
+        colorPercentages = mtgDeckModel.getColorPercentages();
         holder.mtgDeckPieChart.setBlackPercentage(colorPercentages.black);
         holder.mtgDeckPieChart.setBluePercentage(colorPercentages.blue);
         holder.mtgDeckPieChart.setGreenPercentage(colorPercentages.green);
@@ -90,7 +92,7 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
 
     @Override
     public int getItemCount() {
-        return mDecks.length;
+        return mMTGDecks.size();
     }
 
     class DeckItemViewHolder extends RecyclerView.ViewHolder {
