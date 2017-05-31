@@ -1,5 +1,6 @@
 package org.bdaoust.project7capstone.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -21,14 +22,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.bdaoust.project7capstone.adapters.DeckListAdapter;
 import org.bdaoust.project7capstone.R;
-import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
-import org.bdaoust.project7capstone.data.SampleDeck;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
+import org.bdaoust.project7capstone.network.InitSampleDeckService;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.magicthegathering.javasdk.resource.Card;
 
 public class DecksFragment extends Fragment{
 
@@ -56,7 +54,6 @@ public class DecksFragment extends Fragment{
 
         mMTGDecks = new ArrayList<>();
 
-        /**********************************************************************/
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mReferenceRoot = mFirebaseDatabase.getReference();
         mReferenceSampleDeckWasSaved = mReferenceRoot.child("sampleDeckWasSaved");
@@ -65,7 +62,6 @@ public class DecksFragment extends Fragment{
         mReferenceDecks.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.v("AAA", "A New Deck Was Added?");
                 MTGDeckModel mtgDeckModel;
 
                 mtgDeckModel = dataSnapshot.getValue(MTGDeckModel.class);
@@ -98,9 +94,12 @@ public class DecksFragment extends Fragment{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Log.v("DecksFragment","Sample Deck was already saved!");
+                    Log.d("DecksFragment","Sample Deck was already saved!");
                 } else {
-                    initSampleDeck();
+                    Intent initSampleDeck;
+
+                    initSampleDeck = new Intent(getActivity(), InitSampleDeckService.class);
+                    getActivity().startService(initSampleDeck);
                 }
             }
 
@@ -153,26 +152,5 @@ public class DecksFragment extends Fragment{
         outState.putInt(SELECTED_KEY, mSelectedPosition);
 
         super.onSaveInstanceState(outState);
-    }
-
-    private void initSampleDeck(){
-        SampleDeck sampleDeck = new SampleDeck();
-        List<MTGCardModel> deckCards;
-        deckCards = new ArrayList<>();
-        for(Card card: sampleDeck.getCards()){
-            MTGCardModel mtgCardModel;
-
-            mtgCardModel = new MTGCardModel(card);
-            mtgCardModel.setNumbCopies(sampleDeck.getNumbCopies(card.getMultiverseid()));
-            deckCards.add(mtgCardModel);
-        }
-
-        MTGDeckModel mtgDeckModel = new MTGDeckModel();
-        mtgDeckModel.setName(sampleDeck.getDeckName());
-        mtgDeckModel.setMTGCardModels(deckCards);
-
-        mReferenceDecks.push().setValue(mtgDeckModel);
-        mReferenceSampleDeckWasSaved.setValue(true);
-        Log.v("DecksFragment","Sample Deck saved to Firebase");
     }
 }

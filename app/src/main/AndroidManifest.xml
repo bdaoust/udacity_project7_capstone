@@ -21,6 +21,8 @@
 
         <activity android:name=".activities.DeckDetailsActivity" android:parentActivityName=".activities.MainActivity"/>
         <activity android:name=".activities.EditDeckActivity" android:parentActivityName=".activities.DeckDetailsActivity"/>
+
+        <service android:name=".network.InitSampleDeckService" android:exported="false" />
     </application>
 
 </manifest>
