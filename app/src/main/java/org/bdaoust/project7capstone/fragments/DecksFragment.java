@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +41,7 @@ public class DecksFragment extends Fragment{
     private DatabaseReference mReferenceDecks;
     private List<MTGDeckModel> mMTGDecks;
     private DeckListAdapter mDeckListAdapter;
+    private ProgressBar mProgressBar;
 
     private static final String SELECTED_KEY = "selected_position";
 
@@ -51,6 +53,7 @@ public class DecksFragment extends Fragment{
 
         rootView = inflater.inflate(R.layout.fragment_decks, container, false);
         mEmptyDeckListView = rootView.findViewById(R.id.emptyDeckList);
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
         mMTGDecks = new ArrayList<>();
 
@@ -70,6 +73,10 @@ public class DecksFragment extends Fragment{
 
                 if(mEmptyDeckListView.getVisibility() == View.VISIBLE){
                     mEmptyDeckListView.setVisibility(View.GONE);
+                }
+
+                if(mProgressBar.getVisibility() == View.VISIBLE){
+                    mProgressBar.setVisibility(View.GONE);
                 }
             }
 
@@ -95,11 +102,17 @@ public class DecksFragment extends Fragment{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     Log.d("DecksFragment","Sample Deck was already saved!");
+
+                    if(mMTGDecks.size() == 0){
+                        mEmptyDeckListView.setVisibility(View.VISIBLE);
+                    }
                 } else {
                     Intent initSampleDeck;
 
                     initSampleDeck = new Intent(getActivity(), InitSampleDeckService.class);
                     getActivity().startService(initSampleDeck);
+
+                    mProgressBar.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -124,9 +137,7 @@ public class DecksFragment extends Fragment{
                 ((DecksFragment.OnDeckSelectedListener)getActivity()).onDeckSelected(deckId);
             }
         });
-        if(mMTGDecks.size() == 0) {
-            mEmptyDeckListView.setVisibility(View.VISIBLE);
-        }
+
         mRecyclerView.setAdapter(mDeckListAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
