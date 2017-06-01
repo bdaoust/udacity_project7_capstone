@@ -68,6 +68,7 @@ public class DecksFragment extends Fragment{
                 MTGDeckModel mtgDeckModel;
 
                 mtgDeckModel = dataSnapshot.getValue(MTGDeckModel.class);
+                mtgDeckModel.setFirebaseKey(dataSnapshot.getKey());
                 mMTGDecks.add(mtgDeckModel);
                 mDeckListAdapter.notifyDataSetChanged();
 

@@ -14,6 +14,7 @@ public class MTGDeckModel {
     private String mName;
     private long mLastUpdatedTimestamp = 1491006413000L;
     private ColorPercentages mColorPercentages;
+    private String mFirebaseKey;
 
     public MTGDeckModel() {
         mColorPercentages = new ColorPercentages();
@@ -48,6 +49,16 @@ public class MTGDeckModel {
 
     public void setLastUpdatedTimestamp(long lastUpdatedTimestamp) {
         mLastUpdatedTimestamp = lastUpdatedTimestamp;
+    }
+
+    @Exclude
+    public String getFirebaseKey(){
+        return mFirebaseKey;
+    }
+
+    @Exclude
+    public void setFirebaseKey(String firebaseKey){
+        mFirebaseKey = firebaseKey;
     }
 
     @Exclude
