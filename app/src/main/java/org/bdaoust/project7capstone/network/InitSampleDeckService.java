@@ -3,6 +3,7 @@ package org.bdaoust.project7capstone.network;
 import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -14,13 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.magicthegathering.javasdk.api.CardAPI;
+import io.magicthegathering.javasdk.exception.HttpRequestFailedException;
 import io.magicthegathering.javasdk.resource.Card;
 
-public class InitSampleDeckService extends IntentService{
+public class InitSampleDeckService extends IntentService {
 
     private static final String TAG = "InitSampleDeckService";
+    private List<MTGCardModel> mDeckCards;
+    private int mNumbCardsRequested = 0;
 
-    public InitSampleDeckService(){
+    public InitSampleDeckService() {
         super(TAG);
     }
 
@@ -31,143 +35,81 @@ public class InitSampleDeckService extends IntentService{
         DatabaseReference referenceDecks;
         DatabaseReference referenceSampleDeckWasSaved;
         MTGDeckModel mtgDeckModel;
-        MTGCardModel mtgCardModel;
-        List<MTGCardModel> deckCards;
-        Card card;
 
+        mDeckCards = new ArrayList<>();
         mtgDeckModel = new MTGDeckModel();
-        deckCards = new ArrayList<>();
 
-        // 12 x Mountain
-        card = CardAPI.getCard(191401);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(12);
-        deckCards.add(mtgCardModel);
+        downloadCard(191401, 12); // 12 x Mountain
+        downloadCard(191089, 4); // 4 x Lightning Bolt
+        downloadCard(220948, 4); // 4 x Urza's Mine
+        downloadCard(220952, 4); // 4 x Urza's Power Plant
+        downloadCard(220956, 4); // 4 x Urza's Tower
+        downloadCard(134751, 4); // 4 x Incinerate
+        downloadCard(191076, 4); // 4 x Fireball
+        downloadCard(1824, 1); // 1 x Maze of Ith
+        downloadCard(3452, 2); // 2 x Hammer of Bogardan
+        downloadCard(401805, 3); // 3 x Akoum Hellkite
+        downloadCard(126193, 4); // 4 x Arc Blade
+        downloadCard(205386, 3); // 3 x Arc Lightning
+        downloadCard(186613, 4); // 4 x Banefire
+        downloadCard(114909, 2); // 2 x Conflagrate
+        downloadCard(262661, 2); // 2 x Increasing Vengeance
+        downloadCard(420882, 3); // 3 x Nevinyrral's Disk
+        downloadCard(259205, 2); // 2 x Chandra, the Firebrand
+        downloadCard(195402, 1); // 1 x Chandra Ablaze
+        downloadCard(393821, 1);// 1 x Chandra Nalaar
+        downloadCard(417683, 1); // 1 x Chandra, Torch of Defiance
 
-        // 4 x Lightning Bolt
-        card = CardAPI.getCard(191089);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(4);
-        deckCards.add(mtgCardModel);
+        if(mDeckCards.size() == mNumbCardsRequested) {
+            mtgDeckModel.setName("Feel the Burn");
+            mtgDeckModel.setLastUpdatedTimestamp(System.currentTimeMillis());
+            mtgDeckModel.setMTGCardModels(mDeckCards);
 
-        // 4 x Urza's Mine
-        card = CardAPI.getCard(220948);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(4);
-        deckCards.add(mtgCardModel);
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            referenceRoot = firebaseDatabase.getReference();
+            referenceDecks = referenceRoot.child("decks");
+            referenceSampleDeckWasSaved = referenceRoot.child("sampleDeckWasSaved");
 
-        // 4 x Urza's Power Plant
-        card = CardAPI.getCard(220952);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(4);
-        deckCards.add(mtgCardModel);
+            referenceDecks.push().setValue(mtgDeckModel);
+            referenceSampleDeckWasSaved.setValue(true);
+        } else {
+            Intent sampleDeckDownloadFailedIntent;
 
-        // 4 x Urza's Tower
-        card = CardAPI.getCard(220956);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(4);
-        deckCards.add(mtgCardModel);
+            sampleDeckDownloadFailedIntent = new Intent("org.bdaoust.project7capstone.NOTIFY_SAMPLE_DECK_DOWNLOAD_FAILED");
+            getApplicationContext().sendBroadcast(sampleDeckDownloadFailedIntent);
 
-        // 4 x Incinerate
-        card = CardAPI.getCard(134751);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(4);
-        deckCards.add(mtgCardModel);
+            Log.d(TAG, "Downloading the Sample Deck Failed.... sniff, sniff");
+        }
+    }
 
-        // 4 x Fireball
-        card = CardAPI.getCard(191076);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(4);
-        deckCards.add(mtgCardModel);
+    private void downloadCard(int multiverseId, int numbCopies) {
+        int numbRetries = 2;
+        boolean cardDownloaded = false;
 
-        // 1 x Maze of Ith
-        card = CardAPI.getCard(1824);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(1);
-        deckCards.add(mtgCardModel);
+        if(mDeckCards.size() < mNumbCardsRequested){
+            return;
+        }
 
-        // 2 x Hammer of Bogardan
-        card = CardAPI.getCard(3452);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(2);
-        deckCards.add(mtgCardModel);
+        mNumbCardsRequested++;
 
-        // 3 x Akoum Hellkite
-        card = CardAPI.getCard(401805);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(3);
-        deckCards.add(mtgCardModel);
+        while (!cardDownloaded && numbRetries >= 0) {
+            Log.d(TAG, "Attempting to download card (" + multiverseId + ")");
+            try {
+                Card card;
+                MTGCardModel mtgCardModel;
 
-        // 4 x Arc Blade
-        card = CardAPI.getCard(126193);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(4);
-        deckCards.add(mtgCardModel);
+                card = CardAPI.getCard(multiverseId);
+                mtgCardModel = new MTGCardModel(card);
+                mtgCardModel.setNumbCopies(numbCopies);
+                mDeckCards.add(mtgCardModel);
+                cardDownloaded = true;
+            } catch (HttpRequestFailedException e) {
 
-        // 3 x Arc Lightning
-        card = CardAPI.getCard(205386);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(3);
-        deckCards.add(mtgCardModel);
-
-        // 4 x Banefire
-        card = CardAPI.getCard(186613);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(4);
-        deckCards.add(mtgCardModel);
-
-        // 2 x Conflagrate
-        card = CardAPI.getCard(114909);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(2);
-        deckCards.add(mtgCardModel);
-
-        // 2 x Increasing Vengeance
-        card = CardAPI.getCard(262661);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(2);
-        deckCards.add(mtgCardModel);
-
-        // 3 x Nevinyrral's Disk
-        card = CardAPI.getCard(420882);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(3);
-        deckCards.add(mtgCardModel);
-
-        // 2 x Chandra, the Firebrand
-        card = CardAPI.getCard(259205);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(2);
-        deckCards.add(mtgCardModel);
-
-        // 1 x Chandra Ablaze
-        card = CardAPI.getCard(195402);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(1);
-        deckCards.add(mtgCardModel);
-
-        // 1 x Chandra Nalaar
-        card = CardAPI.getCard(393821);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(1);
-        deckCards.add(mtgCardModel);
-
-        // 1 x Chandra, Torch of Defiance
-        card = CardAPI.getCard(417683);
-        mtgCardModel = new MTGCardModel(card);
-        mtgCardModel.setNumbCopies(1);
-        deckCards.add(mtgCardModel);
-
-        mtgDeckModel.setName("Feel the Burn");
-        mtgDeckModel.setLastUpdatedTimestamp(System.currentTimeMillis());
-        mtgDeckModel.setMTGCardModels(deckCards);
-
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        referenceRoot = firebaseDatabase.getReference();
-        referenceDecks = referenceRoot.child("decks");
-        referenceSampleDeckWasSaved = referenceRoot.child("sampleDeckWasSaved");
-
-        referenceDecks.push().setValue(mtgDeckModel);
-        referenceSampleDeckWasSaved.setValue(true);
+                Log.d(TAG, "Failed to download card ("
+                        + multiverseId + ") -> "
+                        + numbRetries + " retries left. :" + e.getMessage());
+                numbRetries--;
+            }
+        }
     }
 }

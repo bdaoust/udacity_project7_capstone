@@ -1,9 +1,15 @@
 package org.bdaoust.project7capstone.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -42,18 +49,20 @@ public class DecksFragment extends Fragment{
     private List<MTGDeckModel> mMTGDecks;
     private DeckListAdapter mDeckListAdapter;
     private ProgressBar mProgressBar;
+    private View mRootView;
+    private SampleDeckDownloadFailedBroadcastReceiver mSampleDeckDownloadFailedBroadcastReceiver;
+    private boolean mDownloadSampleDeckWhenActivityCreated = false;
 
     private static final String SELECTED_KEY = "selected_position";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView;
         FloatingActionButton createDeckFAB;
 
-        rootView = inflater.inflate(R.layout.fragment_decks, container, false);
-        mEmptyDeckListView = rootView.findViewById(R.id.emptyDeckList);
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        mRootView = inflater.inflate(R.layout.fragment_decks, container, false);
+        mEmptyDeckListView = mRootView.findViewById(R.id.emptyDeckList);
+        mProgressBar = (ProgressBar) mRootView.findViewById(R.id.progressBar);
 
         mMTGDecks = new ArrayList<>();
 
@@ -107,13 +116,8 @@ public class DecksFragment extends Fragment{
                     if(mMTGDecks.size() == 0){
                         mEmptyDeckListView.setVisibility(View.VISIBLE);
                     }
-                } else {
-                    Intent initSampleDeck;
-
-                    initSampleDeck = new Intent(getActivity(), InitSampleDeckService.class);
-                    getActivity().startService(initSampleDeck);
-
-                    mProgressBar.setVisibility(View.VISIBLE);
+                } else if(isConnected()){
+                    downloadSampleDeck();
                 }
             }
 
@@ -123,6 +127,11 @@ public class DecksFragment extends Fragment{
             }
         });
 
+        if(!isConnected()){
+            mProgressBar.setVisibility(View.GONE);
+            Toast.makeText(getContext(), R.string.no_network_connection, Toast.LENGTH_SHORT).show();
+        }
+
 
         // Solution for keeping track of the selected position is based on
         // Project Sunshine (https://github.com/udacity/Sunshine-Version-2/blob/sunshine_master/app/src/main/java/com/example/android/sunshine/app/ForecastFragment.java)
@@ -130,7 +139,7 @@ public class DecksFragment extends Fragment{
             mSelectedPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.deckList);
+        mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.deckList);
         mDeckListAdapter = new DeckListAdapter(getContext(), mMTGDecks, mSelectedPosition);
         mDeckListAdapter.setOnDeckClickedListener(new DeckListAdapter.OnDeckClickedListener() {
             @Override
@@ -144,7 +153,7 @@ public class DecksFragment extends Fragment{
 
         mCreateDeckDialogFragment = new CreateDeckDialogFragment();
 
-        createDeckFAB = (FloatingActionButton) rootView.findViewById(R.id.createDeckFAB);
+        createDeckFAB = (FloatingActionButton) mRootView.findViewById(R.id.createDeckFAB);
         createDeckFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,7 +161,7 @@ public class DecksFragment extends Fragment{
             }
         });
 
-        return rootView;
+        return mRootView;
     }
 
     public interface OnDeckSelectedListener {
@@ -164,5 +173,85 @@ public class DecksFragment extends Fragment{
         outState.putInt(SELECTED_KEY, mSelectedPosition);
 
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mSampleDeckDownloadFailedBroadcastReceiver = new SampleDeckDownloadFailedBroadcastReceiver();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        IntentFilter intentFilter;
+
+        intentFilter = new IntentFilter("org.bdaoust.project7capstone.NOTIFY_SAMPLE_DECK_DOWNLOAD_FAILED");
+        getActivity().registerReceiver(mSampleDeckDownloadFailedBroadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        getActivity().unregisterReceiver(mSampleDeckDownloadFailedBroadcastReceiver);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if(mDownloadSampleDeckWhenActivityCreated){
+            downloadSampleDeck();
+            mDownloadSampleDeckWhenActivityCreated = false;
+        }
+    }
+
+    private class SampleDeckDownloadFailedBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Snackbar snackbar;
+
+            mProgressBar.setVisibility(View.GONE);
+            if(mMTGDecks.size() == 0) {
+                mEmptyDeckListView.setVisibility(View.VISIBLE);
+            }
+
+            snackbar = Snackbar.make(mRootView, R.string.failed_to_download_sample_deck, Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction(R.string.action_retry, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mEmptyDeckListView.setVisibility(View.GONE);
+                    downloadSampleDeck();
+                }
+            });
+            snackbar.show();
+        }
+    }
+
+    private void downloadSampleDeck(){
+        Intent initSampleDeck;
+
+        if(getContext() != null) {
+            initSampleDeck = new Intent(getContext(), InitSampleDeckService.class);
+            getActivity().startService(initSampleDeck);
+        } else {
+            mDownloadSampleDeckWhenActivityCreated = true;
+        }
+
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private boolean isConnected() {
+        ConnectivityManager connectivityManager;
+        NetworkInfo activeNetwork;
+
+        connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        activeNetwork = connectivityManager.getActiveNetworkInfo();
+
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }
