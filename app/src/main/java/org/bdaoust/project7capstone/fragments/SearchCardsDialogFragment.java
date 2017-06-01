@@ -63,6 +63,9 @@ public class SearchCardsDialogFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                String searchTerm;
+
+                searchTerm = charSequence.toString().trim();
                 if (isConnected()) {
                     mLastSearchRequestTimestamp = System.currentTimeMillis();
 
@@ -77,9 +80,9 @@ public class SearchCardsDialogFragment extends DialogFragment {
                         mSearchForCardsTask.cancel(true);
                     }
 
-                    if (count > 0) {
+                    if (searchTerm.length() > 0) {
                         mProgressBar.setVisibility(View.VISIBLE);
-                        initiateCardSearch(charSequence.toString());
+                        initiateCardSearch(searchTerm);
                     } else {
                         mProgressBar.setVisibility(View.GONE);
                     }
