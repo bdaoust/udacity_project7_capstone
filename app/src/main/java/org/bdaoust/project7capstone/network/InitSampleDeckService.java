@@ -60,6 +60,27 @@ public class InitSampleDeckService extends IntentService {
         downloadCard(393821, 1);// 1 x Chandra Nalaar
         downloadCard(417683, 1); // 1 x Chandra, Torch of Defiance
 
+        //TODO Remove when done
+        /********** Other cards for testing ***************/
+        // Cards for Random Deck 1
+        /*downloadCard(121157, 1); // 1 x Allosaurus Rider
+        downloadCard(122124, 2); // 2 x Arcum Dagsson
+        downloadCard(2609, 3); // 3 x Balduvian Hydra
+
+        // Cards for Random Deck 2
+        downloadCard(73935, 1); // 1 x Ach! Hans Run!
+        downloadCard(74317, 2); // 2 x Ambiguity
+        downloadCard(73937, 3); // 3 x Atinlay Igpay
+        downloadCard(73938, 4); // 4 x B-I-N-G-O
+        downloadCard(9667, 5); // 5 x Chicken Egg
+
+        // Cards for Random Deck 3
+        downloadCard(394486, 1); // 1 x Aerie Bowmasters
+        downloadCard(394495, 2); // 2 x Arashin Sovereign
+        downloadCard(394500, 3); // 3 x Atarka Monument
+        downloadCard(394526, 4); // 4 x Cunning Breezedancer*/
+        /**************************************************/
+
         if(mDeckCards.size() == mNumbCardsRequested) {
             mtgDeckModel.setName("Feel the Burn");
             mtgDeckModel.setLastUpdatedTimestamp(System.currentTimeMillis());
