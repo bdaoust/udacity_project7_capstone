@@ -52,8 +52,9 @@ public class DecksFragment extends Fragment{
     private View mRootView;
     private SampleDeckDownloadFailedBroadcastReceiver mSampleDeckDownloadFailedBroadcastReceiver;
     private boolean mDownloadSampleDeckWhenActivityCreated = false;
-
+    private boolean mIsFirstDeckAdded;
     private static final String SELECTED_KEY = "selected_position";
+    private static final String TAG = "DecksFragment";
 
     @Nullable
     @Override
@@ -65,6 +66,7 @@ public class DecksFragment extends Fragment{
         mProgressBar = (ProgressBar) mRootView.findViewById(R.id.progressBar);
 
         mMTGDecks = new ArrayList<>();
+        mIsFirstDeckAdded = true;
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mReferenceRoot = mFirebaseDatabase.getReference();
@@ -87,6 +89,11 @@ public class DecksFragment extends Fragment{
 
                 if(mProgressBar.getVisibility() == View.VISIBLE){
                     mProgressBar.setVisibility(View.GONE);
+                }
+
+                if(mIsFirstDeckAdded) {
+                    ((OnFirstDeckAddedListener)getActivity()).onFirstDeckAdded(dataSnapshot.getKey());
+                    mIsFirstDeckAdded = false;
                 }
             }
 
@@ -111,7 +118,7 @@ public class DecksFragment extends Fragment{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Log.d("DecksFragment","Sample Deck was already saved!");
+                    Log.d(TAG,"Sample Deck was already saved!");
 
                     if(mMTGDecks.size() == 0){
                         mEmptyDeckListView.setVisibility(View.VISIBLE);
@@ -132,7 +139,6 @@ public class DecksFragment extends Fragment{
             Toast.makeText(getContext(), R.string.no_network_connection, Toast.LENGTH_SHORT).show();
         }
 
-
         // Solution for keeping track of the selected position is based on
         // Project Sunshine (https://github.com/udacity/Sunshine-Version-2/blob/sunshine_master/app/src/main/java/com/example/android/sunshine/app/ForecastFragment.java)
         if(savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)){
@@ -141,10 +147,11 @@ public class DecksFragment extends Fragment{
 
         mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.deckList);
         mDeckListAdapter = new DeckListAdapter(getContext(), mMTGDecks, mSelectedPosition);
-        mDeckListAdapter.setOnDeckClickedListener(new DeckListAdapter.OnDeckClickedListener() {
+        mDeckListAdapter.setOnDeckSelectedListener(new OnDeckSelectedListener() {
             @Override
-            public void onDeckClicked(int deckId) {
-                ((DecksFragment.OnDeckSelectedListener)getActivity()).onDeckSelected(deckId);
+            public void onDeckSelected(String firebaseKey, int position) {
+                mSelectedPosition = position;
+                ((OnDeckSelectedListener)getActivity()).onDeckSelected(firebaseKey, position);
             }
         });
 
@@ -162,10 +169,6 @@ public class DecksFragment extends Fragment{
         });
 
         return mRootView;
-    }
-
-    public interface OnDeckSelectedListener {
-        void onDeckSelected(int someDeckId);
     }
 
     @Override
@@ -253,5 +256,21 @@ public class DecksFragment extends Fragment{
         activeNetwork = connectivityManager.getActiveNetworkInfo();
 
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    public interface OnFirstDeckAddedListener {
+        void onFirstDeckAdded(String firebaseKey);
+    }
+
+    public interface OnDeckCreatedListener {
+        void onDeckCreated(String firebaseKey);
+    }
+
+    public interface OnDeckSelectedListener {
+        void onDeckSelected(String firebaseKey, int position);
+    }
+
+    public interface OnDeckDeletedListener {
+        void onDeckDeleted(String firstDeckFirebaseKey);
     }
 }

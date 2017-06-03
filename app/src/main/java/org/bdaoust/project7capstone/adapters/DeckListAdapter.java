@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
+import org.bdaoust.project7capstone.fragments.DecksFragment;
 import org.bdaoust.project7capstone.ui.MTGDeckPieChart;
 
 import java.util.List;
@@ -19,9 +20,9 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
     private Context mContext;
     private List<MTGDeckModel> mMTGDecks;
     private int mSelectedPosition;
-    private OnDeckClickedListener mOnDeckClickedListener;
+    private DecksFragment.OnDeckSelectedListener mOnDeckSelectedListener;
 
-    public DeckListAdapter(Context context, List<MTGDeckModel> mtgDecks, int selectedPosition){
+    public DeckListAdapter(Context context, List<MTGDeckModel> mtgDecks, int selectedPosition) {
         mContext = context;
         mMTGDecks = mtgDecks;
         mSelectedPosition = selectedPosition;
@@ -39,16 +40,18 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
             @Override
             public void onClick(View view) {
                 int position;
+                String firebaseKey;
 
-                position = (int)view.getTag();
-                if(position != mSelectedPosition){
+                position = (int) view.getTag();
+                if (position != mSelectedPosition) {
                     notifyItemChanged(mSelectedPosition);
                     mSelectedPosition = position;
                     view.setSelected(true);
                 }
 
-                if(mOnDeckClickedListener != null) {
-                    mOnDeckClickedListener.onDeckClicked((int)view.getTag());
+                firebaseKey = mMTGDecks.get(position).getFirebaseKey();
+                if (mOnDeckSelectedListener != null) {
+                    mOnDeckSelectedListener.onDeckSelected(firebaseKey, position);
                 }
 
             }
@@ -69,14 +72,14 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
         mtgDeckModel = mMTGDecks.get(position);
         numbCards = mtgDeckModel.getNumbCards();
         lastUpdatedTimestamp = mtgDeckModel.getLastUpdatedTimestamp();
-        lastUpdated = DateUtils.formatDateTime(mContext,lastUpdatedTimestamp, DateUtils.FORMAT_SHOW_YEAR);
+        lastUpdated = DateUtils.formatDateTime(mContext, lastUpdatedTimestamp, DateUtils.FORMAT_SHOW_YEAR);
         extraInfo = mContext.getResources().getString(R.string.deck_extra_info, numbCards, lastUpdated);
 
         holder.deckName.setText(mtgDeckModel.getName());
         holder.deckExtraInfo.setText(extraInfo);
         holder.itemView.setTag(position);
 
-        if(position == mSelectedPosition){
+        if (position == mSelectedPosition) {
             holder.itemView.setSelected(true);
         } else {
             holder.itemView.setSelected(false);
@@ -110,11 +113,8 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
         }
     }
 
-    public void setOnDeckClickedListener(OnDeckClickedListener onDeckClickedListener) {
-        mOnDeckClickedListener = onDeckClickedListener;
+    public void setOnDeckSelectedListener(DecksFragment.OnDeckSelectedListener onDeckSelectedListener) {
+        mOnDeckSelectedListener = onDeckSelectedListener;
     }
 
-    public interface OnDeckClickedListener {
-        void onDeckClicked(int deckId);
-    }
 }

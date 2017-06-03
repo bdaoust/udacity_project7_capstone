@@ -6,14 +6,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import org.bdaoust.project7capstone.fragments.DeckDetailsFragment;
 import org.bdaoust.project7capstone.fragments.DecksFragment;
 import org.bdaoust.project7capstone.R;
 
-public class MainActivity extends AppCompatActivity implements DecksFragment.OnDeckSelectedListener {
+public class MainActivity extends AppCompatActivity implements DecksFragment.OnDeckSelectedListener , DecksFragment.OnFirstDeckAddedListener{
 
     private boolean mIsLargeLayout;
+    private boolean mIsActivityInitialCreation;
+    private final static String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,18 +30,15 @@ public class MainActivity extends AppCompatActivity implements DecksFragment.OnD
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if(mIsLargeLayout) {
-            if (savedInstanceState == null) {
-                loadDetailFragment(0);
-            }
-        }
+        mIsActivityInitialCreation = savedInstanceState == null;
     }
 
-    private void loadDetailFragment(int deckId){
+    private void loadDetailFragment(String firebaseKey){
         FragmentManager fragmentManager;
         FragmentTransaction fragmentTransaction;
         DeckDetailsFragment deckDetailsFragment;
 
+        Log.d(TAG, "Loading Deck: " + firebaseKey);
         deckDetailsFragment = new DeckDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -47,14 +47,24 @@ public class MainActivity extends AppCompatActivity implements DecksFragment.OnD
     }
 
     @Override
-    public void onDeckSelected(int deckId) {
+    public void onDeckSelected(String firebaseKey, int position) {
         if(mIsLargeLayout){
-            loadDetailFragment(deckId);
+            loadDetailFragment(firebaseKey);
         } else {
             Intent intent;
 
             intent = new Intent(this, DeckDetailsActivity.class);
+            intent.putExtra("FIREBASE_DECK_KEY", firebaseKey);
+            Log.d(TAG, "Loading Deck: " + firebaseKey);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onFirstDeckAdded(String firebaseKey) {
+        if(mIsLargeLayout && mIsActivityInitialCreation) {
+            Log.d(TAG, "Initial Activity Creation... Loading First Deck");
+            loadDetailFragment(firebaseKey);
         }
     }
 }
