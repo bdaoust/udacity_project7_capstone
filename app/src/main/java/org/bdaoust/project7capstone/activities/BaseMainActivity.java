@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import org.bdaoust.project7capstone.MTGKeys;
 import org.bdaoust.project7capstone.fragments.DeckDetailsFragment;
 import org.bdaoust.project7capstone.fragments.DecksFragment;
 import org.bdaoust.project7capstone.R;
@@ -37,9 +38,14 @@ public class BaseMainActivity extends AppCompatActivity implements DecksFragment
         FragmentManager fragmentManager;
         FragmentTransaction fragmentTransaction;
         DeckDetailsFragment deckDetailsFragment;
+        Bundle bundle;
 
-        Log.d(TAG, "Loading Deck: " + firebaseKey);
+        bundle = new Bundle();
+        bundle.putString(MTGKeys.FIREBASE_DECK_KEY, firebaseKey);
         deckDetailsFragment = new DeckDetailsFragment();
+        deckDetailsFragment.setArguments(bundle);
+        Log.d(TAG, "Loading Deck: " + firebaseKey);
+
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.deckDetailsContainer, deckDetailsFragment);
@@ -54,7 +60,7 @@ public class BaseMainActivity extends AppCompatActivity implements DecksFragment
             Intent intent;
 
             intent = new Intent(this, DeckDetailsActivity.class);
-            intent.putExtra("FIREBASE_DECK_KEY", firebaseKey);
+            intent.putExtra(MTGKeys.FIREBASE_DECK_KEY, firebaseKey);
             Log.d(TAG, "Loading Deck: " + firebaseKey);
             startActivity(intent);
         }

@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import org.bdaoust.project7capstone.MTGKeys;
 import org.bdaoust.project7capstone.fragments.DeckDetailsFragment;
 import org.bdaoust.project7capstone.R;
 
@@ -35,8 +36,14 @@ public class BaseDeckDetailsActivity extends AppCompatActivity{
             FragmentManager fragmentManager;
             FragmentTransaction fragmentTransaction;
             DeckDetailsFragment deckDetailsFragment;
+            String firebaseDeckKey;
+            Bundle bundle;
 
+            firebaseDeckKey = getIntent().getStringExtra(MTGKeys.FIREBASE_DECK_KEY);
+            bundle = new Bundle();
+            bundle.putString(MTGKeys.FIREBASE_DECK_KEY, firebaseDeckKey);
             deckDetailsFragment = new DeckDetailsFragment();
+            deckDetailsFragment.setArguments(bundle);
 
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();

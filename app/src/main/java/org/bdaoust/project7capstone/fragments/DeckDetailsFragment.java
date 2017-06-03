@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.bdaoust.project7capstone.MTGKeys;
 import org.bdaoust.project7capstone.adapters.CardListAdapter;
 import org.bdaoust.project7capstone.data.Deck;
 import org.bdaoust.project7capstone.R;
@@ -24,6 +26,7 @@ import org.bdaoust.project7capstone.activities.EditDeckActivity;
 public class DeckDetailsFragment extends Fragment{
 
     private boolean mIsLargeLayout;
+    private String mFirebaseDeckKey;
 
     @Nullable
     @Override
@@ -53,6 +56,9 @@ public class DeckDetailsFragment extends Fragment{
         recyclerView.setLayoutManager(gridLayoutManager);
 
         mIsLargeLayout = getResources().getBoolean(R.bool.large_layout);
+
+        mFirebaseDeckKey = getArguments().getString(MTGKeys.FIREBASE_DECK_KEY);
+        Log.d("DeckDetailsFragment", "----------- The Deck to load is " + mFirebaseDeckKey + " ---------------");
 
         setHasOptionsMenu(true);
 
