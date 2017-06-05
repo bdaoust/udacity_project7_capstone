@@ -14,6 +14,7 @@ public class MTGCardModel {
     private String mArtist;
     private double mCmc;
     private List<String> mColors;
+    private String mFlavorText;
     private String mImageUrl;
     private int mLoyalty;
     private String mManaCost;
@@ -33,6 +34,7 @@ public class MTGCardModel {
     public MTGCardModel(Card card){
         mArtist = card.getArtist();
         mCmc = card.getCmc();
+        mFlavorText = card.getFlavor();
         mImageUrl = card.getImageUrl();
         mLoyalty = card.getLoyalty();
         mManaCost = card.getManaCost();
@@ -84,6 +86,14 @@ public class MTGCardModel {
 
     public void setColors(List<String> colors){
         mColors = colors;
+    }
+
+    public String getFlavorText(){
+        return mFlavorText;
+    }
+
+    public void setFlavorText(String flavorText){
+        mFlavorText = flavorText;
     }
 
     public String getImageUrl(){
