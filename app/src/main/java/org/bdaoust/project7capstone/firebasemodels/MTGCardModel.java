@@ -1,6 +1,8 @@
 package org.bdaoust.project7capstone.firebasemodels;
 
 
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import io.magicthegathering.javasdk.resource.Card;
 
 public class MTGCardModel {
 
+    private String mFirebaseKey;
     private String mArtist;
     private double mCmc;
     private List<String> mColors;
@@ -47,6 +50,16 @@ public class MTGCardModel {
                 mColors.add(color);
             }
         }
+    }
+
+    @Exclude
+    public String getFirebaseKey(){
+        return mFirebaseKey;
+    }
+
+    @Exclude
+    public void setFirebaseKey(String firebaseKey){
+        mFirebaseKey = firebaseKey;
     }
 
     public String getArtist(){
