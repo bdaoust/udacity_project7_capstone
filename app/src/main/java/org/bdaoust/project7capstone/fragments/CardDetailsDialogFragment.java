@@ -76,7 +76,9 @@ public class CardDetailsDialogFragment extends DialogFragment{
                     mtgCard = dataSnapshot.getValue(MTGCardModel.class);
 
 
-                    mToolbar.setTitle(mtgCard.getName());
+                    if(mToolbar != null) {
+                        mToolbar.setTitle(mtgCard.getName());
+                    }
 
                     Glide.with(getContext()).load(mtgCard.getImageUrl()).into(mCardImage);
                     mCardName.setText(mtgCard.getName());
