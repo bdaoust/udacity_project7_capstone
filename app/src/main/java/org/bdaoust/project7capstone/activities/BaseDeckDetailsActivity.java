@@ -8,38 +8,70 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import org.bdaoust.project7capstone.MTGKeys;
 import org.bdaoust.project7capstone.fragments.DeckDetailsFragment;
 import org.bdaoust.project7capstone.R;
 
 public class BaseDeckDetailsActivity extends AppCompatActivity{
 
+    private ActionBar mActionBar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Toolbar toolbar;
-        ActionBar actionBar;
+        FirebaseDatabase firebaseDatabase;
+        DatabaseReference referenceRoot;
+        DatabaseReference referenceDeckName;
+        String firebaseDeckKey;
 
         setContentView(R.layout.activity_deck_details);
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        actionBar = getSupportActionBar();
+        mActionBar = getSupportActionBar();
 
-        if(actionBar != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("[Deck Name]");
+        if(mActionBar != null) {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        firebaseDeckKey = getIntent().getStringExtra(MTGKeys.FIREBASE_DECK_KEY);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        referenceRoot = firebaseDatabase.getReference();
+        referenceDeckName = referenceRoot.child("decks").child(firebaseDeckKey).child("name");
+
+        referenceDeckName.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String deckName;
+
+                deckName = dataSnapshot.getValue(String.class);
+
+                if(mActionBar != null){
+                    mActionBar.setTitle(deckName);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         if(savedInstanceState == null){
             FragmentManager fragmentManager;
             FragmentTransaction fragmentTransaction;
             DeckDetailsFragment deckDetailsFragment;
-            String firebaseDeckKey;
+
             Bundle bundle;
 
-            firebaseDeckKey = getIntent().getStringExtra(MTGKeys.FIREBASE_DECK_KEY);
             bundle = new Bundle();
             bundle.putString(MTGKeys.FIREBASE_DECK_KEY, firebaseDeckKey);
             deckDetailsFragment = new DeckDetailsFragment();
