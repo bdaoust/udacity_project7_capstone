@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import org.bdaoust.project7capstone.MTGKeys;
 import org.bdaoust.project7capstone.data.Deck;
 import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.data.SampleDeck;
@@ -30,6 +31,8 @@ public class CardDetailsDialogFragment extends DialogFragment{
         ArrayList<Card> cards;
         Card card;
         Toolbar toolbar;
+        String firebaseDeckKey;
+        String firebaseCardKey;
 
         ImageView cardImage;
         TextView cardName;
@@ -43,6 +46,9 @@ public class CardDetailsDialogFragment extends DialogFragment{
         TextView cardArtist;
 
         rootView = inflater.inflate(R.layout.fragment_card_details_dialog, container, false);
+
+        firebaseDeckKey = getArguments().getString(MTGKeys.FIREBASE_DECK_KEY);
+        firebaseCardKey = getArguments().getString(MTGKeys.FIREBASE_CARD_KEY);
 
         cardImage = (ImageView) rootView.findViewById(R.id.cardImage);
         cardName = (TextView) rootView.findViewById(R.id.cardName);

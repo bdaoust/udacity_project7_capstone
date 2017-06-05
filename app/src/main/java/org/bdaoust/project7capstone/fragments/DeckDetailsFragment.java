@@ -63,8 +63,8 @@ public class DeckDetailsFragment extends Fragment{
 
         mCardListAdapter.setOnCardClickedListener(new CardListAdapter.OnCardClickedListener() {
             @Override
-            public void onCardClicked() {
-                showCardDetails();
+            public void onCardClicked(String firebaseCardKey) {
+                showCardDetails(firebaseCardKey);
             }
         });
 
@@ -87,6 +87,7 @@ public class DeckDetailsFragment extends Fragment{
                 MTGCardModel mtgCardModel;
 
                 mtgCardModel = dataSnapshot.getValue(MTGCardModel.class);
+                mtgCardModel.setFirebaseKey(dataSnapshot.getKey());
                 mMTGCards.add(mtgCardModel);
                 mCardListAdapter.notifyDataSetChanged();
             }
@@ -141,15 +142,21 @@ public class DeckDetailsFragment extends Fragment{
         }
     }
 
-    private void showCardDetails(){
+    private void showCardDetails(String firebaseCardKey){
         CardDetailsDialogFragment cardDetailsDialogFragment;
         FragmentManager fragmentManager;
+        Bundle bundle;
 
+        bundle = new Bundle();
+        bundle.putString(MTGKeys.FIREBASE_DECK_KEY, mFirebaseDeckKey);
+        bundle.putString(MTGKeys.FIREBASE_CARD_KEY, firebaseCardKey);
         cardDetailsDialogFragment = new CardDetailsDialogFragment();
+        cardDetailsDialogFragment.setArguments(bundle);
+
         fragmentManager = getFragmentManager();
 
         if(mIsLargeLayout){
-            cardDetailsDialogFragment.show(getFragmentManager(), "CardDetails");
+            cardDetailsDialogFragment.show(fragmentManager, "CardDetails");
         } else {
             FragmentTransaction fragmentTransaction;
 

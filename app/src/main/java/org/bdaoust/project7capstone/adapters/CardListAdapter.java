@@ -32,15 +32,6 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardIt
         View view;
 
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_card, parent, false);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mOnCardClickedListener != null){
-                    mOnCardClickedListener.onCardClicked();
-                }
-            }
-        });
-
         cardItemViewHolder = new CardItemViewHolder(view);
 
         return cardItemViewHolder;
@@ -48,7 +39,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardIt
 
     @Override
     public void onBindViewHolder(CardItemViewHolder holder, int position) {
-        MTGCardModel mtgCardModel;
+        final MTGCardModel mtgCardModel;
         int numbCopies;
 
         mtgCardModel = mMTGDeckModel.getMTGCardModels().get(position);
@@ -60,6 +51,18 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardIt
         // ImageView, otherwise TalkBack will read the name of the card followed by the number
         // of copies as opposed to the number of copies followed by the name of the card.
         holder.cardNumbCopies.setContentDescription(numbCopies + mtgCardModel.getName());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String firebaseCardKey;
+
+                firebaseCardKey = mtgCardModel.getFirebaseKey();
+                if(mOnCardClickedListener != null){
+                    mOnCardClickedListener.onCardClicked(firebaseCardKey);
+                }
+            }
+        });
     }
 
     @Override
@@ -72,7 +75,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardIt
     }
 
     public interface OnCardClickedListener {
-        void onCardClicked();
+        void onCardClicked(String firebaseKey);
     }
 
     class CardItemViewHolder extends RecyclerView.ViewHolder{
