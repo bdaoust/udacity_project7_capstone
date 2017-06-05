@@ -11,77 +11,98 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.bdaoust.project7capstone.MTGKeys;
-import org.bdaoust.project7capstone.data.Deck;
 import org.bdaoust.project7capstone.R;
-import org.bdaoust.project7capstone.data.SampleDeck;
-
-import java.util.ArrayList;
-
-import io.magicthegathering.javasdk.resource.Card;
+import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
 
 public class CardDetailsDialogFragment extends DialogFragment{
+
+    private Toolbar mToolbar;
+    private ImageView mCardImage;
+    private TextView mCardName;
+    private TextView mCardQuantity;
+    private TextView mCardCMC;
+    private TextView mCardTypes;
+    private TextView mCardOracleText;
+    private TextView mCardFlavorText;
+    private TextView mCardPowerToughness;
+    private TextView mCardLoyalty;
+    private TextView mCardSet;
+    private TextView mCardArtist;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView;
-        Deck deck;
-        ArrayList<Card> cards;
-        Card card;
-        Toolbar toolbar;
+        FirebaseDatabase firebaseDatabase;
+        DatabaseReference referenceCard;
         String firebaseDeckKey;
         String firebaseCardKey;
 
-        ImageView cardImage;
-        TextView cardName;
-        TextView cardQuantity;
-        TextView cardCMC;
-        TextView cardTypes;
-        TextView cardOracleText;
-        TextView cardPowerToughness;
-        TextView cardLoyalty;
-        TextView cardSet;
-        TextView cardArtist;
-
         rootView = inflater.inflate(R.layout.fragment_card_details_dialog, container, false);
+        mToolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+
+        mCardImage = (ImageView) rootView.findViewById(R.id.cardImage);
+        mCardName = (TextView) rootView.findViewById(R.id.cardName);
+        mCardQuantity = (TextView) rootView.findViewById(R.id.cardQuantity);
+        mCardCMC = (TextView) rootView.findViewById(R.id.cardCMC);
+        mCardTypes = (TextView) rootView.findViewById(R.id.cardTypes);
+        mCardOracleText = (TextView) rootView.findViewById(R.id.cardOracleText);
+        mCardFlavorText = (TextView) rootView.findViewById(R.id.cardFlavorText);
+        mCardPowerToughness = (TextView) rootView.findViewById(R.id.cardPowerToughness);
+        mCardLoyalty = (TextView) rootView.findViewById(R.id.cardLoyalty);
+        mCardSet = (TextView) rootView.findViewById(R.id.cardSet);
+        mCardArtist = (TextView) rootView.findViewById(R.id.cardArtist);
 
         firebaseDeckKey = getArguments().getString(MTGKeys.FIREBASE_DECK_KEY);
         firebaseCardKey = getArguments().getString(MTGKeys.FIREBASE_CARD_KEY);
 
-        cardImage = (ImageView) rootView.findViewById(R.id.cardImage);
-        cardName = (TextView) rootView.findViewById(R.id.cardName);
-        cardQuantity = (TextView) rootView.findViewById(R.id.cardQuantity);
-        cardCMC = (TextView) rootView.findViewById(R.id.cardCMC);
-        cardTypes = (TextView) rootView.findViewById(R.id.cardTypes);
-        cardOracleText = (TextView) rootView.findViewById(R.id.cardOracleText);
-        cardPowerToughness = (TextView) rootView.findViewById(R.id.cardPowerToughness);
-        cardLoyalty = (TextView) rootView.findViewById(R.id.cardLoyalty);
-        cardSet = (TextView) rootView.findViewById(R.id.cardSet);
-        cardArtist = (TextView) rootView.findViewById(R.id.cardArtist);
+        if(firebaseDeckKey != null && firebaseCardKey != null) {
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            referenceCard = firebaseDatabase.getReference().child("decks").
+                    child(firebaseDeckKey).child("mtgcardModels").child(firebaseCardKey);
 
-        deck = new SampleDeck();
-        cards = deck.getCards();
-        card = cards.get(0);
+            referenceCard.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    MTGCardModel mtgCard;
 
-        Glide.with(getContext()).load(card.getImageUrl()).into(cardImage);
-        cardName.setText(card.getName());
-        cardQuantity.setText(String.valueOf(deck.getNumbCopies(card.getMultiverseid())));
-        cardCMC.setText(String.valueOf(card.getCmc()));
-        cardTypes.setText(card.getType());
-        cardOracleText.setText(card.getText());
-        cardPowerToughness.setText(card.getPower() + "/" + card.getToughness());
-        cardLoyalty.setText("This will be Null???");
-        cardSet.setText(card.getSetName());
-        cardArtist.setText(card.getArtist());
+                    mtgCard = dataSnapshot.getValue(MTGCardModel.class);
 
-        toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
-        if(toolbar != null){
-            toolbar.setTitle(card.getName());
-            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_36dp);
-            toolbar.setNavigationContentDescription(R.string.action_up);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
+                    mToolbar.setTitle(mtgCard.getName());
+
+                    Glide.with(getContext()).load(mtgCard.getImageUrl()).into(mCardImage);
+                    mCardName.setText(mtgCard.getName());
+                    mCardQuantity.setText(String.valueOf(mtgCard.getNumbCopies()));
+                    mCardCMC.setText(String.valueOf(mtgCard.getCmc()));
+                    mCardTypes.setText(mtgCard.getType());
+                    mCardOracleText.setText(mtgCard.getText());
+                    mCardFlavorText.setText(mtgCard.getFlavorText());
+                    mCardPowerToughness.setText(mtgCard.getPower() + "/" + mtgCard.getToughness());
+                    mCardLoyalty.setText(String.valueOf(mtgCard.getLoyalty()));
+                    mCardSet.setText(mtgCard.getSetName());
+                    mCardArtist.setText(mtgCard.getArtist());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+
+        if(mToolbar != null){
+            mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_36dp);
+            mToolbar.setNavigationContentDescription(R.string.action_up);
+            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dismiss();
