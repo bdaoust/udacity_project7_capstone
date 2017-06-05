@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.MainActivity" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +21,7 @@
         </activity>
 
         <activity android:name=".activities.DeckDetailsActivity" android:parentActivityName=".activities.MainActivity" android:launchMode="singleTop"/>
-        <activity android:name=".activities.EditDeckActivity" android:parentActivityName=".activities.DeckDetailsActivity"/>
+        <activity android:name=".activities.EditDeckActivity" android:parentActivityName=".activities.DeckDetailsActivity" android:launchMode="singleTop"/>
 
         <service android:name=".network.InitSampleDeckService" android:exported="false" />
     </application>
