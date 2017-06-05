@@ -12,19 +12,18 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import org.bdaoust.project7capstone.R;
-import org.bdaoust.project7capstone.data.Deck;
-
-import io.magicthegathering.javasdk.resource.Card;
+import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
+import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 
 public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardItemViewHolder>{
 
     private Context mContext;
-    private Deck mDeck;
+    private MTGDeckModel mMTGDeckModel;
     private OnCardClickedListener mOnCardClickedListener;
 
-    public CardListAdapter(Context context, Deck deck){
+    public CardListAdapter(Context context, MTGDeckModel mtgDeckModel){
         mContext = context;
-        mDeck = deck;
+        mMTGDeckModel = mtgDeckModel;
     }
 
     @Override
@@ -49,23 +48,23 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardIt
 
     @Override
     public void onBindViewHolder(CardItemViewHolder holder, int position) {
-        Card card;
+        MTGCardModel mtgCardModel;
         int numbCopies;
 
-        card = mDeck.getCards().get(position);
-        numbCopies = mDeck.getNumbCopies(card.getMultiverseid());
+        mtgCardModel = mMTGDeckModel.getMTGCardModels().get(position);
+        numbCopies = mtgCardModel.getNumbCopies();
 
-        Glide.with(mContext).load(card.getImageUrl()).into(holder.cardImage);
+        Glide.with(mContext).load(mtgCardModel.getImageUrl()).into(holder.cardImage);
         holder.cardNumbCopies.setText(String.valueOf(numbCopies));
         // Setting the contentDescription on the cardNumbCopies TextView instead of the cardImage
         // ImageView, otherwise TalkBack will read the name of the card followed by the number
         // of copies as opposed to the number of copies followed by the name of the card.
-        holder.cardNumbCopies.setContentDescription(numbCopies + card.getName());
+        holder.cardNumbCopies.setContentDescription(numbCopies + mtgCardModel.getName());
     }
 
     @Override
     public int getItemCount() {
-        return mDeck.getCards().size();
+        return mMTGDeckModel.getMTGCardModels().size();
     }
 
     public void setOnCardClickedListener (OnCardClickedListener onCardClickedListener) {
