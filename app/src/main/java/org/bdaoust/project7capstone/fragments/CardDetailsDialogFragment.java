@@ -29,9 +29,13 @@ public class CardDetailsDialogFragment extends DialogFragment{
     private TextView mCardQuantity;
     private TextView mCardCMC;
     private TextView mCardTypes;
+    private TextView mCardOracleTextLabel;
     private TextView mCardOracleText;
+    private TextView mCardFlavorTextLabel;
     private TextView mCardFlavorText;
+    private TextView mCardPowerToughnessLabel;
     private TextView mCardPowerToughness;
+    private TextView mCardLoyaltyLabel;
     private TextView mCardLoyalty;
     private TextView mCardSet;
     private TextView mCardArtist;
@@ -53,9 +57,13 @@ public class CardDetailsDialogFragment extends DialogFragment{
         mCardQuantity = (TextView) rootView.findViewById(R.id.cardQuantity);
         mCardCMC = (TextView) rootView.findViewById(R.id.cardCMC);
         mCardTypes = (TextView) rootView.findViewById(R.id.cardTypes);
+        mCardOracleTextLabel = (TextView) rootView.findViewById(R.id.cardOracleTextLabel);
         mCardOracleText = (TextView) rootView.findViewById(R.id.cardOracleText);
+        mCardFlavorTextLabel = (TextView) rootView.findViewById(R.id.cardFlavorTextLabel);
         mCardFlavorText = (TextView) rootView.findViewById(R.id.cardFlavorText);
+        mCardPowerToughnessLabel = (TextView) rootView.findViewById(R.id.cardPowerToughnessLabel);
         mCardPowerToughness = (TextView) rootView.findViewById(R.id.cardPowerToughness);
+        mCardLoyaltyLabel = (TextView) rootView.findViewById(R.id.cardLoyaltyLabel);
         mCardLoyalty = (TextView) rootView.findViewById(R.id.cardLoyalty);
         mCardSet = (TextView) rootView.findViewById(R.id.cardSet);
         mCardArtist = (TextView) rootView.findViewById(R.id.cardArtist);
@@ -80,22 +88,51 @@ public class CardDetailsDialogFragment extends DialogFragment{
                         mToolbar.setTitle(mtgCard.getName());
                     }
 
+                    /* The card fields "CardImage", "Name", "Quantity", "CMC", "Types", "Set",
+                     * and "Artist" should always be defined so we simply set the values. However,
+                     *  the fields "Oracle Text", "Flavor Text", "PowerToughness", and  "Loyalty" might be
+                     * null so we only display them if they aren't null.
+                     */
                     Glide.with(getContext()).load(mtgCard.getImageUrl()).into(mCardImage);
                     mCardName.setText(mtgCard.getName());
                     mCardQuantity.setText(String.valueOf(mtgCard.getNumbCopies()));
-                    mCardCMC.setText(String.valueOf(mtgCard.getCmc()));
+                    mCardCMC.setText(getPrettyCMC(mtgCard.getCmc()));
                     mCardTypes.setText(mtgCard.getType());
-                    mCardOracleText.setText(mtgCard.getText());
-                    mCardFlavorText.setText(mtgCard.getFlavorText());
-                    mCardPowerToughness.setText(mtgCard.getPower() + "/" + mtgCard.getToughness());
-                    mCardLoyalty.setText(String.valueOf(mtgCard.getLoyalty()));
                     mCardSet.setText(mtgCard.getSetName());
                     mCardArtist.setText(mtgCard.getArtist());
+
+
+                    if(mtgCard.getText() != null) {
+                        mCardOracleText.setText(mtgCard.getText());
+                    } else {
+                        mCardOracleTextLabel.setVisibility(View.GONE);
+                        mCardOracleText.setVisibility(View.GONE);
+                    }
+
+                    if(mtgCard.getFlavorText() != null){
+                        mCardFlavorText.setText(mtgCard.getFlavorText());
+                    } else {
+                        mCardFlavorTextLabel.setVisibility(View.GONE);
+                        mCardFlavorText.setVisibility(View.GONE);
+                    }
+
+                    if(mtgCard.getPower() != null && mtgCard.getToughness() != null){
+                        mCardPowerToughness.setText(mtgCard.getPower() + "/" + mtgCard.getToughness());
+                    } else {
+                        mCardPowerToughnessLabel.setVisibility(View.GONE);
+                        mCardPowerToughness.setVisibility(View.GONE);
+                    }
+
+                    if(mtgCard.getLoyalty() > 0){
+                        mCardLoyalty.setText(String.valueOf(mtgCard.getLoyalty()));
+                    } else {
+                        mCardLoyaltyLabel.setVisibility(View.GONE);
+                        mCardLoyalty.setVisibility(View.GONE);
+                    }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
                 }
             });
         }
@@ -136,5 +173,22 @@ public class CardDetailsDialogFragment extends DialogFragment{
         if(deckList !=null && (deckList.getVisibility() == View.INVISIBLE)) {
             deckList.setVisibility(View.VISIBLE);
         }
+    }
+
+    private String getPrettyCMC(double cmc){
+        double delta = 0.01;
+        String prettyCMC;
+
+        // Most values of CMC are integer values and we want to display them as integers, however we
+        // also want to make sure that we account for special cases like the card
+        // "Little Girl" (http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=74257)
+        // which has a CMC of 0.5
+        if(cmc - Math.floor(cmc) > delta){
+            prettyCMC = String.valueOf(cmc);
+        } else {
+            prettyCMC = String.valueOf((int)cmc);
+        }
+
+        return prettyCMC;
     }
 }

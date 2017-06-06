@@ -8,6 +8,7 @@
     android:padding="@dimen/card_details_gridlayout_padding">
 
     <TextView
+        android:id="@+id/cardNameLabel"
         style="@style/CardDetailsGridLabelItem"
         android:layout_width="@dimen/card_details_text_label_width"
         android:layout_height="wrap_content"
@@ -21,6 +22,7 @@
         android:text="@string/card_details_name_placeholder" />
 
     <TextView
+        android:id="@+id/cardQuantityLabel"
         style="@style/CardDetailsGridLabelItem"
         android:layout_width="@dimen/card_details_text_label_width"
         android:layout_height="wrap_content"
@@ -34,6 +36,7 @@
         android:text="@string/card_details_quantity_placeholder" />
 
     <TextView
+        android:id="@+id/cardCMCLabel"
         style="@style/CardDetailsGridLabelItem"
         android:layout_width="@dimen/card_details_text_label_width"
         android:layout_height="wrap_content"
@@ -47,6 +50,7 @@
         android:text="@string/card_details_cmc_placeholder" />
 
     <TextView
+        android:id="@+id/cardTypesLabel"
         style="@style/CardDetailsGridLabelItem"
         android:layout_width="@dimen/card_details_text_label_width"
         android:layout_height="wrap_content"
@@ -60,6 +64,7 @@
         android:text="@string/card_details_types_placeholder" />
 
     <TextView
+        android:id="@+id/cardOracleTextLabel"
         style="@style/CardDetailsGridLabelItem"
         android:layout_width="@dimen/card_details_text_label_width"
         android:layout_height="wrap_content"
@@ -73,6 +78,7 @@
         android:text="@string/card_details_oracle_text_placeholder" />
 
     <TextView
+        android:id="@+id/cardFlavorTextLabel"
         style="@style/CardDetailsGridLabelItem"
         android:layout_width="@dimen/card_details_text_label_width"
         android:layout_height="wrap_content"
@@ -87,6 +93,7 @@
         android:text="@string/card_details_flavor_text_placeholder" />
 
     <TextView
+        android:id="@+id/cardPowerToughnessLabel"
         style="@style/CardDetailsGridLabelItem"
         android:layout_width="@dimen/card_details_text_label_width"
         android:layout_height="wrap_content"
@@ -100,6 +107,7 @@
         android:text="@string/card_details_power_toughness_placeholder" />
 
     <TextView
+        android:id="@+id/cardLoyaltyLabel"
         style="@style/CardDetailsGridLabelItem"
         android:layout_width="@dimen/card_details_text_label_width"
         android:layout_height="wrap_content"
@@ -113,6 +121,7 @@
         android:text="@string/card_details_loyalty_placeholder" />
 
     <TextView
+        android:id="@+id/cardSetLabel"
         style="@style/CardDetailsGridLabelItem"
         android:layout_width="@dimen/card_details_text_label_width"
         android:layout_height="wrap_content"
@@ -126,6 +135,7 @@
         android:text="@string/card_details_set_placeholder" />
 
     <TextView
+        android:id="@+id/cardArtistLabel"
         style="@style/CardDetailsGridLabelItem"
         android:layout_width="@dimen/card_details_text_label_width"
         android:layout_height="wrap_content"
