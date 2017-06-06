@@ -36,6 +36,20 @@
         android:text="@string/card_details_quantity_placeholder" />
 
     <TextView
+        android:id="@+id/cardManaCostLabel"
+        style="@style/CardDetailsGridLabelItem"
+        android:layout_width="@dimen/card_details_text_label_width"
+        android:layout_height="wrap_content"
+        android:text="@string/card_details_label_mana_cost" />
+
+    <TextView
+        android:id="@+id/cardManaCost"
+        style="@style/CardDetailsGridItem"
+        android:layout_width="@dimen/card_details_text_value_width"
+        android:layout_height="wrap_content"
+        android:text="@string/card_details_mana_cost_placeholder" />
+
+    <TextView
         android:id="@+id/cardCMCLabel"
         style="@style/CardDetailsGridLabelItem"
         android:layout_width="@dimen/card_details_text_label_width"

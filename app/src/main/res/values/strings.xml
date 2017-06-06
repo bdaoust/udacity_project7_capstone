@@ -30,6 +30,7 @@
 
     <string name="card_details_label_name">Name:</string>
     <string name="card_details_label_quantity">Quantity:</string>
+    <string name="card_details_label_mana_cost">Mana Cost:</string>
     <string name="card_details_label_converted_mana_cost">CMC:</string>
     <string name="card_details_label_types">Types:</string>
     <string name="card_details_label_oracle_text">Oracle Text:</string>
@@ -43,6 +44,7 @@
     <string name="card_list_item_numb_copies_placeholder">99</string>
     <string name="card_details_name_placeholder">[Card Name]</string>
     <string name="card_details_quantity_placeholder">99</string>
+    <string name="card_details_mana_cost_placeholder">99</string>
     <string name="card_details_cmc_placeholder">99</string>
     <string name="card_details_types_placeholder">[Type - Subtype]</string>
     <string name="card_details_oracle_text_placeholder">[This is a long Oracle Text,  This is a

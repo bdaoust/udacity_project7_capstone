@@ -27,6 +27,8 @@ public class CardDetailsDialogFragment extends DialogFragment{
     private ImageView mCardImage;
     private TextView mCardName;
     private TextView mCardQuantity;
+    private TextView mCardManaCostLabel;
+    private TextView mCardManaCost;
     private TextView mCardCMC;
     private TextView mCardTypes;
     private TextView mCardOracleTextLabel;
@@ -55,6 +57,8 @@ public class CardDetailsDialogFragment extends DialogFragment{
         mCardImage = (ImageView) rootView.findViewById(R.id.cardImage);
         mCardName = (TextView) rootView.findViewById(R.id.cardName);
         mCardQuantity = (TextView) rootView.findViewById(R.id.cardQuantity);
+        mCardManaCostLabel = (TextView) rootView.findViewById(R.id.cardManaCostLabel);
+        mCardManaCost = (TextView) rootView.findViewById(R.id.cardManaCost);
         mCardCMC = (TextView) rootView.findViewById(R.id.cardCMC);
         mCardTypes = (TextView) rootView.findViewById(R.id.cardTypes);
         mCardOracleTextLabel = (TextView) rootView.findViewById(R.id.cardOracleTextLabel);
@@ -90,8 +94,8 @@ public class CardDetailsDialogFragment extends DialogFragment{
 
                     /* The card fields "CardImage", "Name", "Quantity", "CMC", "Types", "Set",
                      * and "Artist" should always be defined so we simply set the values. However,
-                     *  the fields "Oracle Text", "Flavor Text", "PowerToughness", and  "Loyalty" might be
-                     * null so we only display them if they aren't null.
+                     * the fields "Mana Cost", "Oracle Text", "Flavor Text", "PowerToughness",
+                     * and  "Loyalty" might be null so we only display them if they aren't null.
                      */
                     Glide.with(getContext()).load(mtgCard.getImageUrl()).into(mCardImage);
                     mCardName.setText(mtgCard.getName());
@@ -101,6 +105,12 @@ public class CardDetailsDialogFragment extends DialogFragment{
                     mCardSet.setText(mtgCard.getSetName());
                     mCardArtist.setText(mtgCard.getArtist());
 
+                    if(mtgCard.getManaCost() != null){
+                        mCardManaCost.setText(mtgCard.getManaCost());
+                    } else {
+                        mCardManaCostLabel.setVisibility(View.GONE);
+                        mCardManaCost.setVisibility(View.GONE);
+                    }
 
                     if(mtgCard.getText() != null) {
                         mCardOracleText.setText(mtgCard.getText());
