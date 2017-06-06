@@ -10,20 +10,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:background="@color/card_details_background_color">
+        android:background="@color/card_details_grid_layout_background_color">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/cardImage"
-                android:layout_width="@dimen/card_details_image_width"
-                android:layout_height="@dimen/card_details_image_height"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/card_details_image_margin"
-                tools:ignore="ContentDescription" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/card_details_background_color">
+
+                <ImageView
+                    android:id="@+id/cardImage"
+                    android:layout_width="@dimen/card_details_image_width"
+                    android:layout_height="@dimen/card_details_image_height"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/card_details_image_margin"
+                    tools:ignore="ContentDescription" />
+            </FrameLayout>
 
             <include layout="@layout/card_details_grid_layout" />
 
