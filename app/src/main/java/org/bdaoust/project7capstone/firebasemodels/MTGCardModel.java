@@ -4,6 +4,7 @@ package org.bdaoust.project7capstone.firebasemodels;
 import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.magicthegathering.javasdk.resource.Card;
@@ -48,9 +49,7 @@ public class MTGCardModel {
 
         mColors = new ArrayList<>();
         if(card.getColors() != null) {
-            for (String color : card.getColors()) {
-                mColors.add(color);
-            }
+            Collections.addAll(mColors, card.getColors());
         }
     }
 
