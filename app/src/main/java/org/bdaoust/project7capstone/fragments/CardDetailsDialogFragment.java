@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,7 +155,13 @@ public class CardDetailsDialogFragment extends DialogFragment{
             mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dismiss();
+                    // Calling onBackPressed() instead of dismiss() because otherwise the state
+                    // of the stack becomes inconsistent. For example, if a user is on a phone and
+                    // clicks on the Up arrow to return to the Deck Details, followed by clicking on a
+                    // card to get to the Card Details, followed by clicking on the Up arrow to return
+                    // to the Deck Details once more, it will take more than one click on the Back
+                    // Arrow (bottom of screen) to return to the Deck list, which is not what we want.
+                    getActivity().onBackPressed();
                 }
             });
 
@@ -168,6 +175,8 @@ public class CardDetailsDialogFragment extends DialogFragment{
             }
 
         }
+
+        Log.v("AAA", "----------- On Create Called -------------");
 
         return rootView;
     }
@@ -183,6 +192,8 @@ public class CardDetailsDialogFragment extends DialogFragment{
         if(deckList !=null && (deckList.getVisibility() == View.INVISIBLE)) {
             deckList.setVisibility(View.VISIBLE);
         }
+
+        Log.v("AAA", "----------- On Destroy Called -------------");
     }
 
     private String getPrettyCMC(double cmc){
