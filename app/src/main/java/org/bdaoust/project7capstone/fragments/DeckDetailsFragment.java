@@ -132,6 +132,7 @@ public class DeckDetailsFragment extends Fragment{
                 Intent intent;
 
                 intent = new Intent(getContext(), EditDeckActivity.class);
+                intent.putExtra(MTGKeys.FIREBASE_DECK_KEY, mFirebaseDeckKey);
                 startActivity(intent);
 
                 return true;

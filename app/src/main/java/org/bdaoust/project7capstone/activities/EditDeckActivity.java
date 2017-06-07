@@ -13,10 +13,12 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
+import org.bdaoust.project7capstone.MTGKeys;
 import org.bdaoust.project7capstone.adapters.EditCardListAdapter;
 import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.adapters.SearchCardListAdapter;
@@ -41,6 +43,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         Toolbar toolbar;
         ActionBar actionBar;
         Resources resources;
+        String editDeckFirebaseKey;
 
         mContext = this;
         setContentView(R.layout.activity_edit_deck);
@@ -55,6 +58,9 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeActionContentDescription(R.string.action_cancel);
         }
+
+        editDeckFirebaseKey = getIntent().getStringExtra(MTGKeys.FIREBASE_DECK_KEY);
+        Log.d("EditDeckActivity", "Editing deck.... " + editDeckFirebaseKey);
 
         mDeck = new SampleDeck();
         mEditCardListAdapter = new EditCardListAdapter(this, mDeck);
