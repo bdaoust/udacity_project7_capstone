@@ -12,18 +12,17 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import org.bdaoust.project7capstone.R;
-import org.bdaoust.project7capstone.data.Deck;
-
-import io.magicthegathering.javasdk.resource.Card;
+import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
+import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 
 public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapter.EditCardItemViewHolder> {
 
     private Context mContext;
-    private Deck mDeck;
+    private MTGDeckModel mMTGDeck;
 
-    public EditCardListAdapter(Context context, Deck deck){
+    public EditCardListAdapter(Context context, MTGDeckModel mtgDeck){
         mContext = context;
-        mDeck = deck;
+        mMTGDeck = mtgDeck;
     }
 
     @Override
@@ -39,15 +38,15 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
 
     @Override
     public void onBindViewHolder(final EditCardItemViewHolder holder, int position) {
-        final Card card;
+        final MTGCardModel mtgCard;
         int numbCopies;
 
-        card = mDeck.getCards().get(position);
-        numbCopies = mDeck.getNumbCopies(card.getMultiverseid());
-        Glide.with(holder.itemView.getContext()).load(card.getImageUrl()).into(holder.cardImage);
-        holder.cardName.setText(card.getName());
+        mtgCard = mMTGDeck.getMTGCardModels().get(position);
+        numbCopies = mtgCard.getNumbCopies();
+        Glide.with(holder.itemView.getContext()).load(mtgCard.getImageUrl()).into(holder.cardImage);
+        holder.cardName.setText(mtgCard.getName());
         holder.cardNumbCopies.setText(String.valueOf(numbCopies));
-        holder.setName.setText(String.valueOf(card.getSetName()));
+        holder.setName.setText(String.valueOf(mtgCard.getSetName()));
 
         if(numbCopies == 1){
             holder.decrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_disabled_tint_color));
@@ -66,10 +65,10 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
             public void onClick(View v) {
                 int numbCopies;
 
-                numbCopies = mDeck.getNumbCopies(card.getMultiverseid());
+                numbCopies = mtgCard.getNumbCopies();
                 if(numbCopies < 99){
-                    mDeck.addCardCopies(card, 1);
                     numbCopies++;
+                    mtgCard.setNumbCopies(numbCopies);
                     holder.cardNumbCopies.setText(String.valueOf(numbCopies));
 
                     if(numbCopies == 99){
@@ -89,10 +88,10 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
             public void onClick(View v) {
                 int numbCopies;
 
-                numbCopies = mDeck.getNumbCopies(card.getMultiverseid());
+                numbCopies = mtgCard.getNumbCopies();
                 if(numbCopies > 1){
                     numbCopies--;
-                    mDeck.setCardCopies(card, numbCopies);
+                    mtgCard.setNumbCopies(numbCopies);
                     holder.cardNumbCopies.setText(String.valueOf(numbCopies));
 
                     if(numbCopies == 1){
@@ -109,8 +108,9 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDeck.removeCardCopies(card.getMultiverseid());
-                notifyDataSetChanged();
+                //TODO Implement Delete cards from deck
+                //mDeck.removeCardCopies(card.getMultiverseid());
+                //notifyDataSetChanged();
             }
         });
 
@@ -119,7 +119,7 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
 
     @Override
     public int getItemCount() {
-        return mDeck.getCards().size();
+        return mMTGDeck.getMTGCardModels().size();
     }
 
     class EditCardItemViewHolder extends RecyclerView.ViewHolder {

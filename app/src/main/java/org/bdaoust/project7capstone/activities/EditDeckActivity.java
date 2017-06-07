@@ -15,26 +15,42 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.bdaoust.project7capstone.MTGKeys;
 import org.bdaoust.project7capstone.adapters.EditCardListAdapter;
 import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.adapters.SearchCardListAdapter;
-import org.bdaoust.project7capstone.data.Deck;
-import org.bdaoust.project7capstone.data.SampleDeck;
+import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
+import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 import org.bdaoust.project7capstone.fragments.SearchCardsDialogFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.magicthegathering.javasdk.resource.Card;
 
-public class EditDeckActivity extends AppCompatActivity implements SearchCardListAdapter.OnCardAddedListener{
+public class EditDeckActivity extends AppCompatActivity implements SearchCardListAdapter.OnCardAddedListener {
 
-    private RecyclerView mRecyclerView;
-    private FloatingActionButton mSearchCardsFAB;
     private EditCardListAdapter mEditCardListAdapter;
-    private Deck mDeck;
+    private MTGDeckModel mMTGTempDeck;
+    private List<MTGCardModel> mMTGTempCards;
     private Context mContext;
+    private DatabaseReference mReferenceDeck;
+    private DatabaseReference mReferenceTempDeck;
+    private DatabaseReference mReferenceTempDeckCards;
+    private ValueEventListener mOnTempDeckValueEventListener;
+    private ValueEventListener mOnDeckValueEventListener;
+    private ChildEventListener mOnTempDeckCardsChildEventListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,16 +59,21 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         Toolbar toolbar;
         ActionBar actionBar;
         Resources resources;
+        FirebaseDatabase firebaseDatabase;
+        DatabaseReference referenceRoot;
+        RecyclerView recyclerView;
+        FloatingActionButton searchCardsFAB;
+        String tempDeckName;
         String editDeckFirebaseKey;
 
         mContext = this;
         setContentView(R.layout.activity_edit_deck);
 
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
-        if(actionBar !=null){
+        if (actionBar != null) {
             resources = getResources();
             getSupportActionBar().setTitle(resources.getText(R.string.activity_name_edit_deck));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -60,18 +81,21 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         }
 
         editDeckFirebaseKey = getIntent().getStringExtra(MTGKeys.FIREBASE_DECK_KEY);
-        Log.d("EditDeckActivity", "Editing deck.... " + editDeckFirebaseKey);
+        tempDeckName = "tempDeck" + editDeckFirebaseKey;
 
-        mDeck = new SampleDeck();
-        mEditCardListAdapter = new EditCardListAdapter(this, mDeck);
-        mRecyclerView = (RecyclerView)findViewById(R.id.editCardsList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        mRecyclerView.setAdapter(mEditCardListAdapter);
+        mMTGTempCards = new ArrayList<>();
+        mMTGTempDeck = new MTGDeckModel();
+        mMTGTempDeck.setMTGCardModels(mMTGTempCards);
 
-        mSearchCardsFAB = (FloatingActionButton) findViewById(R.id.searchCardsFAB);
+        mEditCardListAdapter = new EditCardListAdapter(this, mMTGTempDeck);
+        recyclerView = (RecyclerView) findViewById(R.id.editCardsList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(mEditCardListAdapter);
 
-        mSearchCardsFAB.setOnClickListener(new View.OnClickListener() {
+        searchCardsFAB = (FloatingActionButton) findViewById(R.id.searchCardsFAB);
+
+        searchCardsFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ConnectivityManager connectivityManager;
@@ -83,7 +107,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
                 isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
                 SearchCardsDialogFragment searchCardsDialogFragment;
 
-                if(isConnected) {
+                if (isConnected) {
                     searchCardsDialogFragment = new SearchCardsDialogFragment();
                     searchCardsDialogFragment.show(getSupportFragmentManager(), "SEARCH_CARDS");
                 } else {
@@ -92,6 +116,13 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
             }
         });
 
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        referenceRoot = firebaseDatabase.getReference();
+        mReferenceDeck = referenceRoot.child("decks").child(editDeckFirebaseKey);
+        mReferenceTempDeck = referenceRoot.child(tempDeckName);
+        mReferenceTempDeckCards = mReferenceTempDeck.child("mtgcardModels");
+
+        createListeners();
     }
 
     @Override
@@ -102,8 +133,116 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                deleteTempDeck();
+                finish();
+                return true;
+            case R.id.action_save:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onCardAdded(Card card) {
-        mDeck.addCardCopies(card, 1);
+        MTGCardModel mtgCard;
+
+        Log.d("EditDeckActivity", "----------- onCardAdded ------------");
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(1);
+        mMTGTempCards.add(mtgCard);
+
         mEditCardListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mReferenceTempDeck.addListenerForSingleValueEvent(mOnTempDeckValueEventListener);
+        mReferenceTempDeckCards.addChildEventListener(mOnTempDeckCardsChildEventListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        mReferenceTempDeck.removeEventListener(mOnTempDeckCardsChildEventListener);
+
+        mReferenceTempDeck.removeEventListener(mOnTempDeckValueEventListener);
+        mReferenceDeck.removeEventListener(mOnDeckValueEventListener);
+    }
+
+    private void createListeners() {
+        mOnTempDeckValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    Log.v("AAA", "The Temp Deck doesn't exist... Create It");
+                    mReferenceDeck.addListenerForSingleValueEvent(mOnDeckValueEventListener);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+        mOnDeckValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                MTGDeckModel mtgDeckModel;
+
+                mtgDeckModel = dataSnapshot.getValue(MTGDeckModel.class);
+                mMTGTempDeck.setName(mtgDeckModel.getName());
+                mReferenceTempDeck.setValue(mtgDeckModel);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+        mOnTempDeckCardsChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                MTGCardModel mtgCardModel;
+
+                mtgCardModel = dataSnapshot.getValue(MTGCardModel.class);
+
+                mMTGTempCards.add(mtgCardModel);
+                mEditCardListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        deleteTempDeck();
+    }
+
+    private void deleteTempDeck() {
+        mReferenceTempDeck.removeValue();
     }
 }
