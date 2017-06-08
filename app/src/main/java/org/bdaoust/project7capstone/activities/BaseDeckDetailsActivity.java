@@ -14,7 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.bdaoust.project7capstone.MTGKeys;
+import org.bdaoust.project7capstone.tools.MTGKeys;
 import org.bdaoust.project7capstone.fragments.DeckDetailsFragment;
 import org.bdaoust.project7capstone.R;
 

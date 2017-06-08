@@ -1,4 +1,4 @@
-package org.bdaoust.project7capstone;
+package org.bdaoust.project7capstone.tools;
 
 public final class MTGKeys {
 

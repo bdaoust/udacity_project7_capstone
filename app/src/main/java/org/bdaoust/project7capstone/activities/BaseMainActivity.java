@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import org.bdaoust.project7capstone.MTGKeys;
+import org.bdaoust.project7capstone.tools.MTGKeys;
 import org.bdaoust.project7capstone.fragments.DeckDetailsFragment;
 import org.bdaoust.project7capstone.fragments.DecksFragment;
 import org.bdaoust.project7capstone.R;

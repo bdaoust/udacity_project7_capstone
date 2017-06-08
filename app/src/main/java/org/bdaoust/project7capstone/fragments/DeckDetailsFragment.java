@@ -22,7 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.bdaoust.project7capstone.MTGKeys;
+import org.bdaoust.project7capstone.tools.MTGKeys;
 import org.bdaoust.project7capstone.adapters.CardListAdapter;
 import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.activities.EditDeckActivity;
