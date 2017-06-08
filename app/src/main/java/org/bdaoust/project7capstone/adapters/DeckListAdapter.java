@@ -62,20 +62,20 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
 
     @Override
     public void onBindViewHolder(DeckItemViewHolder holder, int position) {
-        MTGDeckModel mtgDeckModel;
+        MTGDeckModel mtgDeck;
         String extraInfo;
         String lastUpdated;
         MTGDeckModel.ColorPercentages colorPercentages;
         long lastUpdatedTimestamp;
         int numbCards;
 
-        mtgDeckModel = mMTGDecks.get(position);
-        numbCards = mtgDeckModel.getNumbCards();
-        lastUpdatedTimestamp = mtgDeckModel.getLastUpdatedTimestamp();
+        mtgDeck = mMTGDecks.get(position);
+        numbCards = mtgDeck.getNumbCards();
+        lastUpdatedTimestamp = mtgDeck.getLastUpdatedTimestamp();
         lastUpdated = DateUtils.formatDateTime(mContext, lastUpdatedTimestamp, DateUtils.FORMAT_SHOW_YEAR);
         extraInfo = mContext.getResources().getString(R.string.deck_extra_info, numbCards, lastUpdated);
 
-        holder.deckName.setText(mtgDeckModel.getName());
+        holder.deckName.setText(mtgDeck.getName());
         holder.deckExtraInfo.setText(extraInfo);
         holder.itemView.setTag(position);
 
@@ -85,7 +85,7 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
             holder.itemView.setSelected(false);
         }
 
-        colorPercentages = mtgDeckModel.getColorPercentages();
+        colorPercentages = mtgDeck.getColorPercentages();
         holder.mtgDeckPieChart.setBlackPercentage(colorPercentages.black);
         holder.mtgDeckPieChart.setBluePercentage(colorPercentages.blue);
         holder.mtgDeckPieChart.setGreenPercentage(colorPercentages.green);

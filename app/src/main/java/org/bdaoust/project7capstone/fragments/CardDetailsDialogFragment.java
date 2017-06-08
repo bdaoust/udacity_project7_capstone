@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.bdaoust.project7capstone.MTGKeys;
 import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
+import org.bdaoust.project7capstone.tools.MTGTools;
 
 public class CardDetailsDialogFragment extends DialogFragment{
 
@@ -48,6 +48,7 @@ public class CardDetailsDialogFragment extends DialogFragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView;
         FirebaseDatabase firebaseDatabase;
+        DatabaseReference referenceUserRoot;
         DatabaseReference referenceCard;
         String firebaseDeckKey;
         String firebaseCardKey;
@@ -78,8 +79,8 @@ public class CardDetailsDialogFragment extends DialogFragment{
 
         if(firebaseDeckKey != null && firebaseCardKey != null) {
             firebaseDatabase = FirebaseDatabase.getInstance();
-            referenceCard = firebaseDatabase.getReference().child("decks").
-                    child(firebaseDeckKey).child("mtgcardModels").child(firebaseCardKey);
+            referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
+            referenceCard = MTGTools.createCardReference(referenceUserRoot, firebaseDeckKey, firebaseCardKey);
 
             referenceCard.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -176,8 +177,6 @@ public class CardDetailsDialogFragment extends DialogFragment{
 
         }
 
-        Log.v("AAA", "----------- On Create Called -------------");
-
         return rootView;
     }
 
@@ -192,8 +191,6 @@ public class CardDetailsDialogFragment extends DialogFragment{
         if(deckList !=null && (deckList.getVisibility() == View.INVISIBLE)) {
             deckList.setVisibility(View.VISIBLE);
         }
-
-        Log.v("AAA", "----------- On Destroy Called -------------");
     }
 
     private String getPrettyCMC(double cmc){

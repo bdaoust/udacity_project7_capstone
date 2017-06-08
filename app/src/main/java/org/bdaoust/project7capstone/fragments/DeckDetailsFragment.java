@@ -28,6 +28,7 @@ import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.activities.EditDeckActivity;
 import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
+import org.bdaoust.project7capstone.tools.MTGTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class DeckDetailsFragment extends Fragment{
     private boolean mIsLargeLayout;
     private String mFirebaseDeckKey;
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mReferenceRoot;
+    private DatabaseReference mReferenceUserRoot;
     private DatabaseReference mReferenceCards;
     private MTGDeckModel mMTGDeck;
     private List<MTGCardModel> mMTGCards;
@@ -58,7 +59,7 @@ public class DeckDetailsFragment extends Fragment{
 
         mMTGCards = new ArrayList<>();
         mMTGDeck = new MTGDeckModel();
-        mMTGDeck.setMTGCardModels(mMTGCards);
+        mMTGDeck.setMTGCards(mMTGCards);
         mCardListAdapter = new CardListAdapter(getContext(), mMTGDeck);
 
         mCardListAdapter.setOnCardClickedListener(new CardListAdapter.OnCardClickedListener() {
@@ -78,17 +79,17 @@ public class DeckDetailsFragment extends Fragment{
         Log.d("DeckDetailsFragment", "----------- The Deck to load is " + mFirebaseDeckKey + " ---------------");
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mReferenceRoot = mFirebaseDatabase.getReference();
-        mReferenceCards = mReferenceRoot.child("decks").child(mFirebaseDeckKey).child("mtgcardModels");
+        mReferenceUserRoot = MTGTools.createUserRootReference(mFirebaseDatabase, null);
+        mReferenceCards = MTGTools.createCardListReference(mReferenceUserRoot, mFirebaseDeckKey);
 
         mReferenceCards.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                MTGCardModel mtgCardModel;
+                MTGCardModel mtgCard;
 
-                mtgCardModel = dataSnapshot.getValue(MTGCardModel.class);
-                mtgCardModel.setFirebaseKey(dataSnapshot.getKey());
-                mMTGCards.add(mtgCardModel);
+                mtgCard = dataSnapshot.getValue(MTGCardModel.class);
+                mtgCard.setFirebaseKey(dataSnapshot.getKey());
+                mMTGCards.add(mtgCard);
                 mCardListAdapter.notifyDataSetChanged();
             }
 

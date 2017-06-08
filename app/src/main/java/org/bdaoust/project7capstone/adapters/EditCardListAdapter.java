@@ -41,7 +41,7 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
         final MTGCardModel mtgCard;
         int numbCopies;
 
-        mtgCard = mMTGDeck.getMTGCardModels().get(position);
+        mtgCard = mMTGDeck.getMTGCards().get(position);
         numbCopies = mtgCard.getNumbCopies();
         Glide.with(holder.itemView.getContext()).load(mtgCard.getImageUrl()).into(holder.cardImage);
         holder.cardName.setText(mtgCard.getName());
@@ -119,7 +119,7 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
 
     @Override
     public int getItemCount() {
-        return mMTGDeck.getMTGCardModels().size();
+        return mMTGDeck.getMTGCards().size();
     }
 
     class EditCardItemViewHolder extends RecyclerView.ViewHolder {

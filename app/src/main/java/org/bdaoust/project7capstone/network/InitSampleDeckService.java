@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
+import org.bdaoust.project7capstone.tools.MTGTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class InitSampleDeckService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         FirebaseDatabase firebaseDatabase;
-        DatabaseReference referenceRoot;
+        DatabaseReference referenceUserRoot;
         DatabaseReference referenceDecks;
         DatabaseReference referenceSampleDeckWasSaved;
         MTGDeckModel mtgDeckModel;
@@ -84,12 +85,12 @@ public class InitSampleDeckService extends IntentService {
         if(mDeckCards.size() == mNumbCardsRequested) {
             mtgDeckModel.setName("Feel the Burn");
             mtgDeckModel.setLastUpdatedTimestamp(System.currentTimeMillis());
-            mtgDeckModel.setMTGCardModels(mDeckCards);
+            mtgDeckModel.setMTGCards(mDeckCards);
 
             firebaseDatabase = FirebaseDatabase.getInstance();
-            referenceRoot = firebaseDatabase.getReference();
-            referenceDecks = referenceRoot.child("decks");
-            referenceSampleDeckWasSaved = referenceRoot.child("sampleDeckWasSaved");
+            referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
+            referenceDecks = MTGTools.createDeckListReference(referenceUserRoot);
+            referenceSampleDeckWasSaved = MTGTools.createSampleDeckWasSavedReference(referenceUserRoot);
 
             referenceDecks.push().setValue(mtgDeckModel);
             referenceSampleDeckWasSaved.setValue(true);

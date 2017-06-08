@@ -10,7 +10,7 @@ import java.util.List;
 @IgnoreExtraProperties
 public class MTGDeckModel {
 
-    private List<MTGCardModel> mMTGCardModels;
+    private List<MTGCardModel> mMTGCards;
     private String mName;
     private long mLastUpdatedTimestamp = 1491006413000L;
     private ColorPercentages mColorPercentages;
@@ -20,19 +20,13 @@ public class MTGDeckModel {
         mColorPercentages = new ColorPercentages();
     }
 
-    public List<MTGCardModel> getMTGCardModels() {
-        return mMTGCardModels;
+    public List<MTGCardModel> getMTGCards() {
+        return mMTGCards;
     }
 
-    public void setMTGCardModels(List<MTGCardModel> mtgCardModels) {
-        mMTGCardModels = mtgCardModels;
-
-        Collections.sort(mMTGCardModels, new Comparator<MTGCardModel>() {
-            @Override
-            public int compare(MTGCardModel mtgCardModel1, MTGCardModel mtgCardModel2) {
-                return mtgCardModel1.getName().compareTo(mtgCardModel2.getName());
-            }
-        });
+    public void setMTGCards(List<MTGCardModel> mtgCards) {
+        mMTGCards = mtgCards;
+        sortMTGCards();
     }
 
     public String getName() {
@@ -65,38 +59,32 @@ public class MTGDeckModel {
     public int getNumbCards() {
         int numbCards = 0;
 
-        for (MTGCardModel mtgCardModel : mMTGCardModels) {
-            numbCards += mtgCardModel.getNumbCopies();
+        for (MTGCardModel mtgCard : mMTGCards) {
+            numbCards += mtgCard.getNumbCopies();
         }
 
         return numbCards;
     }
 
+    @Exclude
     public void addCard(MTGCardModel mtgCard){
-        mMTGCardModels.add(mtgCard);
-
-
-        Collections.sort(mMTGCardModels, new Comparator<MTGCardModel>() {
-            @Override
-            public int compare(MTGCardModel mtgCardModel1, MTGCardModel mtgCardModel2) {
-                return mtgCardModel1.getName().compareTo(mtgCardModel2.getName());
-            }
-        });
+        mMTGCards.add(mtgCard);
+        sortMTGCards();
     }
 
     @Exclude
     public void removeCard(int multiverseId){
-        MTGCardModel mtgCardModelToRemove;
+        MTGCardModel mtgCardToRemove;
 
-        mtgCardModelToRemove = null;
-        for (MTGCardModel mtgCardModel : mMTGCardModels) {
-            if(mtgCardModel.getMultiverseId() == multiverseId){
-                mtgCardModelToRemove = mtgCardModel;
+        mtgCardToRemove = null;
+        for (MTGCardModel mtgCard : mMTGCards) {
+            if(mtgCard.getMultiverseId() == multiverseId){
+                mtgCardToRemove = mtgCard;
             }
         }
 
-        if(mtgCardModelToRemove != null){
-            mMTGCardModels.remove(mtgCardModelToRemove);
+        if(mtgCardToRemove != null){
+            mMTGCards.remove(mtgCardToRemove);
         }
     }
 
@@ -104,11 +92,11 @@ public class MTGDeckModel {
     public ColorPercentages getColorPercentages() {
         mColorPercentages.reset();
 
-        if (mMTGCardModels.size() < 0) {
+        if (mMTGCards.size() < 0) {
             return mColorPercentages;
         }
 
-        for (MTGCardModel mtgCard : mMTGCardModels) {
+        for (MTGCardModel mtgCard : mMTGCards) {
             List<String> colors;
             int numbColors;
             int numbCopies;
@@ -141,6 +129,15 @@ public class MTGDeckModel {
         return mColorPercentages;
     }
 
+    private void sortMTGCards(){
+        Collections.sort(mMTGCards, new Comparator<MTGCardModel>() {
+            @Override
+            public int compare(MTGCardModel mtgCard1, MTGCardModel mtgCard2) {
+                return mtgCard1.getName().compareTo(mtgCard2.getName());
+            }
+        });
+    }
+
     private float calcCardColorPercentageContribution(int numbCopies, int numbColors) {
         return 100f * (((float) numbCopies / (float) numbColors) / (float) getNumbCards());
     }
@@ -152,7 +149,7 @@ public class MTGDeckModel {
         public float red;
         public float white;
 
-        public void reset() {
+        void reset() {
             black = 0;
             blue = 0;
             green = 0;

@@ -41,7 +41,6 @@ public class SearchCardListAdapter extends RecyclerView.Adapter<SearchCardListAd
         View view;
 
         view = LayoutInflater.from(mContext).inflate(R.layout.list_item_search_card, parent, false);
-
         searchCardItemViewHolder = new SearchCardItemViewHolder(view);
 
         return searchCardItemViewHolder;

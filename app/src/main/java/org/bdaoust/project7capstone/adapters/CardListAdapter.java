@@ -18,12 +18,12 @@ import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardItemViewHolder>{
 
     private Context mContext;
-    private MTGDeckModel mMTGDeckModel;
+    private MTGDeckModel mMTGDeck;
     private OnCardClickedListener mOnCardClickedListener;
 
-    public CardListAdapter(Context context, MTGDeckModel mtgDeckModel){
+    public CardListAdapter(Context context, MTGDeckModel mtgDeck){
         mContext = context;
-        mMTGDeckModel = mtgDeckModel;
+        mMTGDeck = mtgDeck;
     }
 
     @Override
@@ -39,25 +39,25 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardIt
 
     @Override
     public void onBindViewHolder(CardItemViewHolder holder, int position) {
-        final MTGCardModel mtgCardModel;
+        final MTGCardModel mtgCard;
         int numbCopies;
 
-        mtgCardModel = mMTGDeckModel.getMTGCardModels().get(position);
-        numbCopies = mtgCardModel.getNumbCopies();
+        mtgCard = mMTGDeck.getMTGCards().get(position);
+        numbCopies = mtgCard.getNumbCopies();
 
-        Glide.with(mContext).load(mtgCardModel.getImageUrl()).into(holder.cardImage);
+        Glide.with(mContext).load(mtgCard.getImageUrl()).into(holder.cardImage);
         holder.cardNumbCopies.setText(String.valueOf(numbCopies));
         // Setting the contentDescription on the cardNumbCopies TextView instead of the cardImage
         // ImageView, otherwise TalkBack will read the name of the card followed by the number
         // of copies as opposed to the number of copies followed by the name of the card.
-        holder.cardNumbCopies.setContentDescription(numbCopies + mtgCardModel.getName());
+        holder.cardNumbCopies.setContentDescription(numbCopies + mtgCard.getName());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String firebaseCardKey;
 
-                firebaseCardKey = mtgCardModel.getFirebaseKey();
+                firebaseCardKey = mtgCard.getFirebaseKey();
                 if(mOnCardClickedListener != null){
                     mOnCardClickedListener.onCardClicked(firebaseCardKey);
                 }
@@ -67,7 +67,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardIt
 
     @Override
     public int getItemCount() {
-        return mMTGDeckModel.getMTGCardModels().size();
+        return mMTGDeck.getMTGCards().size();
     }
 
     public void setOnCardClickedListener (OnCardClickedListener onCardClickedListener) {

@@ -33,6 +33,7 @@ import org.bdaoust.project7capstone.adapters.SearchCardListAdapter;
 import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 import org.bdaoust.project7capstone.fragments.SearchCardsDialogFragment;
+import org.bdaoust.project7capstone.tools.MTGTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         ActionBar actionBar;
         Resources resources;
         FirebaseDatabase firebaseDatabase;
-        DatabaseReference referenceRoot;
+        DatabaseReference referenceUserRoot;
         RecyclerView recyclerView;
         FloatingActionButton searchCardsFAB;
         String tempDeckName;
@@ -86,7 +87,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
 
         mMTGTempCards = new ArrayList<>();
         mMTGTempDeck = new MTGDeckModel();
-        mMTGTempDeck.setMTGCardModels(mMTGTempCards);
+        mMTGTempDeck.setMTGCards(mMTGTempCards);
 
         mEditCardListAdapter = new EditCardListAdapter(this, mMTGTempDeck);
         recyclerView = (RecyclerView) findViewById(R.id.editCardsList);
@@ -118,10 +119,10 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         });
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        referenceRoot = firebaseDatabase.getReference();
-        mReferenceDeck = referenceRoot.child("decks").child(editDeckFirebaseKey);
-        mReferenceTempDeck = referenceRoot.child(tempDeckName);
-        mReferenceTempDeckCards = mReferenceTempDeck.child("mtgcardModels");
+        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
+        mReferenceDeck = MTGTools.createDeckReference(referenceUserRoot, editDeckFirebaseKey);
+        mReferenceTempDeck = MTGTools.createTempDeckReference(referenceUserRoot, tempDeckName);
+        mReferenceTempDeckCards = MTGTools.createTempDeckCardsReference(referenceUserRoot, tempDeckName);
 
         createListeners();
     }
@@ -194,11 +195,11 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         mOnDeckValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                MTGDeckModel mtgDeckModel;
+                MTGDeckModel mtgDeck;
 
-                mtgDeckModel = dataSnapshot.getValue(MTGDeckModel.class);
-                mMTGTempDeck.setName(mtgDeckModel.getName());
-                mReferenceTempDeck.setValue(mtgDeckModel);
+                mtgDeck = dataSnapshot.getValue(MTGDeckModel.class);
+                mMTGTempDeck.setName(mtgDeck.getName());
+                mReferenceTempDeck.setValue(mtgDeck);
             }
 
             @Override
@@ -209,12 +210,12 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         mOnTempDeckCardsChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                MTGCardModel mtgCardModel;
+                MTGCardModel mtgCard;
 
-                mtgCardModel = dataSnapshot.getValue(MTGCardModel.class);
-                mtgCardModel.setFirebaseKey(dataSnapshot.getKey());
+                mtgCard = dataSnapshot.getValue(MTGCardModel.class);
+                mtgCard.setFirebaseKey(dataSnapshot.getKey());
 
-                mMTGTempCards.add(mtgCardModel);
+                mMTGTempCards.add(mtgCard);
                 mEditCardListAdapter.notifyDataSetChanged();
             }
 

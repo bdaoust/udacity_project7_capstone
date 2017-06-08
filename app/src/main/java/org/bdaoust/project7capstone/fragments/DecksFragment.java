@@ -32,6 +32,7 @@ import org.bdaoust.project7capstone.adapters.DeckListAdapter;
 import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 import org.bdaoust.project7capstone.network.InitSampleDeckService;
+import org.bdaoust.project7capstone.tools.MTGTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class DecksFragment extends Fragment{
     private View mEmptyDeckListView;
     private int mSelectedPosition = 0;
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mReferenceRoot;
+    private DatabaseReference mReferenceUserRoot;
     private DatabaseReference mReferenceSampleDeckWasSaved;
     private DatabaseReference mReferenceDecks;
     private List<MTGDeckModel> mMTGDecks;
@@ -69,9 +70,9 @@ public class DecksFragment extends Fragment{
         mIsFirstDeckAdded = true;
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mReferenceRoot = mFirebaseDatabase.getReference();
-        mReferenceSampleDeckWasSaved = mReferenceRoot.child("sampleDeckWasSaved");
-        mReferenceDecks = mReferenceRoot.child("decks");
+        mReferenceUserRoot = MTGTools.createUserRootReference(mFirebaseDatabase, null);
+        mReferenceSampleDeckWasSaved = MTGTools.createSampleDeckWasSavedReference(mReferenceUserRoot);
+        mReferenceDecks = MTGTools.createDeckListReference(mReferenceUserRoot);
 
         mReferenceDecks.addChildEventListener(new ChildEventListener() {
             @Override
