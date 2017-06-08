@@ -72,6 +72,34 @@ public class MTGDeckModel {
         return numbCards;
     }
 
+    public void addCard(MTGCardModel mtgCard){
+        mMTGCardModels.add(mtgCard);
+
+
+        Collections.sort(mMTGCardModels, new Comparator<MTGCardModel>() {
+            @Override
+            public int compare(MTGCardModel mtgCardModel1, MTGCardModel mtgCardModel2) {
+                return mtgCardModel1.getName().compareTo(mtgCardModel2.getName());
+            }
+        });
+    }
+
+    @Exclude
+    public void removeCard(int multiverseId){
+        MTGCardModel mtgCardModelToRemove;
+
+        mtgCardModelToRemove = null;
+        for (MTGCardModel mtgCardModel : mMTGCardModels) {
+            if(mtgCardModel.getMultiverseId() == multiverseId){
+                mtgCardModelToRemove = mtgCardModel;
+            }
+        }
+
+        if(mtgCardModelToRemove != null){
+            mMTGCardModels.remove(mtgCardModelToRemove);
+        }
+    }
+
     @Exclude
     public ColorPercentages getColorPercentages() {
         mColorPercentages.reset();

@@ -47,6 +47,7 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
         holder.cardName.setText(mtgCard.getName());
         holder.cardNumbCopies.setText(String.valueOf(numbCopies));
         holder.setName.setText(String.valueOf(mtgCard.getSetName()));
+        holder.itemView.setTag(mtgCard.getFirebaseKey());
 
         if(numbCopies == 1){
             holder.decrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_disabled_tint_color));
@@ -108,9 +109,8 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Implement Delete cards from deck
-                //mDeck.removeCardCopies(card.getMultiverseid());
-                //notifyDataSetChanged();
+                mMTGDeck.removeCard(mtgCard.getMultiverseId());
+                notifyDataSetChanged();
             }
         });
 

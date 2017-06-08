@@ -51,6 +51,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
     private ValueEventListener mOnTempDeckValueEventListener;
     private ValueEventListener mOnDeckValueEventListener;
     private ChildEventListener mOnTempDeckCardsChildEventListener;
+    private final static String TAG = "EditDeckActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -150,10 +151,9 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
     public void onCardAdded(Card card) {
         MTGCardModel mtgCard;
 
-        Log.d("EditDeckActivity", "----------- onCardAdded ------------");
         mtgCard = new MTGCardModel(card);
         mtgCard.setNumbCopies(1);
-        mMTGTempCards.add(mtgCard);
+        mMTGTempDeck.addCard(mtgCard);
 
         mEditCardListAdapter.notifyDataSetChanged();
     }
@@ -181,7 +181,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
-                    Log.v("AAA", "The Temp Deck doesn't exist... Create It");
+                    Log.d(TAG, "The Temp Deck doesn't exist... Create It");
                     mReferenceDeck.addListenerForSingleValueEvent(mOnDeckValueEventListener);
                 }
             }
@@ -212,6 +212,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
                 MTGCardModel mtgCardModel;
 
                 mtgCardModel = dataSnapshot.getValue(MTGCardModel.class);
+                mtgCardModel.setFirebaseKey(dataSnapshot.getKey());
 
                 mMTGTempCards.add(mtgCardModel);
                 mEditCardListAdapter.notifyDataSetChanged();
