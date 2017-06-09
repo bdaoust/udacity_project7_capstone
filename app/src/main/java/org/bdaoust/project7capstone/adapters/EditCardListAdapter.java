@@ -1,6 +1,8 @@
 package org.bdaoust.project7capstone.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,15 +61,15 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
         holder.itemView.setTag(mtgCard.getFirebaseKey());
 
         if(numbCopies == 1){
-            holder.decrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_disabled_tint_color));
+            disableButton(holder.decrementButton);
         } else {
-            holder.decrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_tint_color));
+            enableButton(holder.decrementButton);
         }
 
         if(numbCopies == 99){
-            holder.incrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_disabled_tint_color));
+            disableButton(holder.incrementButton);
         } else {
-            holder.incrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_tint_color));
+            enableButton(holder.incrementButton);
         }
 
         holder.incrementButton.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +122,23 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
 
         cardNumbCopiesReference = MTGTools.createTempDeckCardNumbCopiesReference(mUserRootReference, firebaseDeckKey, firebaseCardKey);
         cardNumbCopiesReference.setValue(numbCopies);
+    }
+
+    private void disableButton(ImageButton button){
+        setDrawableTint(button.getDrawable(), R.color.icon_button_disabled_tint_color);
+    }
+
+    private void enableButton(ImageButton button){
+        setDrawableTint(button.getDrawable(), R.color.icon_button_tint_color);
+    }
+
+    private void setDrawableTint(Drawable drawable, int tintColorResource){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            drawable.setTint(mContext.getResources().getColor(tintColorResource, mContext.getTheme()));
+        } else {
+            //noinspection deprecation
+            drawable.setTint(mContext.getResources().getColor(tintColorResource));
+        }
     }
 
     class EditCardItemViewHolder extends RecyclerView.ViewHolder {
