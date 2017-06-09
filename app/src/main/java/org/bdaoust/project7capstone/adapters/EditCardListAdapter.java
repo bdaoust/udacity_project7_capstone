@@ -10,19 +10,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
+import org.bdaoust.project7capstone.tools.MTGTools;
 
 public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapter.EditCardItemViewHolder> {
 
     private Context mContext;
     private MTGDeckModel mMTGDeck;
+    private DatabaseReference mUserRootReference;
 
     public EditCardListAdapter(Context context, MTGDeckModel mtgDeck){
+        FirebaseDatabase firebaseDatabase;
+
         mContext = context;
         mMTGDeck = mtgDeck;
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        mUserRootReference = MTGTools.createUserRootReference(firebaseDatabase, null);
     }
 
     @Override
@@ -37,7 +46,7 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
     }
 
     @Override
-    public void onBindViewHolder(final EditCardItemViewHolder holder, int position) {
+    public void onBindViewHolder(EditCardItemViewHolder holder, int position) {
         final MTGCardModel mtgCard;
         int numbCopies;
 
@@ -69,16 +78,7 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
                 numbCopies = mtgCard.getNumbCopies();
                 if(numbCopies < 99){
                     numbCopies++;
-                    mtgCard.setNumbCopies(numbCopies);
-                    holder.cardNumbCopies.setText(String.valueOf(numbCopies));
-
-                    if(numbCopies == 99){
-                        holder.incrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_disabled_tint_color));
-                    }
-
-                    if(numbCopies == 2){
-                        holder.decrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_tint_color));
-                    }
+                    updateNumbCardCopies(mMTGDeck.getFirebaseKey(), mtgCard.getFirebaseKey(), numbCopies);
                 }
             }
         });
@@ -92,16 +92,7 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
                 numbCopies = mtgCard.getNumbCopies();
                 if(numbCopies > 1){
                     numbCopies--;
-                    mtgCard.setNumbCopies(numbCopies);
-                    holder.cardNumbCopies.setText(String.valueOf(numbCopies));
-
-                    if(numbCopies == 1){
-                        holder.decrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_disabled_tint_color));
-                    }
-
-                    if(numbCopies == 98){
-                        holder.incrementButton.getDrawable().setTint(mContext.getResources().getColor(R.color.icon_button_tint_color));
-                    }
+                    updateNumbCardCopies(mMTGDeck.getFirebaseKey(), mtgCard.getFirebaseKey(), numbCopies);
                 }
             }
         });
@@ -109,8 +100,10 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMTGDeck.removeCard(mtgCard.getMultiverseId());
-                notifyDataSetChanged();
+                DatabaseReference cardReference;
+
+                cardReference = MTGTools.createTempDeckCardReference(mUserRootReference, mMTGDeck.getFirebaseKey(), mtgCard.getFirebaseKey());
+                cardReference.removeValue();
             }
         });
 
@@ -120,6 +113,13 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
     @Override
     public int getItemCount() {
         return mMTGDeck.getMTGCards().size();
+    }
+
+    public void updateNumbCardCopies(String firebaseDeckKey, String firebaseCardKey, int numbCopies){
+        DatabaseReference cardNumbCopiesReference;
+
+        cardNumbCopiesReference = MTGTools.createTempDeckCardNumbCopiesReference(mUserRootReference, firebaseDeckKey, firebaseCardKey);
+        cardNumbCopiesReference.setValue(numbCopies);
     }
 
     class EditCardItemViewHolder extends RecyclerView.ViewHolder {

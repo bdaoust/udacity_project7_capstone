@@ -13,7 +13,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,7 +43,6 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
 
     private EditCardListAdapter mEditCardListAdapter;
     private MTGDeckModel mMTGTempDeck;
-    private List<MTGCardModel> mMTGTempCards;
     private Context mContext;
     private DatabaseReference mReferenceDeck;
     private DatabaseReference mReferenceTempDeck;
@@ -52,7 +50,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
     private ValueEventListener mOnTempDeckValueEventListener;
     private ValueEventListener mOnDeckValueEventListener;
     private ChildEventListener mOnTempDeckCardsChildEventListener;
-    private final static String TAG = "EditDeckActivity";
+    private String mTempDeckFirebaseKey;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,11 +59,11 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         Toolbar toolbar;
         ActionBar actionBar;
         Resources resources;
+        List<MTGCardModel> mtgTempCards;
         FirebaseDatabase firebaseDatabase;
         DatabaseReference referenceUserRoot;
         RecyclerView recyclerView;
         FloatingActionButton searchCardsFAB;
-        String tempDeckName;
         String editDeckFirebaseKey;
 
         mContext = this;
@@ -83,11 +81,12 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         }
 
         editDeckFirebaseKey = getIntent().getStringExtra(MTGKeys.FIREBASE_DECK_KEY);
-        tempDeckName = "tempDeck" + editDeckFirebaseKey;
+        mTempDeckFirebaseKey = "tempDeck" + editDeckFirebaseKey;
 
-        mMTGTempCards = new ArrayList<>();
+        mtgTempCards = new ArrayList<>();
         mMTGTempDeck = new MTGDeckModel();
-        mMTGTempDeck.setMTGCards(mMTGTempCards);
+        mMTGTempDeck.setFirebaseKey(mTempDeckFirebaseKey);
+        mMTGTempDeck.setMTGCards(mtgTempCards);
 
         mEditCardListAdapter = new EditCardListAdapter(this, mMTGTempDeck);
         recyclerView = (RecyclerView) findViewById(R.id.editCardsList);
@@ -121,8 +120,8 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         firebaseDatabase = FirebaseDatabase.getInstance();
         referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
         mReferenceDeck = MTGTools.createDeckReference(referenceUserRoot, editDeckFirebaseKey);
-        mReferenceTempDeck = MTGTools.createTempDeckReference(referenceUserRoot, tempDeckName);
-        mReferenceTempDeckCards = MTGTools.createTempDeckCardsReference(referenceUserRoot, tempDeckName);
+        mReferenceTempDeck = MTGTools.createTempDeckReference(referenceUserRoot, mTempDeckFirebaseKey);
+        mReferenceTempDeckCards = MTGTools.createTempDeckCardsReference(referenceUserRoot, mTempDeckFirebaseKey);
 
         createListeners();
     }
@@ -150,11 +149,25 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
 
     @Override
     public void onCardAdded(Card card) {
+        MTGCardModel newMTGCard;
         MTGCardModel mtgCard;
 
-        mtgCard = new MTGCardModel(card);
-        mtgCard.setNumbCopies(1);
-        mMTGTempDeck.addCard(mtgCard);
+        newMTGCard = new MTGCardModel(card);
+
+        if(mMTGTempDeck.findCardByMultiverseId(newMTGCard.getMultiverseId()) != null){
+            int numbCopies;
+
+            mtgCard = mMTGTempDeck.findCardByMultiverseId(newMTGCard.getMultiverseId());
+            numbCopies = mtgCard.getNumbCopies();
+
+            if(numbCopies < 99){
+                numbCopies++;
+                mEditCardListAdapter.updateNumbCardCopies(mTempDeckFirebaseKey, mtgCard.getFirebaseKey(), numbCopies);
+            }
+        } else {
+            newMTGCard.setNumbCopies(1);
+            mReferenceTempDeckCards.push().setValue(newMTGCard);
+        }
 
         mEditCardListAdapter.notifyDataSetChanged();
     }
@@ -182,7 +195,6 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
-                    Log.d(TAG, "The Temp Deck doesn't exist... Create It");
                     mReferenceDeck.addListenerForSingleValueEvent(mOnDeckValueEventListener);
                 }
             }
@@ -211,20 +223,40 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 MTGCardModel mtgCard;
+                int position;
 
                 mtgCard = dataSnapshot.getValue(MTGCardModel.class);
                 mtgCard.setFirebaseKey(dataSnapshot.getKey());
 
-                mMTGTempCards.add(mtgCard);
-                mEditCardListAdapter.notifyDataSetChanged();
+                mMTGTempDeck.addCard(mtgCard);
+                position = mMTGTempDeck.findCardPositionByMultiverseId(mtgCard.getMultiverseId());
+                mEditCardListAdapter.notifyItemInserted(position);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                MTGCardModel updatedMTGCard;
+                MTGCardModel mtgCard;
+                int position;
+
+                updatedMTGCard = dataSnapshot.getValue(MTGCardModel.class);
+                updatedMTGCard.setFirebaseKey(dataSnapshot.getKey());
+
+                mtgCard = mMTGTempDeck.findCardByMultiverseId(updatedMTGCard.getMultiverseId());
+                mtgCard.setNumbCopies(updatedMTGCard.getNumbCopies());
+                position = mMTGTempDeck.findCardPositionByMultiverseId(updatedMTGCard.getMultiverseId());
+                mEditCardListAdapter.notifyItemChanged(position);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                MTGCardModel deletedMTGCard;
+                int position;
+
+                deletedMTGCard = dataSnapshot.getValue(MTGCardModel.class);
+                position = mMTGTempDeck.findCardPositionByMultiverseId(deletedMTGCard.getMultiverseId());
+                mMTGTempDeck.removeCard(deletedMTGCard.getMultiverseId());
+                mEditCardListAdapter.notifyItemRemoved(position);
             }
 
             @Override

@@ -89,6 +89,33 @@ public class MTGDeckModel {
     }
 
     @Exclude
+    public MTGCardModel findCardByMultiverseId(int multiverseId){
+        MTGCardModel foundMTGCard;
+
+        foundMTGCard = null;
+        for (MTGCardModel mtgCard : mMTGCards) {
+            if(mtgCard.getMultiverseId() == multiverseId){
+                foundMTGCard = mtgCard;
+            }
+        }
+
+        return foundMTGCard;
+    }
+
+    public int findCardPositionByMultiverseId(int multiverseId){
+        int position;
+
+        position = -1;
+        for(int i=0; i< mMTGCards.size(); i++){
+            if(mMTGCards.get(i).getMultiverseId() == multiverseId){
+                position = i;
+            }
+        }
+
+        return position;
+    }
+
+    @Exclude
     public ColorPercentages getColorPercentages() {
         mColorPercentages.reset();
 
