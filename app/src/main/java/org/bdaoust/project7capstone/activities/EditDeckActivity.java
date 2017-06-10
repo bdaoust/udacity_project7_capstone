@@ -46,8 +46,10 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
     private Context mContext;
     private DatabaseReference mReferenceDeck;
     private DatabaseReference mReferenceTempDeck;
+    private DatabaseReference mReferenceTempDeckName;
     private DatabaseReference mReferenceTempDeckCards;
     private ValueEventListener mOnTempDeckValueEventListener;
+    private ValueEventListener mOnTempDeckNameValueEventListener;
     private ValueEventListener mOnDeckValueEventListener;
     private ChildEventListener mOnTempDeckCardsChildEventListener;
     private String mTempDeckFirebaseKey;
@@ -121,6 +123,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
         mReferenceDeck = MTGTools.createDeckReference(referenceUserRoot, editDeckFirebaseKey);
         mReferenceTempDeck = MTGTools.createTempDeckReference(referenceUserRoot, mTempDeckFirebaseKey);
+        mReferenceTempDeckName = mReferenceTempDeck.child("name");
         mReferenceTempDeckCards = MTGTools.createTempDeckCardsReference(referenceUserRoot, mTempDeckFirebaseKey);
 
         createListeners();
@@ -137,10 +140,16 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                removeListeners();
                 deleteTempDeck();
                 finish();
                 return true;
             case R.id.action_save:
+                removeListeners();
+                mMTGTempDeck.setLastUpdatedTimestamp(System.currentTimeMillis());
+                mReferenceDeck.setValue(mMTGTempDeck);
+                deleteTempDeck();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -176,18 +185,14 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
     protected void onResume() {
         super.onResume();
 
-        mReferenceTempDeck.addListenerForSingleValueEvent(mOnTempDeckValueEventListener);
-        mReferenceTempDeckCards.addChildEventListener(mOnTempDeckCardsChildEventListener);
+        addListeners();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        mReferenceTempDeck.removeEventListener(mOnTempDeckCardsChildEventListener);
-
-        mReferenceTempDeck.removeEventListener(mOnTempDeckValueEventListener);
-        mReferenceDeck.removeEventListener(mOnDeckValueEventListener);
+        removeListeners();
     }
 
     private void createListeners() {
@@ -195,12 +200,29 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
-                    mReferenceDeck.addListenerForSingleValueEvent(mOnDeckValueEventListener);
+                    mReferenceDeck.addValueEventListener(mOnDeckValueEventListener);
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+        mOnTempDeckNameValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    String deckName;
+
+                    deckName = dataSnapshot.getValue(String.class);
+                    mMTGTempDeck.setName(deckName);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         };
 
@@ -267,6 +289,19 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
             public void onCancelled(DatabaseError databaseError) {
             }
         };
+    }
+
+    private void addListeners(){
+        mReferenceTempDeck.addValueEventListener(mOnTempDeckValueEventListener);
+        mReferenceTempDeckName.addValueEventListener(mOnTempDeckNameValueEventListener);
+        mReferenceTempDeckCards.addChildEventListener(mOnTempDeckCardsChildEventListener);
+    }
+
+    private void removeListeners(){
+        mReferenceTempDeck.removeEventListener(mOnTempDeckCardsChildEventListener);
+        mReferenceTempDeck.removeEventListener(mOnTempDeckValueEventListener);
+        mReferenceTempDeckName.removeEventListener(mOnTempDeckNameValueEventListener);
+        mReferenceDeck.removeEventListener(mOnDeckValueEventListener);
     }
 
     @Override
