@@ -298,9 +298,9 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
     }
 
     private void removeListeners(){
-        mReferenceTempDeck.removeEventListener(mOnTempDeckCardsChildEventListener);
         mReferenceTempDeck.removeEventListener(mOnTempDeckValueEventListener);
         mReferenceTempDeckName.removeEventListener(mOnTempDeckNameValueEventListener);
+        mReferenceTempDeckCards.removeEventListener(mOnTempDeckCardsChildEventListener);
         mReferenceDeck.removeEventListener(mOnDeckValueEventListener);
     }
 
