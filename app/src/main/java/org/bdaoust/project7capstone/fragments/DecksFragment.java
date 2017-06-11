@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.bdaoust.project7capstone.adapters.DeckListAdapter;
 import org.bdaoust.project7capstone.R;
+import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 import org.bdaoust.project7capstone.network.InitSampleDeckService;
 import org.bdaoust.project7capstone.tools.MTGTools;
@@ -81,6 +82,9 @@ public class DecksFragment extends Fragment{
 
                 mtgDeckModel = dataSnapshot.getValue(MTGDeckModel.class);
                 mtgDeckModel.setFirebaseKey(dataSnapshot.getKey());
+                if(mtgDeckModel.getMTGCards() == null){
+                    mtgDeckModel.setMTGCards(new ArrayList<MTGCardModel>());
+                }
                 mMTGDecks.add(mtgDeckModel);
                 mDeckListAdapter.notifyDataSetChanged();
 
