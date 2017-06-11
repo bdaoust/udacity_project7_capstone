@@ -192,6 +192,10 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
     protected void onPause() {
         super.onPause();
 
+        // We clear the list of MTG cards, otherwise when we return to this Fragment, assuming it
+        // hasn't been recreated, all of the MTG cards contained in the Deck will be added again
+        // to the list, thus creating extra copies of MTG cards, which we don't want.
+        mMTGTempDeck.getMTGCards().clear();
         removeListeners();
     }
 
@@ -222,7 +226,6 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         };
 
