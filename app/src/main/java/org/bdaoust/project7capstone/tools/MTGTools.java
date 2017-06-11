@@ -19,6 +19,10 @@ public class MTGTools {
         return userRootReference.child("decks").child(firebaseDeckKey);
     }
 
+    public static DatabaseReference createDeckLastUpdatedReference(DatabaseReference userRootReference, String firebaseDeckKey){
+        return userRootReference.child("decks").child(firebaseDeckKey).child("lastUpdatedTimestamp");
+    }
+
     public static DatabaseReference createCardListReference(DatabaseReference userRootReference, String firebaseDeckKey){
         return userRootReference.child("decks").child(firebaseDeckKey).child("mtgcards");
     }

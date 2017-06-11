@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.bdaoust.project7capstone.tools.MTGKeys;
 import org.bdaoust.project7capstone.adapters.CardListAdapter;
@@ -37,13 +37,13 @@ public class DeckDetailsFragment extends Fragment{
 
     private boolean mIsLargeLayout;
     private String mFirebaseDeckKey;
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mReferenceUserRoot;
     private DatabaseReference mReferenceCards;
+    private DatabaseReference mReferenceDeckLastUpdated;
     private MTGDeckModel mMTGDeck;
-    private List<MTGCardModel> mMTGCards;
     private CardListAdapter mCardListAdapter;
-
+    private ChildEventListener mOnCardsChildEventListener;
+    private ValueEventListener mOnLastUpdatedValueEventListener;
+    private long mLastUpdatedTimestamp;
 
     @Nullable
     @Override
@@ -51,15 +51,22 @@ public class DeckDetailsFragment extends Fragment{
         View rootView;
         RecyclerView recyclerView;
         GridLayoutManager gridLayoutManager;
+        List<MTGCardModel> mtgCards;
+        FirebaseDatabase firebaseDatabase;
+        DatabaseReference referenceUserRoot;
         int numbColumns;
 
         rootView = inflater.inflate(R.layout.fragment_deck_details, container, false);
         numbColumns = getResources().getInteger(R.integer.card_list_column_count);
         gridLayoutManager = new GridLayoutManager(getContext(), numbColumns);
 
-        mMTGCards = new ArrayList<>();
+        mIsLargeLayout = getResources().getBoolean(R.bool.large_layout);
+        mLastUpdatedTimestamp = 0;
+        setHasOptionsMenu(true);
+
+        mtgCards = new ArrayList<>();
         mMTGDeck = new MTGDeckModel();
-        mMTGDeck.setMTGCards(mMTGCards);
+        mMTGDeck.setMTGCards(mtgCards);
         mCardListAdapter = new CardListAdapter(getContext(), mMTGDeck);
 
         mCardListAdapter.setOnCardClickedListener(new CardListAdapter.OnCardClickedListener() {
@@ -73,50 +80,34 @@ public class DeckDetailsFragment extends Fragment{
         recyclerView.setAdapter(mCardListAdapter);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        mIsLargeLayout = getResources().getBoolean(R.bool.large_layout);
-
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
         mFirebaseDeckKey = getArguments().getString(MTGKeys.FIREBASE_DECK_KEY);
-        Log.d("DeckDetailsFragment", "----------- The Deck to load is " + mFirebaseDeckKey + " ---------------");
+        mReferenceCards = MTGTools.createCardListReference(referenceUserRoot, mFirebaseDeckKey);
+        mReferenceDeckLastUpdated = MTGTools.createDeckLastUpdatedReference(referenceUserRoot, mFirebaseDeckKey);
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mReferenceUserRoot = MTGTools.createUserRootReference(mFirebaseDatabase, null);
-        mReferenceCards = MTGTools.createCardListReference(mReferenceUserRoot, mFirebaseDeckKey);
-
-        mReferenceCards.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                MTGCardModel mtgCard;
-
-                mtgCard = dataSnapshot.getValue(MTGCardModel.class);
-                mtgCard.setFirebaseKey(dataSnapshot.getKey());
-                mMTGCards.add(mtgCard);
-                mCardListAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        setHasOptionsMenu(true);
+        createListeners();
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        addListeners();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // We clear the list of MTG cards, otherwise when we return to this Fragment, assuming it
+        // hasn't been recreated, all of the MTG cards contained in the Deck will be added again
+        // to the list, thus creating extra copies of MTG cards, which we don't want.
+        mMTGDeck.getMTGCards().clear();
+        mLastUpdatedTimestamp = 0;
+        removeListeners();
     }
 
     @Override
@@ -169,5 +160,75 @@ public class DeckDetailsFragment extends Fragment{
                 .commit();
         }
 
+    }
+
+    private void createListeners() {
+        mOnCardsChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                MTGCardModel mtgCard;
+
+                mtgCard = dataSnapshot.getValue(MTGCardModel.class);
+                mtgCard.setFirebaseKey(dataSnapshot.getKey());
+                mMTGDeck.addCard(mtgCard);
+                mCardListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+        mOnLastUpdatedValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long lastUpdatedTimestamp;
+
+                lastUpdatedTimestamp = dataSnapshot.getValue(Long.class);
+
+                // It is possible that a user could have the current Deck open for editing on a different device.
+                // If the current Deck does get updated on a different device then we can monitor that even by looking
+                // for a change in the lastUpdatedTimestamp. We ignore the case where mLastUpdatedTimestamp is 0 because
+                // that means either this Fragment is just being created or we are resuming back to this Fragment from
+                // the EditDeckActivity (i.e. mLastUpdatedTimestamp is also set to 0 in onPause). Once we know that the Deck
+                // was updated on a different device, we clear the list of MTGCards, remove and re-add the
+                // mOnCardsChildEventListener to repopulate the list and then notify the CardListAdapter.
+                if(mLastUpdatedTimestamp != 0 && lastUpdatedTimestamp > mLastUpdatedTimestamp){
+                    mMTGDeck.getMTGCards().clear();
+                    mReferenceCards.removeEventListener(mOnCardsChildEventListener);
+                    mReferenceCards.addChildEventListener(mOnCardsChildEventListener);
+                    mCardListAdapter.notifyDataSetChanged();
+                }
+
+                mLastUpdatedTimestamp = lastUpdatedTimestamp;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+    }
+
+    private void addListeners(){
+        mReferenceCards.addChildEventListener(mOnCardsChildEventListener);
+        mReferenceDeckLastUpdated.addValueEventListener(mOnLastUpdatedValueEventListener);
+    }
+
+    private void removeListeners(){
+        mReferenceCards.removeEventListener(mOnCardsChildEventListener);
+        mReferenceDeckLastUpdated.removeEventListener(mOnLastUpdatedValueEventListener);
     }
 }
