@@ -106,6 +106,7 @@ public class DeckDetailsFragment extends Fragment{
         // hasn't been recreated, all of the MTG cards contained in the Deck will be added again
         // to the list, thus creating extra copies of MTG cards, which we don't want.
         mMTGDeck.getMTGCards().clear();
+        mCardListAdapter.notifyDataSetChanged();
         mLastUpdatedTimestamp = 0;
         removeListeners();
     }
