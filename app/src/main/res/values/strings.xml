@@ -24,7 +24,10 @@
     <string name="error_loading_search_results">Error loading search results</string>
     <string name="failed_to_download_sample_deck">Failed to download Sample Deck: Feel the Burn</string>
 
-    <string name="deck_extra_info">%1$d cards - %2$s</string>
+    <plurals name="deck_extra_info">
+        <item quantity="one">%1$d card - %2$s</item>
+        <item quantity="other">%1$d cards - %2$s</item>
+    </plurals>
     <string name="deck_color_breakdown">Deck contents: %1$d percent Black, %2$d percent Blue,
         %3$d percent Green, %4$d percent Red, %5$d percent White, %6$d Colorless</string>
 

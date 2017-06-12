@@ -73,7 +73,7 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
         numbCards = mtgDeck.getNumbCards();
         lastUpdatedTimestamp = mtgDeck.getLastUpdatedTimestamp();
         lastUpdated = DateUtils.formatDateTime(mContext, lastUpdatedTimestamp, DateUtils.FORMAT_SHOW_YEAR);
-        extraInfo = mContext.getResources().getString(R.string.deck_extra_info, numbCards, lastUpdated);
+        extraInfo = mContext.getResources().getQuantityString(R.plurals.deck_extra_info, numbCards, numbCards, lastUpdated);
 
         holder.deckName.setText(mtgDeck.getName());
         holder.deckExtraInfo.setText(extraInfo);

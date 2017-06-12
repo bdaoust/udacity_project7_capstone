@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/deckName"
         android:layout_toEndOf="@id/deckPieChart"
-        android:text="@string/deck_extra_info"
+        android:text="@plurals/deck_extra_info"
         android:textSize="@dimen/deck_extra_info_text_size"
         android:textStyle="italic" />
 
