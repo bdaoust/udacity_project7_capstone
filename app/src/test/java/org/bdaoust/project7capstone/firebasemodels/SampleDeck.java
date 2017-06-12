@@ -1,7 +1,4 @@
-package org.bdaoust.project7capstone.data;
-
-import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
-import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
+package org.bdaoust.project7capstone.firebasemodels;
 
 import io.magicthegathering.javasdk.resource.Card;
 

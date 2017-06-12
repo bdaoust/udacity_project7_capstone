@@ -1,6 +1,6 @@
 package org.bdaoust.project7capstone;
 
-import org.bdaoust.project7capstone.data.SampleDeck;
+import org.bdaoust.project7capstone.firebasemodels.SampleDeck;
 import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 import org.junit.Before;
