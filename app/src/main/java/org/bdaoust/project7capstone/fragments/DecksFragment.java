@@ -82,9 +82,7 @@ public class DecksFragment extends Fragment{
 
                 mtgDeckModel = dataSnapshot.getValue(MTGDeckModel.class);
                 mtgDeckModel.setFirebaseKey(dataSnapshot.getKey());
-                if(mtgDeckModel.getMTGCards() == null){
-                    mtgDeckModel.setMTGCards(new ArrayList<MTGCardModel>());
-                }
+
                 mMTGDecks.add(mtgDeckModel);
                 mDeckListAdapter.notifyDataSetChanged();
 
