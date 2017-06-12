@@ -1,5 +1,6 @@
 package org.bdaoust.project7capstone.fragments;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -213,7 +214,14 @@ public class CardDetailsDialogFragment extends DialogFragment {
                 }
 
                 if (mtgCard.getPower() != null && mtgCard.getToughness() != null) {
-                    mCardPowerToughness.setText(mtgCard.getPower() + "/" + mtgCard.getToughness());
+                    Resources resources;
+                    String powerToughness;
+
+                    resources = getContext().getResources();
+                    powerToughness = resources.getString(R.string.card_details_power_toughness,
+                            mtgCard.getPower(), mtgCard.getToughness());
+
+                    mCardPowerToughness.setText(powerToughness);
                 } else {
                     mCardPowerToughnessLabel.setVisibility(View.GONE);
                     mCardPowerToughness.setVisibility(View.GONE);
