@@ -67,6 +67,7 @@ public class MTGCardModel {
         return mArtist;
     }
 
+    @SuppressWarnings("unused")
     public void setArtist(String artist){
         mArtist = artist;
     }
@@ -75,14 +76,17 @@ public class MTGCardModel {
         return mCmc;
     }
 
+    @SuppressWarnings("unused")
     public void setCmc(double cmc){
         mCmc = cmc;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public List<String> getColors(){
         return mColors;
     }
 
+    @SuppressWarnings("unused")
     public void setColors(List<String> colors){
         mColors = colors;
     }
@@ -91,6 +95,7 @@ public class MTGCardModel {
         return mFlavorText;
     }
 
+    @SuppressWarnings("unused")
     public void setFlavorText(String flavorText){
         mFlavorText = flavorText;
     }
@@ -99,6 +104,7 @@ public class MTGCardModel {
         return mImageUrl;
     }
 
+    @SuppressWarnings("unused")
     public void setImageUrl(String imageUrl){
         mImageUrl = imageUrl;
     }
@@ -107,6 +113,7 @@ public class MTGCardModel {
         return mLoyalty;
     }
 
+    @SuppressWarnings("unused")
     public void setLoyalty(int loyalty){
         mLoyalty = loyalty;
     }
@@ -115,6 +122,7 @@ public class MTGCardModel {
         return mManaCost;
     }
 
+    @SuppressWarnings("unused")
     public void setManaCost(String manaCost){
         mManaCost = manaCost;
     }
@@ -123,6 +131,7 @@ public class MTGCardModel {
         return mMultiverseId;
     }
 
+    @SuppressWarnings("unused")
     public void setMultiverseId(int multiverseId){
         mMultiverseId = multiverseId;
     }
@@ -147,6 +156,7 @@ public class MTGCardModel {
         return mPower;
     }
 
+    @SuppressWarnings("unused")
     public void setPower(String power){
         mPower = power;
     }
@@ -155,6 +165,7 @@ public class MTGCardModel {
         return mSetName;
     }
 
+    @SuppressWarnings("unused")
     public void setSetName(String setName){
         mSetName = setName;
     }
@@ -171,6 +182,7 @@ public class MTGCardModel {
         return mToughness;
     }
 
+    @SuppressWarnings("unused")
     public void setToughness(String toughness){
         mToughness = toughness;
     }
@@ -179,6 +191,7 @@ public class MTGCardModel {
         return mType;
     }
 
+    @SuppressWarnings("unused")
     public void setType(String type){
         mType = type;
     }
