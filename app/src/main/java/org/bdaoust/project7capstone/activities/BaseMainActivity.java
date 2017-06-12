@@ -74,6 +74,7 @@ public class BaseMainActivity extends AppCompatActivity implements DecksFragment
         }
     }
 
+    @SuppressWarnings("unused")
     protected boolean isLargeLayout(){
         return mIsLargeLayout;
     }

@@ -30,7 +30,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.bdaoust.project7capstone.adapters.DeckListAdapter;
 import org.bdaoust.project7capstone.R;
-import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 import org.bdaoust.project7capstone.network.InitSampleDeckService;
 import org.bdaoust.project7capstone.tools.MTGTools;
@@ -40,14 +39,13 @@ import java.util.List;
 
 public class DecksFragment extends Fragment{
 
-    private RecyclerView mRecyclerView;
     private CreateDeckDialogFragment mCreateDeckDialogFragment;
     private View mEmptyDeckListView;
     private int mSelectedPosition = 0;
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mReferenceUserRoot;
     private DatabaseReference mReferenceSampleDeckWasSaved;
     private DatabaseReference mReferenceDecks;
+    private ChildEventListener mOnDecksChildEventListener;
+    private ValueEventListener mOnSampleDeckWasSavedValueEventListener;
     private List<MTGDeckModel> mMTGDecks;
     private DeckListAdapter mDeckListAdapter;
     private ProgressBar mProgressBar;
@@ -62,85 +60,17 @@ public class DecksFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FloatingActionButton createDeckFAB;
+        FirebaseDatabase firebaseDatabase;
+        DatabaseReference referenceUserRoot;
+        RecyclerView recyclerView;
 
         mRootView = inflater.inflate(R.layout.fragment_decks, container, false);
         mEmptyDeckListView = mRootView.findViewById(R.id.emptyDeckList);
         mProgressBar = (ProgressBar) mRootView.findViewById(R.id.progressBar);
+        recyclerView = (RecyclerView) mRootView.findViewById(R.id.deckList);
 
-        mMTGDecks = new ArrayList<>();
         mIsFirstDeckAdded = true;
-
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mReferenceUserRoot = MTGTools.createUserRootReference(mFirebaseDatabase, null);
-        mReferenceSampleDeckWasSaved = MTGTools.createSampleDeckWasSavedReference(mReferenceUserRoot);
-        mReferenceDecks = MTGTools.createDeckListReference(mReferenceUserRoot);
-
-        mReferenceDecks.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                MTGDeckModel mtgDeckModel;
-
-                mtgDeckModel = dataSnapshot.getValue(MTGDeckModel.class);
-                mtgDeckModel.setFirebaseKey(dataSnapshot.getKey());
-
-                mMTGDecks.add(mtgDeckModel);
-                mDeckListAdapter.notifyDataSetChanged();
-
-                if(mEmptyDeckListView.getVisibility() == View.VISIBLE){
-                    mEmptyDeckListView.setVisibility(View.GONE);
-                }
-
-                if(mProgressBar.getVisibility() == View.VISIBLE){
-                    mProgressBar.setVisibility(View.GONE);
-                }
-
-                if(mIsFirstDeckAdded) {
-                    ((OnFirstDeckAddedListener)getActivity()).onFirstDeckAdded(dataSnapshot.getKey());
-                    mIsFirstDeckAdded = false;
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
-        mReferenceSampleDeckWasSaved.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    Log.d(TAG,"Sample Deck was already saved!");
-
-                    if(mMTGDecks.size() == 0){
-                        mEmptyDeckListView.setVisibility(View.VISIBLE);
-                    }
-                } else if(isConnected()){
-                    downloadSampleDeck();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        if(!isConnected()){
-            mProgressBar.setVisibility(View.GONE);
-            Toast.makeText(getContext(), R.string.no_network_connection, Toast.LENGTH_SHORT).show();
-        }
+        mSampleDeckDownloadFailedBroadcastReceiver = new SampleDeckDownloadFailedBroadcastReceiver();
 
         // Solution for keeping track of the selected position is based on
         // Project Sunshine (https://github.com/udacity/Sunshine-Version-2/blob/sunshine_master/app/src/main/java/com/example/android/sunshine/app/ForecastFragment.java)
@@ -148,7 +78,7 @@ public class DecksFragment extends Fragment{
             mSelectedPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
 
-        mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.deckList);
+        mMTGDecks = new ArrayList<>();
         mDeckListAdapter = new DeckListAdapter(getContext(), mMTGDecks, mSelectedPosition);
         mDeckListAdapter.setOnDeckSelectedListener(new OnDeckSelectedListener() {
             @Override
@@ -157,12 +87,10 @@ public class DecksFragment extends Fragment{
                 ((OnDeckSelectedListener)getActivity()).onDeckSelected(firebaseKey, position);
             }
         });
-
-        mRecyclerView.setAdapter(mDeckListAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(mDeckListAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mCreateDeckDialogFragment = new CreateDeckDialogFragment();
-
         createDeckFAB = (FloatingActionButton) mRootView.findViewById(R.id.createDeckFAB);
         createDeckFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,6 +98,13 @@ public class DecksFragment extends Fragment{
                 mCreateDeckDialogFragment.show(getFragmentManager(), "CreateDeck");
             }
         });
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
+        mReferenceSampleDeckWasSaved = MTGTools.createSampleDeckWasSavedReference(referenceUserRoot);
+        mReferenceDecks = MTGTools.createDeckListReference(referenceUserRoot);
+
+        createListeners();
 
         return mRootView;
     }
@@ -182,13 +117,6 @@ public class DecksFragment extends Fragment{
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        mSampleDeckDownloadFailedBroadcastReceiver = new SampleDeckDownloadFailedBroadcastReceiver();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
@@ -196,6 +124,13 @@ public class DecksFragment extends Fragment{
 
         intentFilter = new IntentFilter("org.bdaoust.project7capstone.NOTIFY_SAMPLE_DECK_DOWNLOAD_FAILED");
         getActivity().registerReceiver(mSampleDeckDownloadFailedBroadcastReceiver, intentFilter);
+
+        if(!isConnected()){
+            mProgressBar.setVisibility(View.GONE);
+            Toast.makeText(getContext(), R.string.no_network_connection, Toast.LENGTH_SHORT).show();
+        }
+
+        addListeners();
     }
 
     @Override
@@ -203,6 +138,11 @@ public class DecksFragment extends Fragment{
         super.onPause();
 
         getActivity().unregisterReceiver(mSampleDeckDownloadFailedBroadcastReceiver);
+
+        mMTGDecks.clear();
+        mDeckListAdapter.notifyDataSetChanged();
+
+        removeListeners();
     }
 
     @Override
@@ -259,6 +199,108 @@ public class DecksFragment extends Fragment{
         activeNetwork = connectivityManager.getActiveNetworkInfo();
 
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    private void createListeners() {
+        mOnDecksChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                MTGDeckModel mtgDeck;
+
+                mtgDeck = dataSnapshot.getValue(MTGDeckModel.class);
+                mtgDeck.setFirebaseKey(dataSnapshot.getKey());
+
+                mMTGDecks.add(mtgDeck);
+                mDeckListAdapter.notifyDataSetChanged();
+
+                if(mEmptyDeckListView.getVisibility() == View.VISIBLE){
+                    mEmptyDeckListView.setVisibility(View.GONE);
+                }
+
+                if(mProgressBar.getVisibility() == View.VISIBLE){
+                    mProgressBar.setVisibility(View.GONE);
+                }
+
+                if(mIsFirstDeckAdded) {
+                    ((OnFirstDeckAddedListener)getActivity()).onFirstDeckAdded(dataSnapshot.getKey());
+                    mIsFirstDeckAdded = false;
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                MTGDeckModel updatedMTGDeck;
+                int position;
+
+                updatedMTGDeck = dataSnapshot.getValue(MTGDeckModel.class);
+                updatedMTGDeck.setFirebaseKey(dataSnapshot.getKey());
+                position = findMTGDeckPositionByFirebaseKey(updatedMTGDeck.getFirebaseKey());
+
+                if(position != -1){
+                    mMTGDecks.set(position, updatedMTGDeck);
+                    mDeckListAdapter.notifyItemChanged(position);
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+        mOnSampleDeckWasSavedValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Log.d(TAG,"Sample Deck was already saved!");
+
+                    if(mMTGDecks.size() == 0){
+                        mEmptyDeckListView.setVisibility(View.VISIBLE);
+                    }
+                } else if(isConnected()){
+                    downloadSampleDeck();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+    }
+
+    private void addListeners(){
+        mReferenceDecks.addChildEventListener(mOnDecksChildEventListener);
+        mReferenceSampleDeckWasSaved.addListenerForSingleValueEvent(mOnSampleDeckWasSavedValueEventListener);
+    }
+
+    private void removeListeners(){
+        mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
+        mReferenceSampleDeckWasSaved.removeEventListener(mOnSampleDeckWasSavedValueEventListener);
+    }
+
+    private int findMTGDeckPositionByFirebaseKey(String firebaseKey){
+        int position;
+
+        position = -1;
+
+        for(int i= 0; i < mMTGDecks.size(); i++){
+            MTGDeckModel mtgDeck;
+
+            mtgDeck = mMTGDecks.get(i);
+            if(mtgDeck.getFirebaseKey().equals(firebaseKey)){
+                position = i;
+                break;
+            }
+        }
+
+        return position;
     }
 
     public interface OnFirstDeckAddedListener {
