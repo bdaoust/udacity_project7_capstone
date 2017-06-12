@@ -22,7 +22,7 @@ import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
 import org.bdaoust.project7capstone.tools.MTGTools;
 
-public class CardDetailsDialogFragment extends DialogFragment{
+public class CardDetailsDialogFragment extends DialogFragment {
 
     private Toolbar mToolbar;
     private ImageView mCardImage;
@@ -42,6 +42,9 @@ public class CardDetailsDialogFragment extends DialogFragment{
     private TextView mCardLoyalty;
     private TextView mCardSet;
     private TextView mCardArtist;
+    private View mCardsList;
+    private ValueEventListener mOnCardValueEventListener;
+    private DatabaseReference mReferenceCard;
 
     @Nullable
     @Override
@@ -49,7 +52,6 @@ public class CardDetailsDialogFragment extends DialogFragment{
         View rootView;
         FirebaseDatabase firebaseDatabase;
         DatabaseReference referenceUserRoot;
-        DatabaseReference referenceCard;
         String firebaseDeckKey;
         String firebaseCardKey;
 
@@ -74,108 +76,24 @@ public class CardDetailsDialogFragment extends DialogFragment{
         mCardSet = (TextView) rootView.findViewById(R.id.cardSet);
         mCardArtist = (TextView) rootView.findViewById(R.id.cardArtist);
 
+        mCardsList = getActivity().findViewById(R.id.cardsList);
+
+        if (mToolbar != null) {
+            setupToolbar();
+        }
+
+        // Hide the cardsList from the DeckDetailsFragment (on phones) since it can be otherwise
+        // still be "seen" when navigating the app with TalkBack.
+        hideCardsList();
+
         firebaseDeckKey = getArguments().getString(MTGKeys.FIREBASE_DECK_KEY);
         firebaseCardKey = getArguments().getString(MTGKeys.FIREBASE_CARD_KEY);
 
-        if(firebaseDeckKey != null && firebaseCardKey != null) {
-            firebaseDatabase = FirebaseDatabase.getInstance();
-            referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
-            referenceCard = MTGTools.createCardReference(referenceUserRoot, firebaseDeckKey, firebaseCardKey);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
+        mReferenceCard = MTGTools.createCardReference(referenceUserRoot, firebaseDeckKey, firebaseCardKey);
 
-            referenceCard.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    MTGCardModel mtgCard;
-
-                    mtgCard = dataSnapshot.getValue(MTGCardModel.class);
-
-
-                    if(mToolbar != null) {
-                        mToolbar.setTitle(mtgCard.getName());
-                    }
-
-                    /* The card fields "CardImage", "Name", "Quantity", "CMC", "Types", "Set",
-                     * and "Artist" should always be defined so we simply set the values. However,
-                     * the fields "Mana Cost", "Oracle Text", "Flavor Text", "PowerToughness",
-                     * and  "Loyalty" might be null so we only display them if they aren't null.
-                     */
-                    Glide.with(getContext()).load(mtgCard.getImageUrl()).into(mCardImage);
-                    mCardName.setText(mtgCard.getName());
-                    mCardQuantity.setText(String.valueOf(mtgCard.getNumbCopies()));
-                    mCardCMC.setText(getPrettyCMC(mtgCard.getCmc()));
-                    mCardTypes.setText(mtgCard.getType());
-                    mCardSet.setText(mtgCard.getSetName());
-                    mCardArtist.setText(mtgCard.getArtist());
-
-                    if(mtgCard.getManaCost() != null){
-                        mCardManaCost.setText(mtgCard.getManaCost());
-                    } else {
-                        mCardManaCostLabel.setVisibility(View.GONE);
-                        mCardManaCost.setVisibility(View.GONE);
-                    }
-
-                    if(mtgCard.getText() != null) {
-                        mCardOracleText.setText(mtgCard.getText());
-                    } else {
-                        mCardOracleTextLabel.setVisibility(View.GONE);
-                        mCardOracleText.setVisibility(View.GONE);
-                    }
-
-                    if(mtgCard.getFlavorText() != null){
-                        mCardFlavorText.setText(mtgCard.getFlavorText());
-                    } else {
-                        mCardFlavorTextLabel.setVisibility(View.GONE);
-                        mCardFlavorText.setVisibility(View.GONE);
-                    }
-
-                    if(mtgCard.getPower() != null && mtgCard.getToughness() != null){
-                        mCardPowerToughness.setText(mtgCard.getPower() + "/" + mtgCard.getToughness());
-                    } else {
-                        mCardPowerToughnessLabel.setVisibility(View.GONE);
-                        mCardPowerToughness.setVisibility(View.GONE);
-                    }
-
-                    if(mtgCard.getLoyalty() > 0){
-                        mCardLoyalty.setText(String.valueOf(mtgCard.getLoyalty()));
-                    } else {
-                        mCardLoyaltyLabel.setVisibility(View.GONE);
-                        mCardLoyalty.setVisibility(View.GONE);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        }
-
-
-        if(mToolbar != null){
-            mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_36dp);
-            mToolbar.setNavigationContentDescription(R.string.action_up);
-            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Calling onBackPressed() instead of dismiss() because otherwise the state
-                    // of the stack becomes inconsistent. For example, if a user is on a phone and
-                    // clicks on the Up arrow to return to the Deck Details, followed by clicking on a
-                    // card to get to the Card Details, followed by clicking on the Up arrow to return
-                    // to the Deck Details once more, it will take more than one click on the Back
-                    // Arrow (bottom of screen) to return to the Deck list, which is not what we want.
-                    getActivity().onBackPressed();
-                }
-            });
-
-            // Hide the deckList from the DeckDetailsFragment (on phones) since it can be otherwise
-            // still be "seen" when navigating the app with TalkBack.
-            View deckList;
-
-            deckList = getActivity().findViewById(R.id.cardsList);
-            if(deckList != null){
-                deckList.setVisibility(View.INVISIBLE);
-            }
-
-        }
+        createListeners();
 
         return rootView;
     }
@@ -184,16 +102,54 @@ public class CardDetailsDialogFragment extends DialogFragment{
     public void onDestroyView() {
         super.onDestroyView();
 
-        View deckList;
+        // The CardDetailsDialogFragment is no longer visible, so we can show the cardsList view
+        showCardsList();
+    }
 
-        // The CardDetailsDialogFragment is no longer visible, so we can show the deckList view
-        deckList = getActivity().findViewById(R.id.cardsList);
-        if(deckList !=null && (deckList.getVisibility() == View.INVISIBLE)) {
-            deckList.setVisibility(View.VISIBLE);
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        addListeners();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        removeListeners();
+    }
+
+    private void setupToolbar() {
+        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_36dp);
+        mToolbar.setNavigationContentDescription(R.string.action_up);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Calling onBackPressed() instead of dismiss() because otherwise the state
+                // of the stack becomes inconsistent. For example, if a user is on a phone and
+                // clicks on the Up arrow to return to the Deck Details, followed by clicking on a
+                // card to get to the Card Details, followed by clicking on the Up arrow to return
+                // to the Deck Details once more, it will take more than one click on the Back
+                // Arrow (bottom of screen) to return to the Deck list, which is not what we want.
+                getActivity().onBackPressed();
+            }
+        });
+    }
+
+    private void showCardsList(){
+        if (mCardsList != null && (mCardsList.getVisibility() == View.INVISIBLE)) {
+            mCardsList.setVisibility(View.VISIBLE);
         }
     }
 
-    private String getPrettyCMC(double cmc){
+    private void hideCardsList(){
+        if (mCardsList != null) {
+            mCardsList.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private String getPrettyCMC(double cmc) {
         double delta = 0.01;
         String prettyCMC;
 
@@ -201,12 +157,87 @@ public class CardDetailsDialogFragment extends DialogFragment{
         // also want to make sure that we account for special cases like the card
         // "Little Girl" (http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=74257)
         // which has a CMC of 0.5
-        if(cmc - Math.floor(cmc) > delta){
+        if (cmc - Math.floor(cmc) > delta) {
             prettyCMC = String.valueOf(cmc);
         } else {
-            prettyCMC = String.valueOf((int)cmc);
+            prettyCMC = String.valueOf((int) cmc);
         }
 
         return prettyCMC;
+    }
+
+    private void createListeners() {
+        mOnCardValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                MTGCardModel mtgCard;
+
+                mtgCard = dataSnapshot.getValue(MTGCardModel.class);
+
+
+                if (mToolbar != null) {
+                    mToolbar.setTitle(mtgCard.getName());
+                }
+
+                // The card fields "CardImage", "Name", "Quantity", "CMC", "Types", "Set",
+                // and "Artist" should always be defined so we simply set the values. However,
+                // the fields "Mana Cost", "Oracle Text", "Flavor Text", "PowerToughness",
+                // and  "Loyalty" might be null so we only display them if they aren't null.
+                Glide.with(getContext()).load(mtgCard.getImageUrl()).into(mCardImage);
+                mCardName.setText(mtgCard.getName());
+                mCardQuantity.setText(String.valueOf(mtgCard.getNumbCopies()));
+                mCardCMC.setText(getPrettyCMC(mtgCard.getCmc()));
+                mCardTypes.setText(mtgCard.getType());
+                mCardSet.setText(mtgCard.getSetName());
+                mCardArtist.setText(mtgCard.getArtist());
+
+                if (mtgCard.getManaCost() != null) {
+                    mCardManaCost.setText(mtgCard.getManaCost());
+                } else {
+                    mCardManaCostLabel.setVisibility(View.GONE);
+                    mCardManaCost.setVisibility(View.GONE);
+                }
+
+                if (mtgCard.getText() != null) {
+                    mCardOracleText.setText(mtgCard.getText());
+                } else {
+                    mCardOracleTextLabel.setVisibility(View.GONE);
+                    mCardOracleText.setVisibility(View.GONE);
+                }
+
+                if (mtgCard.getFlavorText() != null) {
+                    mCardFlavorText.setText(mtgCard.getFlavorText());
+                } else {
+                    mCardFlavorTextLabel.setVisibility(View.GONE);
+                    mCardFlavorText.setVisibility(View.GONE);
+                }
+
+                if (mtgCard.getPower() != null && mtgCard.getToughness() != null) {
+                    mCardPowerToughness.setText(mtgCard.getPower() + "/" + mtgCard.getToughness());
+                } else {
+                    mCardPowerToughnessLabel.setVisibility(View.GONE);
+                    mCardPowerToughness.setVisibility(View.GONE);
+                }
+
+                if (mtgCard.getLoyalty() > 0) {
+                    mCardLoyalty.setText(String.valueOf(mtgCard.getLoyalty()));
+                } else {
+                    mCardLoyaltyLabel.setVisibility(View.GONE);
+                    mCardLoyalty.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+    }
+
+    private void addListeners() {
+        mReferenceCard.addValueEventListener(mOnCardValueEventListener);
+    }
+
+    private void removeListeners() {
+        mReferenceCard.removeEventListener(mOnCardValueEventListener);
     }
 }
