@@ -1,15 +1,18 @@
 package org.bdaoust.project7capstone.data;
 
+import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
+import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
+
 import io.magicthegathering.javasdk.resource.Card;
 
-public class SampleDeck extends Deck{
+public class SampleDeck extends MTGDeckModel{
 
     public SampleDeck(){
-        super("Feel the Burn");
-
-        this.setLastUpdatedTimestamp(1491006413000L);
-
+        MTGCardModel mtgCard;
         Card card;
+
+        this.setName("Feel the Burn");
+        this.setLastUpdatedTimestamp(1491006413000L);
 
         card = new Card();
         card.setName("Mountain");
@@ -26,7 +29,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Magic 2010");
         card.setArtist("Sam Wood");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=191401&type=card");
-        this.addCardCopies(card, 12);
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(12);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -44,7 +49,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Magic 2010");
         card.setArtist("Christopher Moeller");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=191089&type=card");
-        this.addCardCopies(card, 4);
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(4);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -62,7 +69,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Masters Edition IV");
         card.setArtist("Anson Maddocks");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=220948&type=card");
-        this.addCardCopies(card, 4);
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(4);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -80,7 +89,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Masters Edition IV");
         card.setArtist("Mark Tedin");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=220952&type=card");
-        this.addCardCopies(card, 4);
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(4);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -98,7 +109,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Masters Edition IV");
         card.setArtist("Mark Poole");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=220956&type=card");
-        this.addCardCopies(card, 4);
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(4);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -116,7 +129,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Tenth Edition");
         card.setArtist("Zoltan Boros & Gabor Szikszai");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=134751&type=card");
-        this.addCardCopies(card, 4);
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(4);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -135,7 +150,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Magic 2010");
         card.setArtist("Dave Dorman");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=191076&type=card");
-        this.addCardCopies(card, 4);
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(4);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -153,8 +170,9 @@ public class SampleDeck extends Deck{
         card.setSetName("The Dark");
         card.setArtist("Anson Maddocks");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=1824&type=card");
-        this.addCardCopies(card, 1);
-
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(1);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -173,8 +191,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Mirage");
         card.setArtist("Ron Spencer");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=3452&type=card");
-        this.addCardCopies(card, 2);
-
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(2);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -193,7 +212,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Battle for Zendikar");
         card.setArtist("Jaime Jones");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=401805&type=card");
-        this.addCardCopies(card, 3);
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(3);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -212,8 +233,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Future Sight");
         card.setArtist("Shishizaru");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=126193&type=card");
-        this.addCardCopies(card, 4);
-
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(4);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -231,8 +253,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Planechase");
         card.setArtist("Andrew Goldhawk");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=205386&type=card");
-        this.addCardCopies(card, 3);
-
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(3);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -251,8 +274,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Conflux");
         card.setArtist("Raymond Swanland");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=186613&type=card");
-        this.addCardCopies(card, 4);
-
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(4);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -271,8 +295,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Time Spiral");
         card.setArtist("Warren Mahy");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=114909&type=card");
-        this.addCardCopies(card, 2);
-
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(2);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -291,8 +316,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Dark Ascension");
         card.setArtist("Anthony Francisco");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=262661&type=card");
-        this.addCardCopies(card, 2);
-
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(2);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -311,8 +337,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Commander 2016");
         card.setArtist("Steve Argyle");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=420882&type=card");
-        this.addCardCopies(card, 3);
-
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(3);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -332,8 +359,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Magic 2013");
         card.setArtist("D. Alexander Gregory");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=259205&type=card");
-        this.addCardCopies(card, 2);
-
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(2);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -353,8 +381,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Zendikar");
         card.setArtist("Steve Argyle");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=195402&type=card");
-        this.addCardCopies(card, 1);
-
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(1);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -374,8 +403,9 @@ public class SampleDeck extends Deck{
         card.setSetName("Duel Decks Anthology, Jace vs. Chandra");
         card.setArtist("Kev Walker");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=393821&type=card");
-        this.addCardCopies(card, 1);
-
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(1);
+        this.addCard(mtgCard);
 
 
         card = new Card();
@@ -396,6 +426,8 @@ public class SampleDeck extends Deck{
         card.setSetName("Kaladesh");
         card.setArtist("Magali Villeneuve");
         card.setImageUrl("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417683&type=card");
-        this.addCardCopies(card, 1);
+        mtgCard = new MTGCardModel(card);
+        mtgCard.setNumbCopies(1);
+        this.addCard(mtgCard);
     }
 }

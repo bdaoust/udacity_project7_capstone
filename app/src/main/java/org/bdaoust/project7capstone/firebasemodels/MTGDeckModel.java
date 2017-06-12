@@ -3,6 +3,7 @@ package org.bdaoust.project7capstone.firebasemodels;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -12,12 +13,13 @@ public class MTGDeckModel {
 
     private List<MTGCardModel> mMTGCards;
     private String mName;
-    private long mLastUpdatedTimestamp = 1491006413000L;
+    private long mLastUpdatedTimestamp;
     private ColorPercentages mColorPercentages;
     private String mFirebaseKey;
 
     public MTGDeckModel() {
         mColorPercentages = new ColorPercentages();
+        mMTGCards = new ArrayList<>();
     }
 
     public List<MTGCardModel> getMTGCards() {
