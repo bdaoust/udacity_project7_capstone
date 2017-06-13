@@ -40,20 +40,9 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
             @Override
             public void onClick(View view) {
                 int position;
-                String firebaseKey;
 
                 position = (int) view.getTag();
-                if (position != mSelectedPosition) {
-                    notifyItemChanged(mSelectedPosition);
-                    mSelectedPosition = position;
-                    view.setSelected(true);
-                }
-
-                firebaseKey = mMTGDecks.get(position).getFirebaseKey();
-                if (mOnDeckSelectedListener != null) {
-                    mOnDeckSelectedListener.onDeckSelected(firebaseKey, position);
-                }
-
+                selectDeck(position);
             }
         });
 
@@ -115,6 +104,21 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
 
     public void setOnDeckSelectedListener(DecksFragment.OnDeckSelectedListener onDeckSelectedListener) {
         mOnDeckSelectedListener = onDeckSelectedListener;
+    }
+
+    public void selectDeck(int position){
+        String firebaseKey;
+
+        if (position != mSelectedPosition) {
+            notifyItemChanged(mSelectedPosition);
+            mSelectedPosition = position;
+            notifyItemChanged(mSelectedPosition);
+
+            firebaseKey = mMTGDecks.get(position).getFirebaseKey();
+            if (mOnDeckSelectedListener != null) {
+                mOnDeckSelectedListener.onDeckSelected(firebaseKey, position);
+            }
+        }
     }
 
 }

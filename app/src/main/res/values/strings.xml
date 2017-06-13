@@ -23,6 +23,8 @@
     <string name="no_network_connection">No network connection</string>
     <string name="error_loading_search_results">Error loading search results</string>
     <string name="failed_to_download_sample_deck">Failed to download Sample Deck: Feel the Burn</string>
+    <string name="deck_name_already_exists">A deck with that name already exists.</string>
+    <string name="deck_name_cant_be_null">Deck name can\'t be null.</string>
 
     <plurals name="deck_extra_info">
         <item quantity="one">%1$d card - %2$s</item>

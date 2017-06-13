@@ -48,9 +48,11 @@ public class DecksFragment extends Fragment{
     private ValueEventListener mOnSampleDeckWasSavedValueEventListener;
     private List<MTGDeckModel> mMTGDecks;
     private DeckListAdapter mDeckListAdapter;
+    private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private View mRootView;
     private SampleDeckDownloadFailedBroadcastReceiver mSampleDeckDownloadFailedBroadcastReceiver;
+    private String mNewlyCreatedDeckFirebaseKey;
     private boolean mDownloadSampleDeckWhenActivityCreated = false;
     private boolean mIsFirstDeckAdded;
     private static final String SELECTED_KEY = "selected_position";
@@ -62,12 +64,11 @@ public class DecksFragment extends Fragment{
         FloatingActionButton createDeckFAB;
         FirebaseDatabase firebaseDatabase;
         DatabaseReference referenceUserRoot;
-        RecyclerView recyclerView;
 
         mRootView = inflater.inflate(R.layout.fragment_decks, container, false);
         mEmptyDeckListView = mRootView.findViewById(R.id.emptyDeckList);
         mProgressBar = (ProgressBar) mRootView.findViewById(R.id.progressBar);
-        recyclerView = (RecyclerView) mRootView.findViewById(R.id.deckList);
+        mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.deckList);
 
         mIsFirstDeckAdded = true;
         mSampleDeckDownloadFailedBroadcastReceiver = new SampleDeckDownloadFailedBroadcastReceiver();
@@ -85,12 +86,20 @@ public class DecksFragment extends Fragment{
             public void onDeckSelected(String firebaseKey, int position) {
                 mSelectedPosition = position;
                 ((OnDeckSelectedListener)getActivity()).onDeckSelected(firebaseKey, position);
+                mRecyclerView.scrollToPosition(position);
             }
         });
-        recyclerView.setAdapter(mDeckListAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mDeckListAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mCreateDeckDialogFragment = new CreateDeckDialogFragment();
+        mCreateDeckDialogFragment.setOnDeckCreatedListener(new OnDeckCreatedListener() {
+            @Override
+            public void onDeckCreated(String firebaseKey) {
+                mNewlyCreatedDeckFirebaseKey = firebaseKey;
+            }
+        });
+
         createDeckFAB = (FloatingActionButton) mRootView.findViewById(R.id.createDeckFAB);
         createDeckFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,25 +215,34 @@ public class DecksFragment extends Fragment{
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 MTGDeckModel mtgDeck;
+                int position;
 
                 mtgDeck = dataSnapshot.getValue(MTGDeckModel.class);
                 mtgDeck.setFirebaseKey(dataSnapshot.getKey());
 
                 mMTGDecks.add(mtgDeck);
-                mDeckListAdapter.notifyDataSetChanged();
+                position = findMTGDeckPositionByFirebaseKey(mtgDeck.getFirebaseKey());
+                mDeckListAdapter.notifyItemInserted(position);
 
-                if(mEmptyDeckListView.getVisibility() == View.VISIBLE){
-                    mEmptyDeckListView.setVisibility(View.GONE);
+                if(mtgDeck.getFirebaseKey().equals(mNewlyCreatedDeckFirebaseKey)){
+                    if(position != -1) {
+                        mDeckListAdapter.selectDeck(position);
+                        mNewlyCreatedDeckFirebaseKey = "";
+                    }
                 }
 
-                if(mProgressBar.getVisibility() == View.VISIBLE){
-                    mProgressBar.setVisibility(View.GONE);
-                }
+                mEmptyDeckListView.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.GONE);
 
                 if(mIsFirstDeckAdded) {
                     ((OnFirstDeckAddedListener)getActivity()).onFirstDeckAdded(dataSnapshot.getKey());
                     mIsFirstDeckAdded = false;
                 }
+
+                if(position == mSelectedPosition){
+                    mRecyclerView.scrollToPosition(position);
+                }
+
             }
 
             @Override
@@ -286,9 +304,7 @@ public class DecksFragment extends Fragment{
     }
 
     private int findMTGDeckPositionByFirebaseKey(String firebaseKey){
-        int position;
-
-        position = -1;
+        int position = -1;
 
         for(int i= 0; i < mMTGDecks.size(); i++){
             MTGDeckModel mtgDeck;
