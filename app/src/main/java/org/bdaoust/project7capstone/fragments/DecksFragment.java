@@ -221,7 +221,7 @@ public class DecksFragment extends Fragment{
                 mtgDeck.setFirebaseKey(dataSnapshot.getKey());
 
                 mMTGDecks.add(mtgDeck);
-                position = findMTGDeckPositionByFirebaseKey(mtgDeck.getFirebaseKey());
+                position = mDeckListAdapter.findMTGDeckPositionByFirebaseKey(mtgDeck.getFirebaseKey());
                 mDeckListAdapter.notifyItemInserted(position);
 
                 if(mtgDeck.getFirebaseKey().equals(mNewlyCreatedDeckFirebaseKey)){
@@ -252,7 +252,7 @@ public class DecksFragment extends Fragment{
 
                 updatedMTGDeck = dataSnapshot.getValue(MTGDeckModel.class);
                 updatedMTGDeck.setFirebaseKey(dataSnapshot.getKey());
-                position = findMTGDeckPositionByFirebaseKey(updatedMTGDeck.getFirebaseKey());
+                position = mDeckListAdapter.findMTGDeckPositionByFirebaseKey(updatedMTGDeck.getFirebaseKey());
 
                 if(position != -1){
                     mMTGDecks.set(position, updatedMTGDeck);
@@ -262,6 +262,17 @@ public class DecksFragment extends Fragment{
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                MTGDeckModel deletedMTGDeck;
+                int position;
+
+                deletedMTGDeck = dataSnapshot.getValue(MTGDeckModel.class);
+                deletedMTGDeck.setFirebaseKey(dataSnapshot.getKey());
+                position = mDeckListAdapter.findMTGDeckPositionByFirebaseKey(deletedMTGDeck.getFirebaseKey());
+
+                if(position != -1){
+                    mMTGDecks.remove(position);
+                    mDeckListAdapter.notifyItemRemoved(position);
+                }
             }
 
             @Override
@@ -301,22 +312,6 @@ public class DecksFragment extends Fragment{
     private void removeListeners(){
         mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
         mReferenceSampleDeckWasSaved.removeEventListener(mOnSampleDeckWasSavedValueEventListener);
-    }
-
-    private int findMTGDeckPositionByFirebaseKey(String firebaseKey){
-        int position = -1;
-
-        for(int i= 0; i < mMTGDecks.size(); i++){
-            MTGDeckModel mtgDeck;
-
-            mtgDeck = mMTGDecks.get(i);
-            if(mtgDeck.getFirebaseKey().equals(firebaseKey)){
-                position = i;
-                break;
-            }
-        }
-
-        return position;
     }
 
     public interface OnFirstDeckAddedListener {

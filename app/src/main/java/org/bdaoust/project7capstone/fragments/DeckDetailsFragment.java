@@ -37,6 +37,7 @@ public class DeckDetailsFragment extends Fragment{
 
     private boolean mIsLargeLayout;
     private String mFirebaseDeckKey;
+    private DatabaseReference mReferenceDeck;
     private DatabaseReference mReferenceCards;
     private DatabaseReference mReferenceDeckLastUpdated;
     private MTGDeckModel mMTGDeck;
@@ -83,6 +84,7 @@ public class DeckDetailsFragment extends Fragment{
         firebaseDatabase = FirebaseDatabase.getInstance();
         referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
         mFirebaseDeckKey = getArguments().getString(MTGKeys.FIREBASE_DECK_KEY);
+        mReferenceDeck = MTGTools.createDeckReference(referenceUserRoot, mFirebaseDeckKey);
         mReferenceCards = MTGTools.createCardListReference(referenceUserRoot, mFirebaseDeckKey);
         mReferenceDeckLastUpdated = MTGTools.createDeckLastUpdatedReference(referenceUserRoot, mFirebaseDeckKey);
 
@@ -130,6 +132,7 @@ public class DeckDetailsFragment extends Fragment{
 
                 return true;
             case R.id.action_delete:
+                mReferenceDeck.removeValue();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -197,23 +200,25 @@ public class DeckDetailsFragment extends Fragment{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 long lastUpdatedTimestamp;
 
-                lastUpdatedTimestamp = dataSnapshot.getValue(Long.class);
+                if(dataSnapshot.exists()) {
+                    lastUpdatedTimestamp = dataSnapshot.getValue(Long.class);
 
-                // It is possible that a user could have the current Deck open for editing on a different device.
-                // If the current Deck does get updated on a different device then we can monitor that even by looking
-                // for a change in the lastUpdatedTimestamp. We ignore the case where mLastUpdatedTimestamp is 0 because
-                // that means either this Fragment is just being created or we are resuming back to this Fragment from
-                // the EditDeckActivity (i.e. mLastUpdatedTimestamp is also set to 0 in onPause). Once we know that the Deck
-                // was updated on a different device, we clear the list of MTGCards, remove and re-add the
-                // mOnCardsChildEventListener to repopulate the list and then notify the CardListAdapter.
-                if(mLastUpdatedTimestamp != 0 && lastUpdatedTimestamp > mLastUpdatedTimestamp){
-                    mMTGDeck.getMTGCards().clear();
-                    mReferenceCards.removeEventListener(mOnCardsChildEventListener);
-                    mReferenceCards.addChildEventListener(mOnCardsChildEventListener);
-                    mCardListAdapter.notifyDataSetChanged();
+                    // It is possible that a user could have the current Deck open for editing on a different device.
+                    // If the current Deck does get updated on a different device then we can monitor that even by looking
+                    // for a change in the lastUpdatedTimestamp. We ignore the case where mLastUpdatedTimestamp is 0 because
+                    // that means either this Fragment is just being created or we are resuming back to this Fragment from
+                    // the EditDeckActivity (i.e. mLastUpdatedTimestamp is also set to 0 in onPause). Once we know that the Deck
+                    // was updated on a different device, we clear the list of MTGCards, remove and re-add the
+                    // mOnCardsChildEventListener to repopulate the list and then notify the CardListAdapter.
+                    if (mLastUpdatedTimestamp != 0 && lastUpdatedTimestamp > mLastUpdatedTimestamp) {
+                        mMTGDeck.getMTGCards().clear();
+                        mReferenceCards.removeEventListener(mOnCardsChildEventListener);
+                        mReferenceCards.addChildEventListener(mOnCardsChildEventListener);
+                        mCardListAdapter.notifyDataSetChanged();
+                    }
+
+                    mLastUpdatedTimestamp = lastUpdatedTimestamp;
                 }
-
-                mLastUpdatedTimestamp = lastUpdatedTimestamp;
             }
 
             @Override
