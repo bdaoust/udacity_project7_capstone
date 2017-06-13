@@ -14,11 +14,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.bdaoust.project7capstone.fragments.DecksFragment;
 import org.bdaoust.project7capstone.tools.MTGKeys;
 import org.bdaoust.project7capstone.fragments.DeckDetailsFragment;
 import org.bdaoust.project7capstone.R;
 
-public class BaseDeckDetailsActivity extends AppCompatActivity{
+public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksFragment.OnDeckDeletedListener{
 
     private ActionBar mActionBar;
 
@@ -84,4 +85,8 @@ public class BaseDeckDetailsActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    public void onDeckDeleted(String firebaseKey) {
+        finish();
+    }
 }

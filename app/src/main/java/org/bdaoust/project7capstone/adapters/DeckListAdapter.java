@@ -111,15 +111,13 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
     public void selectDeck(int position){
         String firebaseKey;
 
-        if (position != mSelectedPosition) {
-            notifyItemChanged(mSelectedPosition);
-            mSelectedPosition = position;
-            notifyItemChanged(mSelectedPosition);
+        notifyItemChanged(mSelectedPosition);
+        mSelectedPosition = position;
+        notifyItemChanged(mSelectedPosition);
 
-            firebaseKey = mMTGDecks.get(position).getFirebaseKey();
-            if (mOnDeckSelectedListener != null) {
-                mOnDeckSelectedListener.onDeckSelected(firebaseKey, position);
-            }
+        firebaseKey = mMTGDecks.get(position).getFirebaseKey();
+        if (mOnDeckSelectedListener != null) {
+            mOnDeckSelectedListener.onDeckSelected(firebaseKey, position);
         }
     }
 

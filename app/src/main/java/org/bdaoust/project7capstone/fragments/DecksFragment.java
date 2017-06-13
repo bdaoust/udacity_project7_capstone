@@ -273,6 +273,8 @@ public class DecksFragment extends Fragment{
                     mMTGDecks.remove(position);
                     mDeckListAdapter.notifyItemRemoved(position);
                 }
+
+                ((DecksFragment.OnDeckDeletedListener)getActivity()).onDeckDeleted(deletedMTGDeck.getFirebaseKey());
             }
 
             @Override
@@ -327,6 +329,6 @@ public class DecksFragment extends Fragment{
     }
 
     public interface OnDeckDeletedListener {
-        void onDeckDeleted(String firstDeckFirebaseKey);
+        void onDeckDeleted(String firebaseKey);
     }
 }

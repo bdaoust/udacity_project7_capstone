@@ -13,11 +13,14 @@ import org.bdaoust.project7capstone.fragments.DeckDetailsFragment;
 import org.bdaoust.project7capstone.fragments.DecksFragment;
 import org.bdaoust.project7capstone.R;
 
-public class BaseMainActivity extends AppCompatActivity implements DecksFragment.OnDeckSelectedListener , DecksFragment.OnFirstDeckAddedListener{
+public class BaseMainActivity extends AppCompatActivity implements DecksFragment.OnDeckSelectedListener,
+        DecksFragment.OnFirstDeckAddedListener, DecksFragment.OnDeckDeletedListener{
 
     private boolean mIsLargeLayout;
     private boolean mIsActivityInitialCreation;
     private final static String TAG = "MainActivity";
+    private DeckDetailsFragment mDeckDetailsFragment;
+    private String mLoadedDeckFirebaseKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +40,18 @@ public class BaseMainActivity extends AppCompatActivity implements DecksFragment
     private void loadDetailFragment(String firebaseKey){
         FragmentManager fragmentManager;
         FragmentTransaction fragmentTransaction;
-        DeckDetailsFragment deckDetailsFragment;
         Bundle bundle;
 
         bundle = new Bundle();
         bundle.putString(MTGKeys.FIREBASE_DECK_KEY, firebaseKey);
-        deckDetailsFragment = new DeckDetailsFragment();
-        deckDetailsFragment.setArguments(bundle);
+        mDeckDetailsFragment = new DeckDetailsFragment();
+        mDeckDetailsFragment.setArguments(bundle);
+        mLoadedDeckFirebaseKey = firebaseKey;
         Log.d(TAG, "Loading Deck: " + firebaseKey);
 
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.deckDetailsContainer, deckDetailsFragment);
+        fragmentTransaction.replace(R.id.deckDetailsContainer, mDeckDetailsFragment);
         fragmentTransaction.commit();
     }
 
@@ -77,5 +80,19 @@ public class BaseMainActivity extends AppCompatActivity implements DecksFragment
     @SuppressWarnings("unused")
     protected boolean isLargeLayout(){
         return mIsLargeLayout;
+    }
+
+    @Override
+    public void onDeckDeleted(String firebaseKey) {
+        if(mIsLargeLayout && firebaseKey.equals(mLoadedDeckFirebaseKey)){
+            FragmentManager fragmentManager;
+            FragmentTransaction fragmentTransaction;
+
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.remove(mDeckDetailsFragment);
+            fragmentTransaction.commit();
+        }
+
     }
 }

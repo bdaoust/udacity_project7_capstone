@@ -44,6 +44,7 @@ public class DeckDetailsFragment extends Fragment{
     private CardListAdapter mCardListAdapter;
     private ChildEventListener mOnCardsChildEventListener;
     private ValueEventListener mOnLastUpdatedValueEventListener;
+    private ValueEventListener mOnDeckValueEventListener;
     private long mLastUpdatedTimestamp;
 
     @Nullable
@@ -133,6 +134,8 @@ public class DeckDetailsFragment extends Fragment{
                 return true;
             case R.id.action_delete:
                 mReferenceDeck.removeValue();
+                ((DecksFragment.OnDeckDeletedListener)getActivity()).onDeckDeleted(mFirebaseDeckKey);
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -226,15 +229,30 @@ public class DeckDetailsFragment extends Fragment{
             }
         };
 
+        mOnDeckValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()) {
+                    ((DecksFragment.OnDeckDeletedListener) getActivity()).onDeckDeleted(mFirebaseDeckKey);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
     }
 
     private void addListeners(){
         mReferenceCards.addChildEventListener(mOnCardsChildEventListener);
         mReferenceDeckLastUpdated.addValueEventListener(mOnLastUpdatedValueEventListener);
+        mReferenceDeck.addValueEventListener(mOnDeckValueEventListener);
     }
 
     private void removeListeners(){
         mReferenceCards.removeEventListener(mOnCardsChildEventListener);
         mReferenceDeckLastUpdated.removeEventListener(mOnLastUpdatedValueEventListener);
+        mReferenceDeck.removeEventListener(mOnDeckValueEventListener);
     }
 }
