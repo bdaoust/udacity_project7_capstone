@@ -320,15 +320,15 @@ public class DecksFragment extends Fragment{
         void onFirstDeckAdded(String firebaseKey);
     }
 
-    public interface OnDeckCreatedListener {
-        void onDeckCreated(String firebaseKey);
-    }
-
     public interface OnDeckSelectedListener {
         void onDeckSelected(String firebaseKey, int position);
     }
 
     public interface OnDeckDeletedListener {
         void onDeckDeleted(String firebaseKey);
+    }
+
+    interface OnDeckCreatedListener {
+        void onDeckCreated(String firebaseKey);
     }
 }
