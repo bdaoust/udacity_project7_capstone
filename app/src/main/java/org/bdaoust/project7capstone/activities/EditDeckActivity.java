@@ -234,9 +234,11 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
             public void onDataChange(DataSnapshot dataSnapshot) {
                 MTGDeckModel mtgDeck;
 
-                mtgDeck = dataSnapshot.getValue(MTGDeckModel.class);
-                mMTGTempDeck.setName(mtgDeck.getName());
-                mReferenceTempDeck.setValue(mtgDeck);
+                if(dataSnapshot.exists()) {
+                    mtgDeck = dataSnapshot.getValue(MTGDeckModel.class);
+                    mMTGTempDeck.setName(mtgDeck.getName());
+                    mReferenceTempDeck.setValue(mtgDeck);
+                }
             }
 
             @Override
