@@ -173,65 +173,73 @@ public class CardDetailsDialogFragment extends DialogFragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 MTGCardModel mtgCard;
 
-                mtgCard = dataSnapshot.getValue(MTGCardModel.class);
+                if(dataSnapshot.exists()) {
+                    mtgCard = dataSnapshot.getValue(MTGCardModel.class);
 
 
-                if (mToolbar != null) {
-                    mToolbar.setTitle(mtgCard.getName());
-                }
+                    if (mToolbar != null) {
+                        mToolbar.setTitle(mtgCard.getName());
+                    }
 
-                // The card fields "CardImage", "Name", "Quantity", "CMC", "Types", "Set",
-                // and "Artist" should always be defined so we simply set the values. However,
-                // the fields "Mana Cost", "Oracle Text", "Flavor Text", "PowerToughness",
-                // and  "Loyalty" might be null so we only display them if they aren't null.
-                Glide.with(getContext()).load(mtgCard.getImageUrl()).into(mCardImage);
-                mCardName.setText(mtgCard.getName());
-                mCardQuantity.setText(String.valueOf(mtgCard.getNumbCopies()));
-                mCardCMC.setText(getPrettyCMC(mtgCard.getCmc()));
-                mCardTypes.setText(mtgCard.getType());
-                mCardSet.setText(mtgCard.getSetName());
-                mCardArtist.setText(mtgCard.getArtist());
+                    // The card fields "CardImage", "Name", "Quantity", "CMC", "Types", "Set",
+                    // and "Artist" should always be defined so we simply set the values. However,
+                    // the fields "Mana Cost", "Oracle Text", "Flavor Text", "PowerToughness",
+                    // and  "Loyalty" might be null so we only display them if they aren't null.
+                    Glide.with(getContext()).load(mtgCard.getImageUrl()).into(mCardImage);
+                    mCardName.setText(mtgCard.getName());
+                    mCardQuantity.setText(String.valueOf(mtgCard.getNumbCopies()));
+                    mCardCMC.setText(getPrettyCMC(mtgCard.getCmc()));
+                    mCardTypes.setText(mtgCard.getType());
+                    mCardSet.setText(mtgCard.getSetName());
+                    mCardArtist.setText(mtgCard.getArtist());
 
-                if (mtgCard.getManaCost() != null) {
-                    mCardManaCost.setText(mtgCard.getManaCost());
+                    if (mtgCard.getManaCost() != null) {
+                        mCardManaCost.setText(mtgCard.getManaCost());
+                    } else {
+                        mCardManaCostLabel.setVisibility(View.GONE);
+                        mCardManaCost.setVisibility(View.GONE);
+                    }
+
+                    if (mtgCard.getText() != null) {
+                        mCardOracleText.setText(mtgCard.getText());
+                    } else {
+                        mCardOracleTextLabel.setVisibility(View.GONE);
+                        mCardOracleText.setVisibility(View.GONE);
+                    }
+
+                    if (mtgCard.getFlavorText() != null) {
+                        mCardFlavorText.setText(mtgCard.getFlavorText());
+                    } else {
+                        mCardFlavorTextLabel.setVisibility(View.GONE);
+                        mCardFlavorText.setVisibility(View.GONE);
+                    }
+
+                    if (mtgCard.getPower() != null && mtgCard.getToughness() != null) {
+                        Resources resources;
+                        String powerToughness;
+
+                        resources = getContext().getResources();
+                        powerToughness = resources.getString(R.string.card_details_power_toughness,
+                                mtgCard.getPower(), mtgCard.getToughness());
+
+                        mCardPowerToughness.setText(powerToughness);
+                    } else {
+                        mCardPowerToughnessLabel.setVisibility(View.GONE);
+                        mCardPowerToughness.setVisibility(View.GONE);
+                    }
+
+                    if (mtgCard.getLoyalty() > 0) {
+                        mCardLoyalty.setText(String.valueOf(mtgCard.getLoyalty()));
+                    } else {
+                        mCardLoyaltyLabel.setVisibility(View.GONE);
+                        mCardLoyalty.setVisibility(View.GONE);
+                    }
                 } else {
-                    mCardManaCostLabel.setVisibility(View.GONE);
-                    mCardManaCost.setVisibility(View.GONE);
-                }
-
-                if (mtgCard.getText() != null) {
-                    mCardOracleText.setText(mtgCard.getText());
-                } else {
-                    mCardOracleTextLabel.setVisibility(View.GONE);
-                    mCardOracleText.setVisibility(View.GONE);
-                }
-
-                if (mtgCard.getFlavorText() != null) {
-                    mCardFlavorText.setText(mtgCard.getFlavorText());
-                } else {
-                    mCardFlavorTextLabel.setVisibility(View.GONE);
-                    mCardFlavorText.setVisibility(View.GONE);
-                }
-
-                if (mtgCard.getPower() != null && mtgCard.getToughness() != null) {
-                    Resources resources;
-                    String powerToughness;
-
-                    resources = getContext().getResources();
-                    powerToughness = resources.getString(R.string.card_details_power_toughness,
-                            mtgCard.getPower(), mtgCard.getToughness());
-
-                    mCardPowerToughness.setText(powerToughness);
-                } else {
-                    mCardPowerToughnessLabel.setVisibility(View.GONE);
-                    mCardPowerToughness.setVisibility(View.GONE);
-                }
-
-                if (mtgCard.getLoyalty() > 0) {
-                    mCardLoyalty.setText(String.valueOf(mtgCard.getLoyalty()));
-                } else {
-                    mCardLoyaltyLabel.setVisibility(View.GONE);
-                    mCardLoyalty.setVisibility(View.GONE);
+                    if(mToolbar != null) {
+                        getActivity().onBackPressed();
+                    } else {
+                        dismiss();
+                    }
                 }
             }
 
