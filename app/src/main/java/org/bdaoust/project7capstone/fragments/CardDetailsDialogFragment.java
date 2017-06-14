@@ -81,11 +81,11 @@ public class CardDetailsDialogFragment extends DialogFragment {
 
         if (mToolbar != null) {
             setupToolbar();
-        }
 
-        // Hide the cardsList from the DeckDetailsFragment (on phones) since it can be otherwise
-        // still be "seen" when navigating the app with TalkBack.
-        hideCardsList();
+            // Hide the cardsList from the DeckDetailsFragment (on phones) since it can be otherwise
+            // still be "seen" when navigating the app with TalkBack.
+            hideCardsList();
+        }
 
         firebaseDeckKey = getArguments().getString(MTGKeys.FIREBASE_DECK_KEY);
         firebaseCardKey = getArguments().getString(MTGKeys.FIREBASE_CARD_KEY);
