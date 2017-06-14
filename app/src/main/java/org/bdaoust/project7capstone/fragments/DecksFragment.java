@@ -274,6 +274,10 @@ public class DecksFragment extends Fragment{
                     mDeckListAdapter.notifyItemRemoved(position);
                 }
 
+                if(mMTGDecks.size() == 0){
+                    mEmptyDeckListView.setVisibility(View.VISIBLE);
+                }
+
                 ((DecksFragment.OnDeckDeletedListener)getActivity()).onDeckDeleted(deletedMTGDeck.getFirebaseKey());
             }
 
