@@ -53,6 +53,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
     private ValueEventListener mOnDeckValueEventListener;
     private ChildEventListener mOnTempDeckCardsChildEventListener;
     private String mTempDeckFirebaseKey;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         List<MTGCardModel> mtgTempCards;
         FirebaseDatabase firebaseDatabase;
         DatabaseReference referenceUserRoot;
-        RecyclerView recyclerView;
+        //RecyclerView recyclerView;
         FloatingActionButton searchCardsFAB;
         String editDeckFirebaseKey;
 
@@ -91,10 +92,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         mMTGTempDeck.setMTGCards(mtgTempCards);
 
         mEditCardListAdapter = new EditCardListAdapter(this, mMTGTempDeck);
-        recyclerView = (RecyclerView) findViewById(R.id.editCardsList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        recyclerView.setAdapter(mEditCardListAdapter);
+        mRecyclerView = (RecyclerView) findViewById(R.id.editCardsList);
 
         searchCardsFAB = (FloatingActionButton) findViewById(R.id.searchCardsFAB);
 
@@ -184,6 +182,10 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
     @Override
     protected void onResume() {
         super.onResume();
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mRecyclerView.setAdapter(mEditCardListAdapter);
 
         addListeners();
     }
