@@ -1,12 +1,10 @@
 package org.bdaoust.project7capstone;
 
-import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.util.ArraySet;
 
 import org.bdaoust.project7capstone.network.MTGCardsFetcher;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.List;
 import java.util.Set;
@@ -18,7 +16,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-@RunWith(AndroidJUnit4.class)
 public class MTGCardsFetcherTests {
 
     private List<List<Card>> mCardsLists;
