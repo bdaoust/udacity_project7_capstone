@@ -221,7 +221,7 @@ public class SearchCardsDialogFragment extends DialogFragment implements LoaderM
         // data from this loader. This can happen if for example the user typed slow enough to not have the search request
         // canceled, but fast enough that one search request doesn't have the time to complete the search and update
         // the contents before another search is requested.
-        if (loader.getId() < mCurrentLoaderId) {
+        if (loader.getId() < mCurrentLoaderId || mLastSearchTerm.equals("")) {
             Log.d(TAG, "Ignoring data from Loader #: " + loader.getId());
         } else {
             if (cardsList.size() == 0) {
