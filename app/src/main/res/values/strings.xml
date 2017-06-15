@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MTG Manager</string>
     <string name="activity_name_edit_deck">Edit deck</string>
+    <string name="sample_deck_name">Feel the Burn</string>
 
     <string name="action_create_deck">Create deck</string>
     <string name="action_search_cards">Search for cards</string>

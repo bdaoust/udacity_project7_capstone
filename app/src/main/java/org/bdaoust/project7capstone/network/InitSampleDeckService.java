@@ -8,6 +8,7 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 import org.bdaoust.project7capstone.tools.MTGTools;
@@ -62,7 +63,7 @@ public class InitSampleDeckService extends IntentService {
         downloadCard(417683, 1); // 1 x Chandra, Torch of Defiance
 
         if(mDeckCards.size() == mNumbCardsRequested) {
-            mtgDeckModel.setName("Feel the Burn");
+            mtgDeckModel.setName(getResources().getString(R.string.sample_deck_name));
             mtgDeckModel.setLastUpdatedTimestamp(System.currentTimeMillis());
             mtgDeckModel.setMTGCards(mDeckCards);
 
