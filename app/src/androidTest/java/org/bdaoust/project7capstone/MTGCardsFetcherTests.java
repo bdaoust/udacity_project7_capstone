@@ -3,7 +3,7 @@ package org.bdaoust.project7capstone;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.util.ArraySet;
 
-import org.bdaoust.project7capstone.network.SearchForCardsTask;
+import org.bdaoust.project7capstone.network.MTGCardsFetcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import java.util.List;
 import java.util.Set;
 
+import io.magicthegathering.javasdk.exception.HttpRequestFailedException;
 import io.magicthegathering.javasdk.resource.Card;
 
 import static org.junit.Assert.assertEquals;
@@ -18,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
-public class SearchForCardsTaskTests {
+public class MTGCardsFetcherTests {
 
     private List<List<Card>> mCardsLists;
     private boolean mRequestCompleted;
@@ -37,10 +38,7 @@ public class SearchForCardsTaskTests {
 
     @Test
     public void testSearchFor_NonExistentCard() throws InterruptedException {
-        SearchForCardsTask searchForCardsTask;
-
-        searchForCardsTask = createSearchForCardsTask("xyzthiscarddoesnotexist");
-        searchForCardsTask.execute();
+        startFetchCardsTask("xyzthiscarddoesnotexist");
 
         waitForTaskToComplete();
 
@@ -50,13 +48,10 @@ public class SearchForCardsTaskTests {
 
     @Test
     public void testSearchFor_Lhurgoyf() throws InterruptedException {
-        SearchForCardsTask searchForCardsTask;
         List<Card> mCards;
         Set<Integer> multiverseIds;
 
-        searchForCardsTask = createSearchForCardsTask("Lhurgoyf");
-        searchForCardsTask.setSets(LIST_OF_SETS);
-        searchForCardsTask.execute();
+        startFetchCardsTask("Lhurgoyf");
 
         waitForTaskToComplete();
         multiverseIds = new ArraySet<>();
@@ -84,13 +79,10 @@ public class SearchForCardsTaskTests {
 
     @Test
     public void testSearchFor_chandra() throws InterruptedException {
-        SearchForCardsTask searchForCardsTask;
         List<Card> mCards;
         Set<Integer> multiverseIds;
 
-        searchForCardsTask = createSearchForCardsTask("chandra");
-        searchForCardsTask.setSets(LIST_OF_SETS);
-        searchForCardsTask.execute();
+        startFetchCardsTask("chandra");
 
         waitForTaskToComplete();
 
@@ -251,25 +243,18 @@ public class SearchForCardsTaskTests {
     }
 
 
-    private SearchForCardsTask createSearchForCardsTask(String searchTerm) {
-        SearchForCardsTask searchForCardsTask;
-        searchForCardsTask = new SearchForCardsTask(searchTerm, 0);
+    private void startFetchCardsTask(String searchTerm) {
+        MTGCardsFetcher mtgCardsFetcher;
 
-        searchForCardsTask.setOnSearchCompletedListener(new SearchForCardsTask.OnSearchCompletedListener() {
-            @Override
-            public void onSearchCompleted(List<List<Card>> cardsLists, String searchTerm, long searchRequestTimestamp) {
-                mCardsLists = cardsLists;
-                mRequestCompleted = true;
-            }
-        });
-        searchForCardsTask.setOnRequestFailedListener(new SearchForCardsTask.OnRequestFailedListener() {
-            @Override
-            public void onRequestFailed() {
-                mRequestFailed = true;
-            }
-        });
+        mtgCardsFetcher = new MTGCardsFetcher();
+        mtgCardsFetcher.setSets(LIST_OF_SETS);
 
-        return searchForCardsTask;
+        try{
+            mCardsLists = mtgCardsFetcher.fetch(searchTerm);
+            mRequestCompleted = true;
+        } catch (HttpRequestFailedException e) {
+            mRequestFailed = true;
+        }
     }
 
     private void waitForTaskToComplete() throws InterruptedException {

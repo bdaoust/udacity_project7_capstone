@@ -27,8 +27,6 @@ public class MTGCardSearchLoader extends AsyncTaskLoader<List<List<Card>>> {
         mSearchTerm = searchTerm;
         mSearchRequestTimestamp = searchRequestTimestamp;
         mRequestFailed = false;
-
-
     }
 
     @Override
@@ -97,13 +95,8 @@ public class MTGCardSearchLoader extends AsyncTaskLoader<List<List<Card>>> {
     }
 
 
-    public void setSets(String sets) {
-        //mSets = sets;
-    }
-
     public boolean isWaitingToSearch() {
         return mIsWaitingToSearch;
     }
-
 
 }
