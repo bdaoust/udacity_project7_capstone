@@ -1,8 +1,10 @@
-package org.bdaoust.project7capstone.network;
+package org.bdaoust.project7capstone.loaders;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
+
+import org.bdaoust.project7capstone.network.MTGCardsFetcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +95,6 @@ public class MTGCardSearchLoader extends AsyncTaskLoader<List<List<Card>>> {
 
         super.deliverResult(data);
     }
-
 
     public boolean isWaitingToSearch() {
         return mIsWaitingToSearch;

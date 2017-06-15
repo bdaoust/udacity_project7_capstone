@@ -22,8 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.bdaoust.project7capstone.adapters.SearchCardListAdapter;
+import org.bdaoust.project7capstone.loaders.MTGCardSearchLoader;
 import org.bdaoust.project7capstone.R;
-import org.bdaoust.project7capstone.network.MTGCardSearchLoader;
 
 import java.util.ArrayList;
 import java.util.List;
