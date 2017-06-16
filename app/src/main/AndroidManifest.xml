@@ -24,6 +24,14 @@
         <activity android:name=".activities.EditDeckActivity" android:parentActivityName=".activities.DeckDetailsActivity" android:launchMode="singleTop"/>
 
         <service android:name=".network.InitSampleDeckService" android:exported="false" />
+
+        <receiver android:name="DecksAppWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/decks_appwidget_info" />
+        </receiver>
     </application>
 
 </manifest>
