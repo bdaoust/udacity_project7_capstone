@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/touch_selector"
+    android:paddingBottom="@dimen/deck_list_item_padding_vertical"
+    android:paddingLeft="@dimen/deck_list_item_padding_horizontal"
+    android:paddingRight="@dimen/deck_list_item_padding_horizontal"
+    android:paddingTop="@dimen/deck_list_item_padding_vertical">
+
+    <TextView
+        android:id="@+id/deckName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/deck_list_deck_name_placeholder"
+        android:textSize="@dimen/deck_list_deck_name_text_size"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/deckExtraInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/deckName"
+        android:text="@plurals/deck_extra_info"
+        android:textSize="@dimen/deck_extra_info_text_size"
+        android:textStyle="italic" />
+
+</RelativeLayout>

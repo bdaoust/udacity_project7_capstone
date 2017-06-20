@@ -25,6 +25,9 @@
 
         <service android:name=".network.InitSampleDeckService" android:exported="false" />
 
+        <service android:name=".DecksWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
         <receiver android:name="DecksAppWidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
