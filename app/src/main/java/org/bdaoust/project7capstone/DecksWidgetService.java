@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -55,7 +56,7 @@ public class DecksWidgetService extends RemoteViewsService{
         @Override
         public void onCreate() {
             mReferenceDecks.addChildEventListener(mOnDecksChildEventListener);
-            Log.d(TAG,"RemoteViewsFatory CREATED");
+            Log.d(TAG,"RemoteViewsFactory CREATED");
         }
 
         @Override
@@ -66,7 +67,7 @@ public class DecksWidgetService extends RemoteViewsService{
         @Override
         public void onDestroy() {
             mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
-            Log.d(TAG,"RemoteViewsFatory DESTROYED");
+            Log.d(TAG,"RemoteViewsFactory DESTROYED");
         }
 
         @Override
@@ -80,6 +81,8 @@ public class DecksWidgetService extends RemoteViewsService{
             MTGDeckModel mtgDeck;
             String extraInfo;
             String lastUpdated;
+            Bundle extras;
+            Intent fillIntent;
             long lastUpdatedTimestamp;
             int numbCards;
 
@@ -93,6 +96,13 @@ public class DecksWidgetService extends RemoteViewsService{
             remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.app_widget_list_item_deck);
             remoteViews.setTextViewText(R.id.deckName, mtgDecks.get(position).getName());
             remoteViews.setTextViewText(R.id.deckExtraInfo, extraInfo);
+
+            extras = new Bundle();
+            extras.putString(DecksAppWidgetProvider.EXTRA_DECK_FIREBASE_KEY, mtgDeck.getFirebaseKey());
+            fillIntent = new Intent();
+            fillIntent.putExtras(extras);
+
+            remoteViews.setOnClickFillInIntent(R.id.deckListItem, fillIntent);
 
             return remoteViews;
         }
@@ -183,12 +193,10 @@ public class DecksWidgetService extends RemoteViewsService{
 
                 @Override
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
                 }
             };
         }

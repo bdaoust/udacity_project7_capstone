@@ -32,6 +32,7 @@ import org.bdaoust.project7capstone.adapters.DeckListAdapter;
 import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 import org.bdaoust.project7capstone.network.InitSampleDeckService;
+import org.bdaoust.project7capstone.tools.MTGKeys;
 import org.bdaoust.project7capstone.tools.MTGTools;
 
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class DecksFragment extends Fragment{
     private View mRootView;
     private SampleDeckDownloadFailedBroadcastReceiver mSampleDeckDownloadFailedBroadcastReceiver;
     private String mNewlyCreatedDeckFirebaseKey;
+    private String mWidgetSelectedDeckFirebaseKey;
     private boolean mDownloadSampleDeckWhenActivityCreated = false;
     private boolean mIsFirstDeckAdded;
     private static final String SELECTED_KEY = "selected_position";
@@ -162,6 +164,15 @@ public class DecksFragment extends Fragment{
             downloadSampleDeck();
             mDownloadSampleDeckWhenActivityCreated = false;
         }
+
+        if(savedInstanceState == null) {
+            // We are only interested in getting the firebaseDeckKey in the event that this is the first time the
+            // Fragment is being created (i.e. not being recreated from a rotation) given that on rotation
+            // we will fetch the selected Deck position from the savedInstanceState since the user might
+            // have selected a different Deck than the one originally selected from the Widget. Also, if the
+            // MTGManager app was not opened from the Widget, then mWidgetSelectedDeckFirebaseKey will be null.
+            mWidgetSelectedDeckFirebaseKey = getActivity().getIntent().getStringExtra(MTGKeys.FIREBASE_DECK_KEY);
+        }
     }
 
     private class SampleDeckDownloadFailedBroadcastReceiver extends BroadcastReceiver {
@@ -225,19 +236,26 @@ public class DecksFragment extends Fragment{
                 mDeckListAdapter.notifyItemInserted(position);
 
                 if(mtgDeck.getFirebaseKey().equals(mNewlyCreatedDeckFirebaseKey)){
+                    // New Deck Created
                     if(position != -1) {
                         mDeckListAdapter.selectDeck(position);
                         mNewlyCreatedDeckFirebaseKey = "";
                     }
+                } else if(mtgDeck.getFirebaseKey().equals(mWidgetSelectedDeckFirebaseKey)){
+                    // Deck Selected from Widget
+                    if(position != -1) {
+                        mDeckListAdapter.selectDeck(position);
+                        mWidgetSelectedDeckFirebaseKey = "";
+                    }
+                } else if(mIsFirstDeckAdded) {
+                    // First Deck Added to the Deck list
+                    ((OnFirstDeckAddedListener)getActivity()).onFirstDeckAdded(dataSnapshot.getKey());
+                    mIsFirstDeckAdded = false;
                 }
 
                 mEmptyDeckListView.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.GONE);
 
-                if(mIsFirstDeckAdded) {
-                    ((OnFirstDeckAddedListener)getActivity()).onFirstDeckAdded(dataSnapshot.getKey());
-                    mIsFirstDeckAdded = false;
-                }
 
                 if(position == mSelectedPosition){
                     mRecyclerView.scrollToPosition(position);
