@@ -207,7 +207,7 @@ public class DeckDetailsFragment extends Fragment{
                     lastUpdatedTimestamp = dataSnapshot.getValue(Long.class);
 
                     // It is possible that a user could have the current Deck open for editing on a different device.
-                    // If the current Deck does get updated on a different device then we can monitor that even by looking
+                    // If the current Deck does get updated on a different device then we can monitor that by looking
                     // for a change in the lastUpdatedTimestamp. We ignore the case where mLastUpdatedTimestamp is 0 because
                     // that means either this Fragment is just being created or we are resuming back to this Fragment from
                     // the EditDeckActivity (i.e. mLastUpdatedTimestamp is also set to 0 in onPause). Once we know that the Deck
