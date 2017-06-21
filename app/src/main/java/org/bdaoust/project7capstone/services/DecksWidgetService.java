@@ -24,6 +24,8 @@ import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 import org.bdaoust.project7capstone.tools.MTGTools;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DecksWidgetService extends RemoteViewsService{
@@ -42,11 +44,11 @@ public class DecksWidgetService extends RemoteViewsService{
         private DatabaseReference mReferenceUserRoot;
         private DatabaseReference mReferenceDecks;
         private ChildEventListener mOnDecksChildEventListener;
-        private List<MTGDeckModel> mtgDecks;
+        private List<MTGDeckModel> mMTGDecks;
 
 
         DeckRemoteViewsFactory(Context context){
-            mtgDecks = new ArrayList<>();
+            mMTGDecks = new ArrayList<>();
             mContext = context;
 
             mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -75,7 +77,7 @@ public class DecksWidgetService extends RemoteViewsService{
 
         @Override
         public int getCount() {
-            return mtgDecks.size();
+            return mMTGDecks.size();
         }
 
         @Override
@@ -91,7 +93,7 @@ public class DecksWidgetService extends RemoteViewsService{
             int numbCards;
             float colorless;
 
-            mtgDeck = mtgDecks.get(position);
+            mtgDeck = mMTGDecks.get(position);
             numbCards = mtgDeck.getNumbCards();
             lastUpdatedTimestamp = mtgDeck.getLastUpdatedTimestamp();
             lastUpdated = DateUtils.formatDateTime(mContext, lastUpdatedTimestamp, DateUtils.FORMAT_SHOW_YEAR);
@@ -99,7 +101,7 @@ public class DecksWidgetService extends RemoteViewsService{
                     getQuantityString(R.plurals.deck_extra_info, numbCards, numbCards, lastUpdated);
 
             remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.app_widget_list_item_deck);
-            remoteViews.setTextViewText(R.id.deckName, mtgDecks.get(position).getName());
+            remoteViews.setTextViewText(R.id.deckName, mMTGDecks.get(position).getName());
             remoteViews.setTextViewText(R.id.deckExtraInfo, extraInfo);
 
             colorPercentages = mtgDeck.getColorPercentages();
@@ -188,7 +190,14 @@ public class DecksWidgetService extends RemoteViewsService{
 
                     mtgDeck = dataSnapshot.getValue(MTGDeckModel.class);
                     mtgDeck.setFirebaseKey(dataSnapshot.getKey());
-                    mtgDecks.add(mtgDeck);
+                    mMTGDecks.add(mtgDeck);
+
+                    Collections.sort(mMTGDecks, new Comparator<MTGDeckModel>() {
+                        @Override
+                        public int compare(MTGDeckModel deck1, MTGDeckModel deck2) {
+                            return deck1.getName().compareTo(deck2.getName());
+                        }
+                    });
 
                     updateAllWidgets();
                     Log.d(TAG, "Widget MTG Deck added: " + mtgDeck.getFirebaseKey());
@@ -202,17 +211,17 @@ public class DecksWidgetService extends RemoteViewsService{
                     updatedMTGDeck = dataSnapshot.getValue(MTGDeckModel.class);
                     updatedMTGDeck.setFirebaseKey(dataSnapshot.getKey());
 
-                    for(int i = 0; i < mtgDecks.size(); i++){
+                    for(int i = 0; i < mMTGDecks.size(); i++){
                         MTGDeckModel mtgDeck;
 
-                        mtgDeck = mtgDecks.get(i);
+                        mtgDeck = mMTGDecks.get(i);
                         if(mtgDeck.getFirebaseKey().equals(updatedMTGDeck.getFirebaseKey())){
                             position = i;
                         }
                     }
 
                     if(position >= 0){
-                        mtgDecks.set(position, updatedMTGDeck);
+                        mMTGDecks.set(position, updatedMTGDeck);
                     }
 
                     updateAllWidgets();
@@ -227,17 +236,17 @@ public class DecksWidgetService extends RemoteViewsService{
                     removedMTGDeck = dataSnapshot.getValue(MTGDeckModel.class);
                     removedMTGDeck.setFirebaseKey(dataSnapshot.getKey());
 
-                    for(int i = 0; i < mtgDecks.size(); i++){
+                    for(int i = 0; i < mMTGDecks.size(); i++){
                         MTGDeckModel mtgDeck;
 
-                        mtgDeck = mtgDecks.get(i);
+                        mtgDeck = mMTGDecks.get(i);
                         if(mtgDeck.getFirebaseKey().equals(removedMTGDeck.getFirebaseKey())){
                             position = i;
                         }
                     }
 
                     if(position >= 0){
-                        mtgDecks.remove(position);
+                        mMTGDecks.remove(position);
                     }
 
                     updateAllWidgets();

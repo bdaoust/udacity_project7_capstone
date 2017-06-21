@@ -36,6 +36,8 @@ import org.bdaoust.project7capstone.tools.MTGKeys;
 import org.bdaoust.project7capstone.tools.MTGTools;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DecksFragment extends Fragment{
@@ -232,6 +234,13 @@ public class DecksFragment extends Fragment{
                 mtgDeck.setFirebaseKey(dataSnapshot.getKey());
 
                 mMTGDecks.add(mtgDeck);
+                Collections.sort(mMTGDecks, new Comparator<MTGDeckModel>() {
+                    @Override
+                    public int compare(MTGDeckModel deck1, MTGDeckModel deck2) {
+                        return deck1.getName().compareTo(deck2.getName());
+                    }
+                });
+
                 position = mDeckListAdapter.findMTGDeckPositionByFirebaseKey(mtgDeck.getFirebaseKey());
                 mDeckListAdapter.notifyItemInserted(position);
 
