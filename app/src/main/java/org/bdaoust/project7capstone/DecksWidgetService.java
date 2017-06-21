@@ -88,7 +88,6 @@ public class DecksWidgetService extends RemoteViewsService{
             long lastUpdatedTimestamp;
             int numbCards;
             float colorless;
-            float delta = 0.01f;
 
             mtgDeck = mtgDecks.get(position);
             numbCards = mtgDeck.getNumbCards();
@@ -103,42 +102,48 @@ public class DecksWidgetService extends RemoteViewsService{
 
             colorPercentages = mtgDeck.getColorPercentages();
 
-            if(colorPercentages.black < delta){
+            if(colorPercentages.black <= 0){
                 remoteViews.setViewVisibility(R.id.mtgColorBlackItem, View.GONE);
             } else {
+                remoteViews.setViewVisibility(R.id.mtgColorBlackItem, View.VISIBLE);
                 remoteViews.setTextViewText(R.id.mtgColorBlack, (int)colorPercentages.black + "%");
             }
 
-            if(colorPercentages.blue < delta){
+            if(colorPercentages.blue <= 0){
                 remoteViews.setViewVisibility(R.id.mtgColorBlueItem, View.GONE);
             } else {
+                remoteViews.setViewVisibility(R.id.mtgColorBlueItem, View.VISIBLE);
                 remoteViews.setTextViewText(R.id.mtgColorBlue, (int)colorPercentages.blue + "%");
             }
 
-            if(colorPercentages.green < delta){
+            if(colorPercentages.green <= 0){
                 remoteViews.setViewVisibility(R.id.mtgColorGreenItem, View.GONE);
             } else {
+                remoteViews.setViewVisibility(R.id.mtgColorGreenItem, View.VISIBLE);
                 remoteViews.setTextViewText(R.id.mtgColorGreen, (int)colorPercentages.green + "%");
             }
 
-            if(colorPercentages.red < delta){
+            if(colorPercentages.red <= 0){
                 remoteViews.setViewVisibility(R.id.mtgColorRedItem, View.GONE);
             } else {
+                remoteViews.setViewVisibility(R.id.mtgColorRedItem, View.VISIBLE);
                 remoteViews.setTextViewText(R.id.mtgColorRed, (int)colorPercentages.red + "%");
             }
 
-            if(colorPercentages.white < delta){
+            if(colorPercentages.white <= 0){
                 remoteViews.setViewVisibility(R.id.mtgColorWhiteItem, View.GONE);
             } else {
+                remoteViews.setViewVisibility(R.id.mtgColorWhiteItem, View.VISIBLE);
                 remoteViews.setTextViewText(R.id.mtgColorWhite, (int)colorPercentages.white + "%");
             }
 
             colorless = 100f - colorPercentages.black - colorPercentages.blue - colorPercentages.green
                     - colorPercentages.red - colorPercentages.white;
 
-            if(colorless < delta){
+            if(colorless <= 0){
                 remoteViews.setViewVisibility(R.id.mtgColorlessItem, View.GONE);
             } else {
+                remoteViews.setViewVisibility(R.id.mtgColorlessItem, View.VISIBLE);
                 remoteViews.setTextViewText(R.id.mtgColorless, (int)colorless + "%");
             }
 
