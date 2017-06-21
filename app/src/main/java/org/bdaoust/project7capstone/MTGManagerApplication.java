@@ -11,7 +11,7 @@ public class MTGManagerApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // Enabling Firebase data persistance, based on solution from
+        // Enabling Firebase data persistence, based on solution from
         // cdkn7 (https://stackoverflow.com/questions/37448186/setpersistenceenabledtrue-crashes-app)
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
