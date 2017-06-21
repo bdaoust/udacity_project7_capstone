@@ -28,6 +28,7 @@ public class MTGCardModel {
     private String mToughness;
     private String mType;
 
+    @SuppressWarnings("unused")
     public MTGCardModel(){
         mColors = new ArrayList<>();
     }
