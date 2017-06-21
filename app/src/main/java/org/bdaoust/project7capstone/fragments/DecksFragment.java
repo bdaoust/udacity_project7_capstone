@@ -31,7 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.bdaoust.project7capstone.adapters.DeckListAdapter;
 import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
-import org.bdaoust.project7capstone.network.InitSampleDeckService;
+import org.bdaoust.project7capstone.services.InitSampleDeckService;
 import org.bdaoust.project7capstone.tools.MTGKeys;
 import org.bdaoust.project7capstone.tools.MTGTools;
 

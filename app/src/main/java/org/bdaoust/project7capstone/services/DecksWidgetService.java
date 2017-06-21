@@ -1,4 +1,4 @@
-package org.bdaoust.project7capstone;
+package org.bdaoust.project7capstone.services;
 
 
 import android.appwidget.AppWidgetManager;
@@ -18,6 +18,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.bdaoust.project7capstone.DecksAppWidgetProvider;
+import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 import org.bdaoust.project7capstone.tools.MTGTools;
 

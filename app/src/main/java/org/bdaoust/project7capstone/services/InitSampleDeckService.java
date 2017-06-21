@@ -1,4 +1,4 @@
-package org.bdaoust.project7capstone.network;
+package org.bdaoust.project7capstone.services;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
+import org.bdaoust.project7capstone.network.MTGSampleDeckFetcher;
 import org.bdaoust.project7capstone.tools.MTGTools;
 
 

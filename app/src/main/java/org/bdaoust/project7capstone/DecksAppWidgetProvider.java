@@ -10,6 +10,7 @@ import android.widget.RemoteViews;
 
 import org.bdaoust.project7capstone.activities.DeckDetailsActivity;
 import org.bdaoust.project7capstone.activities.MainActivity;
+import org.bdaoust.project7capstone.services.DecksWidgetService;
 import org.bdaoust.project7capstone.tools.MTGKeys;
 
 public class DecksAppWidgetProvider extends AppWidgetProvider{
