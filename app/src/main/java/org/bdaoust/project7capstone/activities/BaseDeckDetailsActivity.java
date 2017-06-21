@@ -18,10 +18,13 @@ import org.bdaoust.project7capstone.fragments.DecksFragment;
 import org.bdaoust.project7capstone.tools.MTGKeys;
 import org.bdaoust.project7capstone.fragments.DeckDetailsFragment;
 import org.bdaoust.project7capstone.R;
+import org.bdaoust.project7capstone.tools.MTGTools;
 
 public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksFragment.OnDeckDeletedListener{
 
     private ActionBar mActionBar;
+    private DatabaseReference mReferenceDeckName;
+    private ValueEventListener mOnDeckNameValueEventListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,8 +32,7 @@ public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksF
 
         Toolbar toolbar;
         FirebaseDatabase firebaseDatabase;
-        DatabaseReference referenceRoot;
-        DatabaseReference referenceDeckName;
+        DatabaseReference referenceUserRoot;
         String firebaseDeckKey;
 
         setContentView(R.layout.activity_deck_details);
@@ -45,26 +47,10 @@ public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksF
 
         firebaseDeckKey = getIntent().getStringExtra(MTGKeys.FIREBASE_DECK_KEY);
         firebaseDatabase = FirebaseDatabase.getInstance();
-        referenceRoot = firebaseDatabase.getReference();
-        referenceDeckName = referenceRoot.child("decks").child(firebaseDeckKey).child("name");
+        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
+        mReferenceDeckName = MTGTools.createDeckNameReference(referenceUserRoot, firebaseDeckKey);
 
-        referenceDeckName.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String deckName;
-
-                deckName = dataSnapshot.getValue(String.class);
-
-                if(mActionBar != null){
-                    mActionBar.setTitle(deckName);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        createListeners();
 
         if(savedInstanceState == null){
             FragmentManager fragmentManager;
@@ -83,6 +69,49 @@ public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksF
             fragmentTransaction.add(R.id.deckDetailsContainer, deckDetailsFragment);
             fragmentTransaction.commit();
         }
+    }
+
+    private void createListeners(){
+        mOnDeckNameValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String deckName;
+
+                if(dataSnapshot.exists()) {
+                    deckName = dataSnapshot.getValue(String.class);
+
+                    if (mActionBar != null) {
+                        mActionBar.setTitle(deckName);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        addListeners();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        removeListeners();
+    }
+
+    private void addListeners(){
+        mReferenceDeckName.addValueEventListener(mOnDeckNameValueEventListener);
+    }
+
+    private void removeListeners(){
+        mReferenceDeckName.removeEventListener(mOnDeckNameValueEventListener);
     }
 
     @Override
