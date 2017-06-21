@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -79,12 +80,15 @@ public class DecksWidgetService extends RemoteViewsService{
         public RemoteViews getViewAt(int position) {
             RemoteViews remoteViews;
             MTGDeckModel mtgDeck;
+            MTGDeckModel.ColorPercentages colorPercentages;
             String extraInfo;
             String lastUpdated;
             Bundle extras;
             Intent fillIntent;
             long lastUpdatedTimestamp;
             int numbCards;
+            float colorless;
+            float delta = 0.01f;
 
             mtgDeck = mtgDecks.get(position);
             numbCards = mtgDeck.getNumbCards();
@@ -96,6 +100,48 @@ public class DecksWidgetService extends RemoteViewsService{
             remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.app_widget_list_item_deck);
             remoteViews.setTextViewText(R.id.deckName, mtgDecks.get(position).getName());
             remoteViews.setTextViewText(R.id.deckExtraInfo, extraInfo);
+
+            colorPercentages = mtgDeck.getColorPercentages();
+
+            if(colorPercentages.black < delta){
+                remoteViews.setViewVisibility(R.id.mtgColorBlackItem, View.GONE);
+            } else {
+                remoteViews.setTextViewText(R.id.mtgColorBlack, (int)colorPercentages.black + "%");
+            }
+
+            if(colorPercentages.blue < delta){
+                remoteViews.setViewVisibility(R.id.mtgColorBlueItem, View.GONE);
+            } else {
+                remoteViews.setTextViewText(R.id.mtgColorBlue, (int)colorPercentages.blue + "%");
+            }
+
+            if(colorPercentages.green < delta){
+                remoteViews.setViewVisibility(R.id.mtgColorGreenItem, View.GONE);
+            } else {
+                remoteViews.setTextViewText(R.id.mtgColorGreen, (int)colorPercentages.green + "%");
+            }
+
+            if(colorPercentages.red < delta){
+                remoteViews.setViewVisibility(R.id.mtgColorRedItem, View.GONE);
+            } else {
+                remoteViews.setTextViewText(R.id.mtgColorRed, (int)colorPercentages.red + "%");
+            }
+
+            if(colorPercentages.white < delta){
+                remoteViews.setViewVisibility(R.id.mtgColorWhiteItem, View.GONE);
+            } else {
+                remoteViews.setTextViewText(R.id.mtgColorWhite, (int)colorPercentages.white + "%");
+            }
+
+            colorless = 100f - colorPercentages.black - colorPercentages.blue - colorPercentages.green
+                    - colorPercentages.red - colorPercentages.white;
+
+            if(colorless < delta){
+                remoteViews.setViewVisibility(R.id.mtgColorlessItem, View.GONE);
+            } else {
+                remoteViews.setTextViewText(R.id.mtgColorless, (int)colorless + "%");
+            }
+
 
             extras = new Bundle();
             extras.putString(DecksAppWidgetProvider.EXTRA_DECK_FIREBASE_KEY, mtgDeck.getFirebaseKey());

@@ -47,6 +47,13 @@
     <string name="card_details_label_set">Set:</string>
     <string name="card_details_label_artist">Artist:</string>
 
+    <string name="widget_label_color_black">Black</string>
+    <string name="widget_label_color_blue">Blue</string>
+    <string name="widget_label_color_green">Green</string>
+    <string name="widget_label_color_red">Red</string>
+    <string name="widget_label_color_white">White</string>
+    <string name="widget_label_colorless">Colorless</string>
+
     <!-- Placeholder Text -->
     <string name="card_list_item_numb_copies_placeholder">99</string>
     <string name="card_details_name_placeholder">[Card Name]</string>

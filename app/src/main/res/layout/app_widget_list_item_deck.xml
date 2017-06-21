@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/deckListItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -25,5 +26,121 @@
         android:text="@plurals/deck_extra_info"
         android:textSize="@dimen/deck_extra_info_text_size"
         android:textStyle="italic" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/deckExtraInfo"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/mtgColorBlackItem"
+            style="@style/WidgetColorInfoItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:layout_width="@dimen/widget_color_info_item_image_size"
+                android:layout_height="@dimen/widget_color_info_item_image_size"
+                android:contentDescription="@string/widget_label_color_black"
+                android:background="@drawable/widget_label_black_background"/>
+            <TextView
+                android:id="@+id/mtgColorBlack"
+                style="@style/WidgetColorInfoItemText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mtgColorBlueItem"
+            style="@style/WidgetColorInfoItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:layout_width="@dimen/widget_color_info_item_image_size"
+                android:layout_height="@dimen/widget_color_info_item_image_size"
+                android:contentDescription="@string/widget_label_color_blue"
+                android:background="@drawable/widget_label_blue_background"/>
+            <TextView
+                android:id="@+id/mtgColorBlue"
+                style="@style/WidgetColorInfoItemText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mtgColorGreenItem"
+            style="@style/WidgetColorInfoItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:layout_width="@dimen/widget_color_info_item_image_size"
+                android:layout_height="@dimen/widget_color_info_item_image_size"
+                android:contentDescription="@string/widget_label_color_green"
+                android:background="@drawable/widget_label_green_background"/>
+            <TextView
+                android:id="@+id/mtgColorGreen"
+                style="@style/WidgetColorInfoItemText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mtgColorRedItem"
+            style="@style/WidgetColorInfoItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:layout_width="@dimen/widget_color_info_item_image_size"
+                android:layout_height="@dimen/widget_color_info_item_image_size"
+                android:contentDescription="@string/widget_label_color_red"
+                android:background="@drawable/widget_label_red_background"/>
+            <TextView
+                android:id="@+id/mtgColorRed"
+                style="@style/WidgetColorInfoItemText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mtgColorWhiteItem"
+            style="@style/WidgetColorInfoItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:layout_width="@dimen/widget_color_info_item_image_size"
+                android:layout_height="@dimen/widget_color_info_item_image_size"
+                android:contentDescription="@string/widget_label_color_white"
+                android:background="@drawable/widget_label_white_background"/>
+            <TextView
+                android:id="@+id/mtgColorWhite"
+                style="@style/WidgetColorInfoItemText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mtgColorlessItem"
+            style="@style/WidgetColorInfoItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:layout_width="@dimen/widget_color_info_item_image_size"
+                android:layout_height="@dimen/widget_color_info_item_image_size"
+                android:contentDescription="@string/widget_label_colorless"
+                android:background="@drawable/widget_label_colorless_background"/>
+            <TextView
+                android:id="@+id/mtgColorless"
+                style="@style/WidgetColorInfoItemText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>
