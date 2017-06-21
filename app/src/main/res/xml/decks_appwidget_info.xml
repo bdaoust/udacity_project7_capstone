@@ -4,5 +4,6 @@
     android:minHeight="40dp"
     android:updatePeriodMillis="7200000"
     android:initialLayout="@layout/app_widget_decks"
+    android:previewImage="@drawable/mtg_manager_widget_preview"
     android:resizeMode="horizontal|vertical">
 </appwidget-provider>
