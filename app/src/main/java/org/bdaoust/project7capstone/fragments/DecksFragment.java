@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,6 +22,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,19 +40,25 @@ import org.bdaoust.project7capstone.tools.MTGKeys;
 import org.bdaoust.project7capstone.tools.MTGTools;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import static android.app.Activity.RESULT_CANCELED;
 
 public class DecksFragment extends Fragment{
 
     private CreateDeckDialogFragment mCreateDeckDialogFragment;
     private View mEmptyDeckListView;
     private int mSelectedPosition = 0;
+    private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mReferenceSampleDeckWasSaved;
     private DatabaseReference mReferenceDecks;
     private ChildEventListener mOnDecksChildEventListener;
     private ValueEventListener mOnSampleDeckWasSavedValueEventListener;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
     private List<MTGDeckModel> mMTGDecks;
     private DeckListAdapter mDeckListAdapter;
     private RecyclerView mRecyclerView;
@@ -59,15 +69,15 @@ public class DecksFragment extends Fragment{
     private String mWidgetSelectedDeckFirebaseKey;
     private boolean mDownloadSampleDeckWhenActivityCreated = false;
     private boolean mIsFirstDeckAdded;
+    private String mFirebaseUserId;
     private static final String SELECTED_KEY = "selected_position";
     private static final String TAG = "DecksFragment";
+    private static final int RC_SIGN_IN = 42;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FloatingActionButton createDeckFAB;
-        FirebaseDatabase firebaseDatabase;
-        DatabaseReference referenceUserRoot;
 
         mRootView = inflater.inflate(R.layout.fragment_decks, container, false);
         mEmptyDeckListView = mRootView.findViewById(R.id.emptyDeckList);
@@ -84,22 +94,11 @@ public class DecksFragment extends Fragment{
         }
 
         mMTGDecks = new ArrayList<>();
-        mDeckListAdapter = new DeckListAdapter(getContext(), mMTGDecks, mSelectedPosition);
-        mDeckListAdapter.setOnDeckSelectedListener(new OnDeckSelectedListener() {
-            @Override
-            public void onDeckSelected(String firebaseKey, int position) {
-                mSelectedPosition = position;
-                ((OnDeckSelectedListener)getActivity()).onDeckSelected(firebaseKey, position);
-                mRecyclerView.scrollToPosition(position);
-            }
-        });
-        mRecyclerView.setAdapter(mDeckListAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mCreateDeckDialogFragment = new CreateDeckDialogFragment();
         mCreateDeckDialogFragment.setOnDeckCreatedListener(new OnDeckCreatedListener() {
             @Override
-            public void onDeckCreated(String firebaseKey) {
+            public void onDeckCreated(String firebaseUserId, String firebaseKey) {
                 mNewlyCreatedDeckFirebaseKey = firebaseKey;
             }
         });
@@ -108,14 +107,17 @@ public class DecksFragment extends Fragment{
         createDeckFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle bundle;
+
+                bundle = new Bundle();
+                bundle.putString(MTGKeys.FIREBASE_USER_ID, mFirebaseUserId);
+                mCreateDeckDialogFragment.setArguments(bundle);
                 mCreateDeckDialogFragment.show(getFragmentManager(), "CreateDeck");
             }
         });
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
-        mReferenceSampleDeckWasSaved = MTGTools.createSampleDeckWasSavedReference(referenceUserRoot);
-        mReferenceDecks = MTGTools.createDeckListReference(referenceUserRoot);
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
         createListeners();
 
@@ -153,7 +155,9 @@ public class DecksFragment extends Fragment{
         getActivity().unregisterReceiver(mSampleDeckDownloadFailedBroadcastReceiver);
 
         mMTGDecks.clear();
-        mDeckListAdapter.notifyDataSetChanged();
+        if(mDeckListAdapter != null) {
+            mDeckListAdapter.notifyDataSetChanged();
+        }
 
         removeListeners();
     }
@@ -174,6 +178,19 @@ public class DecksFragment extends Fragment{
             // have selected a different Deck than the one originally selected from the Widget. Also, if the
             // MTGManager app was not opened from the Widget, then mWidgetSelectedDeckFirebaseKey will be null.
             mWidgetSelectedDeckFirebaseKey = getActivity().getIntent().getStringExtra(MTGKeys.FIREBASE_DECK_KEY);
+        }
+    }
+
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == RC_SIGN_IN){
+            if(resultCode == RESULT_CANCELED){
+                getActivity().finish();
+            }
         }
     }
 
@@ -205,6 +222,7 @@ public class DecksFragment extends Fragment{
 
         if(getContext() != null) {
             initSampleDeck = new Intent(getContext(), InitSampleDeckService.class);
+            initSampleDeck.putExtra(MTGKeys.FIREBASE_USER_ID, mFirebaseUserId);
             getActivity().startService(initSampleDeck);
         } else {
             mDownloadSampleDeckWhenActivityCreated = true;
@@ -258,7 +276,7 @@ public class DecksFragment extends Fragment{
                     }
                 } else if(mIsFirstDeckAdded) {
                     // First Deck Added to the Deck list
-                    ((OnFirstDeckAddedListener)getActivity()).onFirstDeckAdded(dataSnapshot.getKey());
+                    ((OnFirstDeckAddedListener)getActivity()).onFirstDeckAdded(mFirebaseUserId, dataSnapshot.getKey());
                     mIsFirstDeckAdded = false;
                 }
 
@@ -305,7 +323,7 @@ public class DecksFragment extends Fragment{
                     mEmptyDeckListView.setVisibility(View.VISIBLE);
                 }
 
-                ((DecksFragment.OnDeckDeletedListener)getActivity()).onDeckDeleted(deletedMTGDeck.getFirebaseKey());
+                ((DecksFragment.OnDeckDeletedListener)getActivity()).onDeckDeleted(mFirebaseUserId, deletedMTGDeck.getFirebaseKey());
             }
 
             @Override
@@ -335,31 +353,86 @@ public class DecksFragment extends Fragment{
             public void onCancelled(DatabaseError databaseError) {
             }
         };
+
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser firebaseUser;
+
+                firebaseUser = firebaseAuth.getCurrentUser();
+                if(firebaseUser != null){
+                    mFirebaseUserId = firebaseUser.getUid();
+                    onSignedInInitialize();
+                } else {
+                    onSignedOutCleanup();
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setTheme(R.style.OtherColorAccentTheme)
+                                    .setProviders(
+                                            Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                                    .build(),
+                            RC_SIGN_IN);
+                }
+            }
+        };
+    }
+
+    private void onSignedInInitialize(){
+        DatabaseReference mReferenceUserRoot;
+
+        mReferenceUserRoot = MTGTools.createUserRootReference(mFirebaseDatabase, mFirebaseUserId);
+        mReferenceSampleDeckWasSaved = MTGTools.createSampleDeckWasSavedReference(mReferenceUserRoot);
+        mReferenceDecks = MTGTools.createDeckListReference(mReferenceUserRoot);
+
+        mReferenceDecks.addChildEventListener(mOnDecksChildEventListener);
+        mReferenceSampleDeckWasSaved.addListenerForSingleValueEvent(mOnSampleDeckWasSavedValueEventListener);
+
+        mDeckListAdapter = new DeckListAdapter(getContext(), mMTGDecks, mSelectedPosition, mFirebaseUserId);
+        mDeckListAdapter.setOnDeckSelectedListener(new OnDeckSelectedListener() {
+            @Override
+            public void onDeckSelected(String firebaseUserId, String firebaseKey, int position) {
+                mSelectedPosition = position;
+                ((OnDeckSelectedListener)getActivity()).onDeckSelected(mFirebaseUserId, firebaseKey, position);
+                mRecyclerView.scrollToPosition(position);
+            }
+        });
+        mRecyclerView.setAdapter(mDeckListAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    private void onSignedOutCleanup(){
+        mMTGDecks.clear();
     }
 
     private void addListeners(){
-        mReferenceDecks.addChildEventListener(mOnDecksChildEventListener);
-        mReferenceSampleDeckWasSaved.addListenerForSingleValueEvent(mOnSampleDeckWasSavedValueEventListener);
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
     private void removeListeners(){
-        mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
-        mReferenceSampleDeckWasSaved.removeEventListener(mOnSampleDeckWasSavedValueEventListener);
+        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        if(mReferenceDecks != null) {
+            mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
+        }
+        if(mReferenceSampleDeckWasSaved != null) {
+            mReferenceSampleDeckWasSaved.removeEventListener(mOnSampleDeckWasSavedValueEventListener);
+        }
     }
 
     public interface OnFirstDeckAddedListener {
-        void onFirstDeckAdded(String firebaseKey);
+        void onFirstDeckAdded(String firebaseUserId, String firebaseKey);
     }
 
     public interface OnDeckSelectedListener {
-        void onDeckSelected(String firebaseKey, int position);
+        void onDeckSelected(String firebaseUserId, String firebaseKey, int position);
     }
 
     public interface OnDeckDeletedListener {
-        void onDeckDeleted(String firebaseKey);
+        void onDeckDeleted(String firebaseUserId, String firebaseKey);
     }
 
     interface OnDeckCreatedListener {
-        void onDeckCreated(String firebaseKey);
+        void onDeckCreated(String firebaseUserId, String firebaseKey);
     }
 }

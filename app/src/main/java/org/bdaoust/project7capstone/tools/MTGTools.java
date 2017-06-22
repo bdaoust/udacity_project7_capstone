@@ -8,7 +8,7 @@ public class MTGTools {
     private MTGTools(){}
 
     public static DatabaseReference createUserRootReference(FirebaseDatabase firebaseDatabase, String userId) {
-        return firebaseDatabase.getReference();
+        return firebaseDatabase.getReference().child("users").child(userId);
     }
 
     public static DatabaseReference createDeckListReference(DatabaseReference userRootReference){

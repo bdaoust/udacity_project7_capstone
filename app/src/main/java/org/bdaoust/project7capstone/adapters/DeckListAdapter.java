@@ -21,11 +21,13 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
     private List<MTGDeckModel> mMTGDecks;
     private int mSelectedPosition;
     private DecksFragment.OnDeckSelectedListener mOnDeckSelectedListener;
+    private String mFirebaseUserId;
 
-    public DeckListAdapter(Context context, List<MTGDeckModel> mtgDecks, int selectedPosition) {
+    public DeckListAdapter(Context context, List<MTGDeckModel> mtgDecks, int selectedPosition, String firebaseUserId) {
         mContext = context;
         mMTGDecks = mtgDecks;
         mSelectedPosition = selectedPosition;
+        mFirebaseUserId = firebaseUserId;
     }
 
     @Override
@@ -117,7 +119,7 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
 
         firebaseKey = mMTGDecks.get(position).getFirebaseKey();
         if (mOnDeckSelectedListener != null) {
-            mOnDeckSelectedListener.onDeckSelected(firebaseKey, position);
+            mOnDeckSelectedListener.onDeckSelected(mFirebaseUserId, firebaseKey, position);
         }
     }
 

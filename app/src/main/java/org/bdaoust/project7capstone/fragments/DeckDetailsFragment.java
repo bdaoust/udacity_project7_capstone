@@ -36,6 +36,7 @@ import java.util.List;
 public class DeckDetailsFragment extends Fragment{
 
     private boolean mIsLargeLayout;
+    private String mFirebaseUserId;
     private String mFirebaseDeckKey;
     private DatabaseReference mReferenceDeck;
     private DatabaseReference mReferenceCards;
@@ -82,9 +83,11 @@ public class DeckDetailsFragment extends Fragment{
         recyclerView.setAdapter(mCardListAdapter);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
+        mFirebaseUserId = getArguments().getString(MTGKeys.FIREBASE_USER_ID);
         mFirebaseDeckKey = getArguments().getString(MTGKeys.FIREBASE_DECK_KEY);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, mFirebaseUserId);
         mReferenceDeck = MTGTools.createDeckReference(referenceUserRoot, mFirebaseDeckKey);
         mReferenceCards = MTGTools.createCardListReference(referenceUserRoot, mFirebaseDeckKey);
         mReferenceDeckLastUpdated = MTGTools.createDeckLastUpdatedReference(referenceUserRoot, mFirebaseDeckKey);
@@ -128,13 +131,14 @@ public class DeckDetailsFragment extends Fragment{
                 Intent intent;
 
                 intent = new Intent(getContext(), EditDeckActivity.class);
+                intent.putExtra(MTGKeys.FIREBASE_USER_ID, mFirebaseUserId);
                 intent.putExtra(MTGKeys.FIREBASE_DECK_KEY, mFirebaseDeckKey);
                 startActivity(intent);
 
                 return true;
             case R.id.action_delete:
                 mReferenceDeck.removeValue();
-                ((DecksFragment.OnDeckDeletedListener)getActivity()).onDeckDeleted(mFirebaseDeckKey);
+                ((DecksFragment.OnDeckDeletedListener)getActivity()).onDeckDeleted(mFirebaseUserId, mFirebaseDeckKey);
 
                 return true;
             default:
@@ -148,6 +152,7 @@ public class DeckDetailsFragment extends Fragment{
         Bundle bundle;
 
         bundle = new Bundle();
+        bundle.putString(MTGKeys.FIREBASE_USER_ID, mFirebaseUserId);
         bundle.putString(MTGKeys.FIREBASE_DECK_KEY, mFirebaseDeckKey);
         bundle.putString(MTGKeys.FIREBASE_CARD_KEY, firebaseCardKey);
         cardDetailsDialogFragment = new CardDetailsDialogFragment();
@@ -233,7 +238,7 @@ public class DeckDetailsFragment extends Fragment{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()) {
-                    ((DecksFragment.OnDeckDeletedListener) getActivity()).onDeckDeleted(mFirebaseDeckKey);
+                    ((DecksFragment.OnDeckDeletedListener) getActivity()).onDeckDeleted(mFirebaseUserId, mFirebaseDeckKey);
                 }
             }
 

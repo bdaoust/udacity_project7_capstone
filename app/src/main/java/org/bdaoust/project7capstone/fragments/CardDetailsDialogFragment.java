@@ -53,6 +53,7 @@ public class CardDetailsDialogFragment extends DialogFragment {
         View rootView;
         FirebaseDatabase firebaseDatabase;
         DatabaseReference referenceUserRoot;
+        String firebaseUserId;
         String firebaseDeckKey;
         String firebaseCardKey;
 
@@ -87,11 +88,12 @@ public class CardDetailsDialogFragment extends DialogFragment {
             hideCardsList();
         }
 
+        firebaseUserId = getArguments().getString(MTGKeys.FIREBASE_USER_ID);
         firebaseDeckKey = getArguments().getString(MTGKeys.FIREBASE_DECK_KEY);
         firebaseCardKey = getArguments().getString(MTGKeys.FIREBASE_CARD_KEY);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
+        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, firebaseUserId);
         mReferenceCard = MTGTools.createCardReference(referenceUserRoot, firebaseDeckKey, firebaseCardKey);
 
         createListeners();

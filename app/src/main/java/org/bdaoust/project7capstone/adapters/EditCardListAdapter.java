@@ -26,14 +26,14 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
     private MTGDeckModel mMTGDeck;
     private DatabaseReference mUserRootReference;
 
-    public EditCardListAdapter(Context context, MTGDeckModel mtgDeck){
+    public EditCardListAdapter(Context context, MTGDeckModel mtgDeck, String firebaseUserId){
         FirebaseDatabase firebaseDatabase;
 
         mContext = context;
         mMTGDeck = mtgDeck;
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        mUserRootReference = MTGTools.createUserRootReference(firebaseDatabase, null);
+        mUserRootReference = MTGTools.createUserRootReference(firebaseDatabase, firebaseUserId);
     }
 
     @Override

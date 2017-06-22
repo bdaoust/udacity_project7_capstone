@@ -37,12 +37,13 @@ public class BaseMainActivity extends AppCompatActivity implements DecksFragment
         mIsActivityInitialCreation = savedInstanceState == null;
     }
 
-    private void loadDetailFragment(String firebaseKey){
+    private void loadDetailFragment(String firebaseUserId, String firebaseKey){
         FragmentManager fragmentManager;
         FragmentTransaction fragmentTransaction;
         Bundle bundle;
 
         bundle = new Bundle();
+        bundle.putString(MTGKeys.FIREBASE_USER_ID, firebaseUserId);
         bundle.putString(MTGKeys.FIREBASE_DECK_KEY, firebaseKey);
         mDeckDetailsFragment = new DeckDetailsFragment();
         mDeckDetailsFragment.setArguments(bundle);
@@ -56,24 +57,26 @@ public class BaseMainActivity extends AppCompatActivity implements DecksFragment
     }
 
     @Override
-    public void onDeckSelected(String firebaseKey, int position) {
+    public void onDeckSelected(String firebaseUserId, String firebaseKey, int position) {
         if(mIsLargeLayout){
-            loadDetailFragment(firebaseKey);
+            loadDetailFragment(firebaseUserId, firebaseKey);
         } else {
             Intent intent;
 
             intent = new Intent(this, DeckDetailsActivity.class);
+            intent.putExtra(MTGKeys.FIREBASE_USER_ID, firebaseUserId);
             intent.putExtra(MTGKeys.FIREBASE_DECK_KEY, firebaseKey);
+
             Log.d(TAG, "Loading Deck: " + firebaseKey);
             startActivity(intent);
         }
     }
 
     @Override
-    public void onFirstDeckAdded(String firebaseKey) {
+    public void onFirstDeckAdded(String firebaseUserId, String firebaseKey) {
         if(mIsLargeLayout && mIsActivityInitialCreation) {
             Log.d(TAG, "Initial Activity Creation... Loading First Deck");
-            loadDetailFragment(firebaseKey);
+            loadDetailFragment(firebaseUserId, firebaseKey);
         }
     }
 
@@ -83,7 +86,7 @@ public class BaseMainActivity extends AppCompatActivity implements DecksFragment
     }
 
     @Override
-    public void onDeckDeleted(String firebaseKey) {
+    public void onDeckDeleted(String firebaseUserId, String firebaseKey) {
         if(mIsLargeLayout && firebaseKey.equals(mLoadedDeckFirebaseKey)){
             FragmentManager fragmentManager;
             FragmentTransaction fragmentTransaction;

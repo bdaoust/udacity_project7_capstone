@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
+import org.bdaoust.project7capstone.tools.MTGKeys;
 import org.bdaoust.project7capstone.tools.MTGTools;
 
 import java.util.HashSet;
@@ -31,6 +32,7 @@ public class CreateDeckDialogFragment extends DialogFragment{
     private Set<String> mDeckNames;
     private EditText mEditDeckName;
     private DecksFragment.OnDeckCreatedListener mOnDeckCreatedListener;
+    private String mFirebaseUserId;
 
     @Nullable
     @Override
@@ -41,8 +43,9 @@ public class CreateDeckDialogFragment extends DialogFragment{
         FirebaseDatabase firebaseDatabase;
         DatabaseReference referenceUserRoot;
 
-        rootView = inflater.inflate(R.layout.fragment_create_deck_dialog, container, false);
+        mFirebaseUserId = getArguments().getString(MTGKeys.FIREBASE_USER_ID);
 
+        rootView = inflater.inflate(R.layout.fragment_create_deck_dialog, container, false);
         cancelButton = (AppCompatButton) rootView.findViewById(R.id.actionCancel);
         saveButton = (AppCompatButton) rootView.findViewById(R.id.actionSave);
         mEditDeckName = (EditText) rootView.findViewById(R.id.inputDeckName);
@@ -81,7 +84,7 @@ public class CreateDeckDialogFragment extends DialogFragment{
                     firebaseKey = newDeckReference.getKey();
 
                     if(mOnDeckCreatedListener != null){
-                        mOnDeckCreatedListener.onDeckCreated(firebaseKey);
+                        mOnDeckCreatedListener.onDeckCreated(mFirebaseUserId, firebaseKey);
                     }
 
                     mEditDeckName.setText("");
@@ -92,7 +95,7 @@ public class CreateDeckDialogFragment extends DialogFragment{
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
+        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, mFirebaseUserId);
         mReferenceDecks = MTGTools.createDeckListReference(referenceUserRoot);
 
         createListeners();

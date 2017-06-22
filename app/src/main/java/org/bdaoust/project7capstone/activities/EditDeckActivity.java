@@ -65,9 +65,9 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         List<MTGCardModel> mtgTempCards;
         FirebaseDatabase firebaseDatabase;
         DatabaseReference referenceUserRoot;
-        //RecyclerView recyclerView;
         FloatingActionButton searchCardsFAB;
         String editDeckFirebaseKey;
+        String firebaseUserId;
 
         mContext = this;
         setContentView(R.layout.activity_edit_deck);
@@ -83,6 +83,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
             getSupportActionBar().setHomeActionContentDescription(R.string.action_cancel);
         }
 
+        firebaseUserId = getIntent().getStringExtra(MTGKeys.FIREBASE_USER_ID);
         editDeckFirebaseKey = getIntent().getStringExtra(MTGKeys.FIREBASE_DECK_KEY);
         mTempDeckFirebaseKey = "tempDeck" + editDeckFirebaseKey;
 
@@ -91,7 +92,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         mMTGTempDeck.setFirebaseKey(mTempDeckFirebaseKey);
         mMTGTempDeck.setMTGCards(mtgTempCards);
 
-        mEditCardListAdapter = new EditCardListAdapter(this, mMTGTempDeck);
+        mEditCardListAdapter = new EditCardListAdapter(this, mMTGTempDeck, firebaseUserId);
         mRecyclerView = (RecyclerView) findViewById(R.id.editCardsList);
 
         searchCardsFAB = (FloatingActionButton) findViewById(R.id.searchCardsFAB);
@@ -118,7 +119,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         });
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
+        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, firebaseUserId);
         mReferenceDeck = MTGTools.createDeckReference(referenceUserRoot, editDeckFirebaseKey);
         mReferenceTempDeck = MTGTools.createTempDeckReference(referenceUserRoot, mTempDeckFirebaseKey);
         mReferenceTempDeckName = mReferenceTempDeck.child("name");

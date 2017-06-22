@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 import org.bdaoust.project7capstone.network.MTGSampleDeckFetcher;
+import org.bdaoust.project7capstone.tools.MTGKeys;
 import org.bdaoust.project7capstone.tools.MTGTools;
 
 
@@ -29,13 +30,18 @@ public class InitSampleDeckService extends IntentService {
         DatabaseReference referenceSampleDeckWasSaved;
         MTGSampleDeckFetcher mtgSampleDeckFetcher;
         MTGDeckModel mtgDeck;
+        String userId;
 
+        userId = "";
+        if (intent != null) {
+            userId = intent.getStringExtra(MTGKeys.FIREBASE_USER_ID);
+        }
         mtgSampleDeckFetcher = new MTGSampleDeckFetcher(getResources());
         mtgDeck = mtgSampleDeckFetcher.fetch();
 
-        if(mtgSampleDeckFetcher.isDownloadSuccessful()) {
+        if(mtgSampleDeckFetcher.isDownloadSuccessful() && !userId.equals("")) {
             firebaseDatabase = FirebaseDatabase.getInstance();
-            referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
+            referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, userId);
             referenceDecks = MTGTools.createDeckListReference(referenceUserRoot);
             referenceSampleDeckWasSaved = MTGTools.createSampleDeckWasSavedReference(referenceUserRoot);
 

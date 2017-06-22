@@ -33,6 +33,7 @@ public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksF
         Toolbar toolbar;
         FirebaseDatabase firebaseDatabase;
         DatabaseReference referenceUserRoot;
+        String firebaseUserId;
         String firebaseDeckKey;
 
         setContentView(R.layout.activity_deck_details);
@@ -45,9 +46,10 @@ public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksF
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        firebaseUserId = getIntent().getStringExtra(MTGKeys.FIREBASE_USER_ID);
         firebaseDeckKey = getIntent().getStringExtra(MTGKeys.FIREBASE_DECK_KEY);
         firebaseDatabase = FirebaseDatabase.getInstance();
-        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, null);
+        referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, firebaseUserId);
         mReferenceDeckName = MTGTools.createDeckNameReference(referenceUserRoot, firebaseDeckKey);
 
         createListeners();
@@ -60,6 +62,7 @@ public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksF
             Bundle bundle;
 
             bundle = new Bundle();
+            bundle.putString(MTGKeys.FIREBASE_USER_ID, firebaseUserId);
             bundle.putString(MTGKeys.FIREBASE_DECK_KEY, firebaseDeckKey);
             deckDetailsFragment = new DeckDetailsFragment();
             deckDetailsFragment.setArguments(bundle);
@@ -115,7 +118,7 @@ public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksF
     }
 
     @Override
-    public void onDeckDeleted(String firebaseKey) {
+    public void onDeckDeleted(String firebaseUserId, String firebaseKey) {
         finish();
     }
 }
