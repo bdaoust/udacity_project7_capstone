@@ -135,7 +135,7 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
     private void setDrawableTint(Drawable drawable, int tintColorResource){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             drawable.setTint(mContext.getResources().getColor(tintColorResource, mContext.getTheme()));
-        } else {
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             //noinspection deprecation
             drawable.setTint(mContext.getResources().getColor(tintColorResource));
         }

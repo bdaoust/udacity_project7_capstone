@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/selected_icon_button_background_color"
-    android:radius="@dimen/icon_button_ripple_radius"/>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:state_pressed="true"
+        android:drawable="@color/selected_icon_button_background_color"/>
+
+    <item android:state_activated="true"
+        android:drawable="@color/selected_icon_button_background_color"/>
+
+    <item android:state_selected="true"
+        android:drawable="@android:color/transparent"/>
+
+    <item android:drawable="@android:color/transparent" />
+</selector>

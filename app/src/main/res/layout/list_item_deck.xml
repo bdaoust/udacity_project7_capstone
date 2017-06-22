@@ -13,6 +13,7 @@
         android:layout_width="@dimen/mtg_deck_pie_chart_size"
         android:layout_height="@dimen/mtg_deck_pie_chart_size"
         android:layout_marginEnd="@dimen/mtg_deck_pie_chart_margin_end"
+        android:layout_marginRight="@dimen/mtg_deck_pie_chart_margin_end"
         android:background="@android:color/transparent" />
 
     <TextView
@@ -20,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/deckPieChart"
+        android:layout_toRightOf="@id/deckPieChart"
         android:text="@string/deck_list_deck_name_placeholder"
         android:textSize="@dimen/deck_list_deck_name_text_size"
         android:textStyle="bold" />
@@ -30,6 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/deckName"
         android:layout_toEndOf="@id/deckPieChart"
+        android:layout_toRightOf="@id/deckPieChart"
         android:text="@plurals/deck_extra_info"
         android:textSize="@dimen/deck_extra_info_text_size"
         android:textStyle="italic" />

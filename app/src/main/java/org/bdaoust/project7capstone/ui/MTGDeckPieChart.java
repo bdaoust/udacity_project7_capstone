@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
@@ -196,6 +197,7 @@ public class MTGDeckPieChart extends SurfaceView {
         super.draw(canvas);
 
         ArrayList<DeckColor> deckColorsList;
+        RectF rectF;
         float currentAngle;
         float degreesCovered;
         float degreesLeft;
@@ -206,6 +208,7 @@ public class MTGDeckPieChart extends SurfaceView {
 
         currentAngle = -90;
         degreesCovered = 0;
+        rectF = new RectF(mLeft, mTop, mRight, mBottom);
 
         canvas.drawCircle(mCenterX, mCenterY, mRadius+mBorderWidth, mBorderPaint);
 
@@ -215,14 +218,14 @@ public class MTGDeckPieChart extends SurfaceView {
 
             deckColor = deckColorsList.get(i);
             sweepAngle = calcSweepAngle(deckColor.mPercentage);
-            canvas.drawArc(mLeft, mTop, mRight, mBottom, currentAngle, sweepAngle, true, deckColor.mPaint);
+            canvas.drawArc(rectF, currentAngle, sweepAngle, true, deckColor.mPaint);
             currentAngle += sweepAngle;
             degreesCovered += sweepAngle;
         }
 
         if(degreesCovered < 360) {
             degreesLeft = 360 - degreesCovered;
-            canvas.drawArc(mLeft, mTop, mRight, mBottom, currentAngle, degreesLeft, true, mColorlessPaint);
+            canvas.drawArc(rectF, currentAngle, degreesLeft, true, mColorlessPaint);
         }
     }
 

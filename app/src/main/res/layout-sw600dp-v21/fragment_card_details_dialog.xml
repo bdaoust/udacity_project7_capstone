@@ -19,7 +19,7 @@
             tools:ignore="ContentDescription"/>
 
         <include layout="@layout/card_details_grid_layout"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/card_details_grid_layout_width"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 </ScrollView>

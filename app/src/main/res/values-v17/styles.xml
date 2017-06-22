@@ -1,0 +1,19 @@
+<resources>
+
+    <style name="CardDetailsGridLabelItem" parent="CardDetailsGridItem">
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginEnd">@dimen/card_details_grid_label_item_margin_end</item>
+    </style>
+
+    <style name="WidgetColorInfoItem">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginEnd">@dimen/widget_color_info_item_margin_end</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="WidgetColorInfoItemText">
+        <item name="android:layout_marginStart">@dimen/widget_color_info_item_text_margin_start</item>
+        <item name="android:textSize">@dimen/widget_color_info_item_text_size</item>
+    </style>
+
+</resources>

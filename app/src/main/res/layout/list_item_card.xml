@@ -25,6 +25,7 @@
             android:layout_width="@dimen/card_list_item_numb_copies_width"
             android:layout_height="@dimen/card_list_item_numb_copies_height"
             android:layout_marginStart="@dimen/card_list_item_numb_copies_margin"
+            android:layout_marginLeft="@dimen/card_list_item_numb_copies_margin"
             android:layout_marginTop="@dimen/card_list_item_numb_copies_margin"
             android:background="@drawable/card_numb_copies_background"
             android:gravity="center"
