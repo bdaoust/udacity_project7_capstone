@@ -387,6 +387,8 @@ public class DecksFragment extends Fragment{
         mReferenceSampleDeckWasSaved = MTGTools.createSampleDeckWasSavedReference(mReferenceUserRoot);
         mReferenceDecks = MTGTools.createDeckListReference(mReferenceUserRoot);
 
+        //Clearing the list in case onSignedInInitialize() is called a second time without onSignedOutCleanup() having been called.
+        mMTGDecks.clear();
         mReferenceDecks.addChildEventListener(mOnDecksChildEventListener);
         mReferenceSampleDeckWasSaved.addListenerForSingleValueEvent(mOnSampleDeckWasSavedValueEventListener);
 
@@ -405,6 +407,9 @@ public class DecksFragment extends Fragment{
 
     private void onSignedOutCleanup(){
         mMTGDecks.clear();
+        if(mDeckListAdapter != null) {
+            mDeckListAdapter.notifyDataSetChanged();
+        }
     }
 
     private void addListeners(){

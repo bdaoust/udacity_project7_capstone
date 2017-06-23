@@ -196,10 +196,17 @@ public class DecksWidgetService extends RemoteViewsService{
             mReferenceDecks = MTGTools.createDeckListReference(mReferenceUserRoot);
 
             mReferenceDecks.addChildEventListener(mOnDecksChildEventListener);
+            //Clearing the list in case onSignedInInitialize() is called a second time without onSignedOutCleanup() having been called.
+            mMTGDecks.clear();
         }
 
         private void onSignedOutCleanup(){
-            mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
+            if(mReferenceDecks != null) {
+                mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
+            }
+            mMTGDecks.clear();
+
+            updateAllWidgets();
         }
 
         private void createListeners() {
