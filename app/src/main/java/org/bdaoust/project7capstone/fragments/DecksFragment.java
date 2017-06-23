@@ -369,6 +369,7 @@ public class DecksFragment extends Fragment{
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setTheme(R.style.OtherColorAccentTheme)
+                                    .setIsSmartLockEnabled(false)
                                     .setProviders(
                                             Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
                                                     new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))

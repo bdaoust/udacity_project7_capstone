@@ -12,10 +12,11 @@
     <string name="action_delete_card_copies">Delete card copies</string>
     <string name="action_add_card">Add card to deck</string>
     <string name="action_edit_deck">Edit deck</string>
-    <string name="action_delete_deck">Delete deck</string>
+    <string name="action_delete_deck">Delete Deck</string>
     <string name="action_up">Navigate Up</string>
     <string name="action_save_deck">SAVE</string>
     <string name="action_retry">RETRY</string>
+    <string name="action_sign_out">Sign Out</string>
 
     <string name="hint_deck_name">Deck Name</string>
     <string name="hint_card_name">Card Name</string>
