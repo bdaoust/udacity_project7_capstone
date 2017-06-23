@@ -6,12 +6,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,11 +43,14 @@ public class DecksWidgetService extends RemoteViewsService{
     private class DeckRemoteViewsFactory implements RemoteViewsFactory {
 
         private Context mContext;
+        private FirebaseAuth mFirebaseAuth;
+        private FirebaseAuth.AuthStateListener mAuthStateListener;
         private FirebaseDatabase mFirebaseDatabase;
         private DatabaseReference mReferenceUserRoot;
         private DatabaseReference mReferenceDecks;
         private ChildEventListener mOnDecksChildEventListener;
         private List<MTGDeckModel> mMTGDecks;
+        private String mFirebaseUserId;
 
 
         DeckRemoteViewsFactory(Context context){
@@ -52,15 +58,14 @@ public class DecksWidgetService extends RemoteViewsService{
             mContext = context;
 
             mFirebaseDatabase = FirebaseDatabase.getInstance();
-            mReferenceUserRoot = MTGTools.createUserRootReference(mFirebaseDatabase, null);
-            mReferenceDecks = MTGTools.createDeckListReference(mReferenceUserRoot);
+            mFirebaseAuth = FirebaseAuth.getInstance();
 
             createListeners();
         }
 
         @Override
         public void onCreate() {
-            mReferenceDecks.addChildEventListener(mOnDecksChildEventListener);
+            mFirebaseAuth.addAuthStateListener(mAuthStateListener);
             Log.d(TAG,"RemoteViewsFactory CREATED");
         }
 
@@ -71,7 +76,10 @@ public class DecksWidgetService extends RemoteViewsService{
 
         @Override
         public void onDestroy() {
-            mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+            if(mReferenceDecks != null) {
+                mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
+            }
             Log.d(TAG,"RemoteViewsFactory DESTROYED");
         }
 
@@ -153,6 +161,7 @@ public class DecksWidgetService extends RemoteViewsService{
 
 
             extras = new Bundle();
+            extras.putString(DecksAppWidgetProvider.EXTRA_FIREBASE_USER_ID, mFirebaseUserId);
             extras.putString(DecksAppWidgetProvider.EXTRA_DECK_FIREBASE_KEY, mtgDeck.getFirebaseKey());
             fillIntent = new Intent();
             fillIntent.putExtras(extras);
@@ -182,7 +191,33 @@ public class DecksWidgetService extends RemoteViewsService{
             return false;
         }
 
+        private void onSignedInInitialize(){
+            mReferenceUserRoot = MTGTools.createUserRootReference(mFirebaseDatabase, mFirebaseUserId);
+            mReferenceDecks = MTGTools.createDeckListReference(mReferenceUserRoot);
+
+            mReferenceDecks.addChildEventListener(mOnDecksChildEventListener);
+        }
+
+        private void onSignedOutCleanup(){
+            mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
+        }
+
         private void createListeners() {
+            mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    FirebaseUser firebaseUser;
+
+                    firebaseUser = firebaseAuth.getCurrentUser();
+                    if(firebaseUser != null) {
+                        mFirebaseUserId = firebaseUser.getUid();
+                        onSignedInInitialize();
+                    } else {
+                        onSignedOutCleanup();
+                    }
+                }
+            };
+
             mOnDecksChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
