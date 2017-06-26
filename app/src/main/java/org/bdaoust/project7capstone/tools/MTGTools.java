@@ -43,6 +43,10 @@ public class MTGTools {
         return userRootReference.child(firebaseTempDeckKey);
     }
 
+    public static DatabaseReference createTempDeckNameReference(DatabaseReference userRootReference, String firebaseTempDeckKey) {
+        return userRootReference.child(firebaseTempDeckKey).child("name");
+    }
+
     public static DatabaseReference createTempDeckCardsReference(DatabaseReference userRootReference, String firebaseTempDeckKey){
         return userRootReference.child(firebaseTempDeckKey).child("mtgcards");
     }
@@ -54,4 +58,5 @@ public class MTGTools {
     public static DatabaseReference createTempDeckCardNumbCopiesReference(DatabaseReference userRootReference, String firebaseTempDeckKey, String firebaseTempCardKey){
         return userRootReference.child(firebaseTempDeckKey).child("mtgcards").child(firebaseTempCardKey).child("numbCopies");
     }
+
 }

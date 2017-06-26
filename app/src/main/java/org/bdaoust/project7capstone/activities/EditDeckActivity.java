@@ -122,7 +122,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, firebaseUserId);
         mReferenceDeck = MTGTools.createDeckReference(referenceUserRoot, editDeckFirebaseKey);
         mReferenceTempDeck = MTGTools.createTempDeckReference(referenceUserRoot, mTempDeckFirebaseKey);
-        mReferenceTempDeckName = mReferenceTempDeck.child("name");
+        mReferenceTempDeckName = MTGTools.createTempDeckNameReference(referenceUserRoot, mTempDeckFirebaseKey);
         mReferenceTempDeckCards = MTGTools.createTempDeckCardsReference(referenceUserRoot, mTempDeckFirebaseKey);
 
         createListeners();
