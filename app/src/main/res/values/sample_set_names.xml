@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="sample_set_names">
-        <item>Lorwyn</item>
-        <item>Magic 2010</item>
-        <item>Magic 2011</item>
-    </string-array>
-</resources>
