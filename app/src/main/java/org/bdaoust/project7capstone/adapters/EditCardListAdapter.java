@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -54,7 +55,10 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
 
         mtgCard = mMTGDeck.getMTGCards().get(position);
         numbCopies = mtgCard.getNumbCopies();
-        Glide.with(holder.itemView.getContext()).load(mtgCard.getImageUrl()).into(holder.cardImage);
+        Glide.with(holder.itemView.getContext())
+                .load(mtgCard.getImageUrl())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.cardImage);
         holder.cardName.setText(mtgCard.getName());
         holder.cardNumbCopies.setText(String.valueOf(numbCopies));
         holder.setName.setText(String.valueOf(mtgCard.getSetName()));

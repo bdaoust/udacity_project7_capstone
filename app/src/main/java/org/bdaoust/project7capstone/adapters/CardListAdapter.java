@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
@@ -45,7 +46,10 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardIt
         mtgCard = mMTGDeck.getMTGCards().get(position);
         numbCopies = mtgCard.getNumbCopies();
 
-        Glide.with(mContext).load(mtgCard.getImageUrl()).into(holder.cardImage);
+        Glide.with(mContext)
+                .load(mtgCard.getImageUrl())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.cardImage);
         holder.cardNumbCopies.setText(String.valueOf(numbCopies));
         // Setting the contentDescription on the cardNumbCopies TextView instead of the cardImage
         // ImageView, otherwise TalkBack will read the name of the card followed by the number

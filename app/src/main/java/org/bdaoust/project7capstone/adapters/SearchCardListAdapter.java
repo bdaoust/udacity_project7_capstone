@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.bdaoust.project7capstone.R;
 
@@ -66,7 +67,10 @@ public class SearchCardListAdapter extends RecyclerView.Adapter<SearchCardListAd
         }
 
         card = cards.get(spinnerPosition);
-        Glide.with(mContext).load(card.getImageUrl()).into(holder.cardImage);
+        Glide.with(mContext)
+                .load(card.getImageUrl())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(holder.cardImage);
         holder.cardName.setText(cardName);
 
         setNames = new ArrayList<>();

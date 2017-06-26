@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -187,7 +188,10 @@ public class CardDetailsDialogFragment extends DialogFragment {
                     // and "Artist" should always be defined so we simply set the values. However,
                     // the fields "Mana Cost", "Oracle Text", "Flavor Text", "PowerToughness",
                     // and  "Loyalty" might be null so we only display them if they aren't null.
-                    Glide.with(getContext()).load(mtgCard.getImageUrl()).into(mCardImage);
+                    Glide.with(getContext())
+                            .load(mtgCard.getImageUrl())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(mCardImage);
                     mCardName.setText(mtgCard.getName());
                     mCardQuantity.setText(String.valueOf(mtgCard.getNumbCopies()));
                     mCardCMC.setText(getPrettyCMC(mtgCard.getCmc()));
