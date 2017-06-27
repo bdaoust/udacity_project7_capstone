@@ -98,12 +98,12 @@ public class CreateDeckDialogFragment extends DialogFragment{
         referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, mFirebaseUserId);
         mReferenceDecks = MTGTools.createDeckListReference(referenceUserRoot);
 
-        createListeners();
+        createFirebaseDBListeners();
 
         return rootView;
     }
 
-    private void createListeners() {
+    private void createFirebaseDBListeners() {
 
         mOnDecksChildEventListener = new ChildEventListener() {
             @Override
@@ -136,14 +136,14 @@ public class CreateDeckDialogFragment extends DialogFragment{
     public void onResume() {
         super.onResume();
 
-        addListeners();
+        addFirebaseDBListeners();
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
-        removeListeners();
+        removeFirebaseDBListeners();
         mDeckNames.clear();
     }
 
@@ -151,11 +151,11 @@ public class CreateDeckDialogFragment extends DialogFragment{
         mOnDeckCreatedListener = onDeckCreatedListener;
     }
 
-    private void addListeners(){
+    private void addFirebaseDBListeners(){
         mReferenceDecks.addChildEventListener(mOnDecksChildEventListener);
     }
 
-    private void removeListeners(){
+    private void removeFirebaseDBListeners(){
         mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
     }
 }

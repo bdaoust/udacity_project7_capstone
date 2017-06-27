@@ -114,14 +114,14 @@ public class CardDetailsDialogFragment extends DialogFragment {
     public void onResume() {
         super.onResume();
 
-        addListeners();
+        addFirebaseDBListeners();
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
-        removeListeners();
+        removeFirebaseDBListeners();
     }
 
     private void setupToolbar() {
@@ -255,11 +255,11 @@ public class CardDetailsDialogFragment extends DialogFragment {
         };
     }
 
-    private void addListeners() {
+    private void addFirebaseDBListeners() {
         mReferenceCard.addValueEventListener(mOnCardValueEventListener);
     }
 
-    private void removeListeners() {
+    private void removeFirebaseDBListeners() {
         mReferenceCard.removeEventListener(mOnCardValueEventListener);
     }
 }

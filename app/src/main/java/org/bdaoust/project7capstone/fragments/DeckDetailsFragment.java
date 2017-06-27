@@ -92,7 +92,7 @@ public class DeckDetailsFragment extends Fragment{
         mReferenceCards = MTGTools.createCardListReference(referenceUserRoot, mFirebaseDeckKey);
         mReferenceDeckLastUpdated = MTGTools.createDeckLastUpdatedReference(referenceUserRoot, mFirebaseDeckKey);
 
-        createListeners();
+        createFirebaseDBListeners();
 
         return rootView;
     }
@@ -101,7 +101,7 @@ public class DeckDetailsFragment extends Fragment{
     public void onResume() {
         super.onResume();
 
-        addListeners();
+        addFirebaseDBListeners();
     }
 
     @Override
@@ -114,7 +114,7 @@ public class DeckDetailsFragment extends Fragment{
         mMTGDeck.getMTGCards().clear();
         mCardListAdapter.notifyDataSetChanged();
         mLastUpdatedTimestamp = 0;
-        removeListeners();
+        removeFirebaseDBListeners();
     }
 
     @Override
@@ -174,7 +174,7 @@ public class DeckDetailsFragment extends Fragment{
 
     }
 
-    private void createListeners() {
+    private void createFirebaseDBListeners() {
         mOnCardsChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -249,13 +249,13 @@ public class DeckDetailsFragment extends Fragment{
 
     }
 
-    private void addListeners(){
+    private void addFirebaseDBListeners(){
         mReferenceCards.addChildEventListener(mOnCardsChildEventListener);
         mReferenceDeckLastUpdated.addValueEventListener(mOnLastUpdatedValueEventListener);
         mReferenceDeck.addValueEventListener(mOnDeckValueEventListener);
     }
 
-    private void removeListeners(){
+    private void removeFirebaseDBListeners(){
         mReferenceCards.removeEventListener(mOnCardsChildEventListener);
         mReferenceDeckLastUpdated.removeEventListener(mOnLastUpdatedValueEventListener);
         mReferenceDeck.removeEventListener(mOnDeckValueEventListener);

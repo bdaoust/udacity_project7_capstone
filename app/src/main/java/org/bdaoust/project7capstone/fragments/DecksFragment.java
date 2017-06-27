@@ -70,6 +70,7 @@ public class DecksFragment extends Fragment{
     private boolean mDownloadSampleDeckWhenActivityCreated = false;
     private boolean mIsFirstDeckAdded;
     private String mFirebaseUserId;
+    private boolean mFirebaseAuthListenerAdded;
     private static final String SELECTED_KEY = "selected_position";
     private static final String TAG = "DecksFragment";
     private static final int RC_SIGN_IN = 42;
@@ -118,8 +119,10 @@ public class DecksFragment extends Fragment{
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseAuthListenerAdded = false;
 
-        createListeners();
+        createFirebaseAuthListener();
+        createFirebaseDBListeners();
 
         return mRootView;
     }
@@ -145,7 +148,7 @@ public class DecksFragment extends Fragment{
             Toast.makeText(getContext(), R.string.no_network_connection, Toast.LENGTH_SHORT).show();
         }
 
-        addListeners();
+        addFirebaseAuthListener();
     }
 
     @Override
@@ -159,7 +162,8 @@ public class DecksFragment extends Fragment{
             mDeckListAdapter.notifyDataSetChanged();
         }
 
-        removeListeners();
+        removeFirebaseAuthListener();
+        removeFirebaseDBListeners();
     }
 
     @Override
@@ -241,7 +245,7 @@ public class DecksFragment extends Fragment{
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
-    private void createListeners() {
+    private void createFirebaseDBListeners() {
         mOnDecksChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -354,6 +358,10 @@ public class DecksFragment extends Fragment{
             }
         };
 
+
+    }
+
+    private void createFirebaseAuthListener(){
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -387,11 +395,7 @@ public class DecksFragment extends Fragment{
         mReferenceSampleDeckWasSaved = MTGTools.createSampleDeckWasSavedReference(mReferenceUserRoot);
         mReferenceDecks = MTGTools.createDeckListReference(mReferenceUserRoot);
 
-        //Clearing the list in case onSignedInInitialize() is called a second time without onSignedOutCleanup() having been called.
-        mMTGDecks.clear();
-        mReferenceDecks.addChildEventListener(mOnDecksChildEventListener);
-        mReferenceSampleDeckWasSaved.addListenerForSingleValueEvent(mOnSampleDeckWasSavedValueEventListener);
-
+        addFirebaseDBListeners();
         mDeckListAdapter = new DeckListAdapter(getContext(), mMTGDecks, mSelectedPosition, mFirebaseUserId);
         mDeckListAdapter.setOnDeckSelectedListener(new OnDeckSelectedListener() {
             @Override
@@ -410,17 +414,34 @@ public class DecksFragment extends Fragment{
         if(mDeckListAdapter != null) {
             mDeckListAdapter.notifyDataSetChanged();
         }
+
+        removeFirebaseDBListeners();
     }
 
-    private void addListeners(){
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    private void addFirebaseAuthListener(){
+        if(!mFirebaseAuthListenerAdded){
+            mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+            mFirebaseAuthListenerAdded = true;
+        }
     }
 
-    private void removeListeners(){
-        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+    private void removeFirebaseAuthListener(){
+        if(mFirebaseAuthListenerAdded) {
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+            mFirebaseAuthListenerAdded = false;
+        }
+    }
+
+    private void addFirebaseDBListeners(){
+        mReferenceDecks.addChildEventListener(mOnDecksChildEventListener);
+        mReferenceSampleDeckWasSaved.addListenerForSingleValueEvent(mOnSampleDeckWasSavedValueEventListener);
+    }
+
+    private void removeFirebaseDBListeners(){
         if(mReferenceDecks != null) {
             mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
         }
+
         if(mReferenceSampleDeckWasSaved != null) {
             mReferenceSampleDeckWasSaved.removeEventListener(mOnSampleDeckWasSavedValueEventListener);
         }

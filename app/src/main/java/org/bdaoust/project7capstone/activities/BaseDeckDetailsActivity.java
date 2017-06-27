@@ -52,7 +52,7 @@ public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksF
         referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, firebaseUserId);
         mReferenceDeckName = MTGTools.createDeckNameReference(referenceUserRoot, firebaseDeckKey);
 
-        createListeners();
+        createFirebaseDBListeners();
 
         if(savedInstanceState == null){
             FragmentManager fragmentManager;
@@ -74,7 +74,7 @@ public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksF
         }
     }
 
-    private void createListeners(){
+    private void createFirebaseDBListeners(){
         mOnDeckNameValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -99,21 +99,21 @@ public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksF
     protected void onResume() {
         super.onResume();
 
-        addListeners();
+        addFirebaseDBListeners();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        removeListeners();
+        removeFirebaseDBListeners();
     }
 
-    private void addListeners(){
+    private void addFirebaseDBListeners(){
         mReferenceDeckName.addValueEventListener(mOnDeckNameValueEventListener);
     }
 
-    private void removeListeners(){
+    private void removeFirebaseDBListeners(){
         mReferenceDeckName.removeEventListener(mOnDeckNameValueEventListener);
     }
 

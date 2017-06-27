@@ -60,7 +60,7 @@ public class DecksWidgetService extends RemoteViewsService{
             mFirebaseDatabase = FirebaseDatabase.getInstance();
             mFirebaseAuth = FirebaseAuth.getInstance();
 
-            createListeners();
+            createFirebaseDBListeners();
         }
 
         @Override
@@ -209,7 +209,7 @@ public class DecksWidgetService extends RemoteViewsService{
             updateAllWidgets();
         }
 
-        private void createListeners() {
+        private void createFirebaseDBListeners() {
             mAuthStateListener = new FirebaseAuth.AuthStateListener() {
                 @Override
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {

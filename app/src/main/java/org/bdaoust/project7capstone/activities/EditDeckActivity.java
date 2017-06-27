@@ -125,7 +125,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         mReferenceTempDeckName = MTGTools.createTempDeckNameReference(referenceUserRoot, mTempDeckFirebaseKey);
         mReferenceTempDeckCards = MTGTools.createTempDeckCardsReference(referenceUserRoot, mTempDeckFirebaseKey);
 
-        createListeners();
+        createFirebaseDBListeners();
     }
 
     @Override
@@ -139,12 +139,12 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                removeListeners();
+                removeFirebaseDBListeners();
                 deleteTempDeck();
                 finish();
                 return true;
             case R.id.action_save:
-                removeListeners();
+                removeFirebaseDBListeners();
                 mMTGTempDeck.setLastUpdatedTimestamp(System.currentTimeMillis());
                 mReferenceDeck.setValue(mMTGTempDeck);
                 deleteTempDeck();
@@ -188,7 +188,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(mEditCardListAdapter);
 
-        addListeners();
+        addFirebaseDBListeners();
     }
 
     @Override
@@ -199,10 +199,10 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         // hasn't been recreated, all of the MTG cards contained in the Deck will be added again
         // to the list, thus creating extra copies of MTG cards, which we don't want.
         mMTGTempDeck.getMTGCards().clear();
-        removeListeners();
+        removeFirebaseDBListeners();
     }
 
-    private void createListeners() {
+    private void createFirebaseDBListeners() {
         mOnTempDeckValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -299,13 +299,13 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         };
     }
 
-    private void addListeners(){
+    private void addFirebaseDBListeners(){
         mReferenceTempDeck.addValueEventListener(mOnTempDeckValueEventListener);
         mReferenceTempDeckName.addValueEventListener(mOnTempDeckNameValueEventListener);
         mReferenceTempDeckCards.addChildEventListener(mOnTempDeckCardsChildEventListener);
     }
 
-    private void removeListeners(){
+    private void removeFirebaseDBListeners(){
         mReferenceTempDeck.removeEventListener(mOnTempDeckValueEventListener);
         mReferenceTempDeckName.removeEventListener(mOnTempDeckNameValueEventListener);
         mReferenceTempDeckCards.removeEventListener(mOnTempDeckCardsChildEventListener);
