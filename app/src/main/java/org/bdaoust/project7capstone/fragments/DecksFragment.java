@@ -71,6 +71,7 @@ public class DecksFragment extends Fragment{
     private boolean mIsFirstDeckAdded;
     private String mFirebaseUserId;
     private boolean mFirebaseAuthListenerAdded;
+    private boolean mOnSignedInInitializeCalled;
     private static final String SELECTED_KEY = "selected_position";
     private static final String TAG = "DecksFragment";
     private static final int RC_SIGN_IN = 42;
@@ -147,6 +148,8 @@ public class DecksFragment extends Fragment{
             mProgressBar.setVisibility(View.GONE);
             Toast.makeText(getContext(), R.string.no_network_connection, Toast.LENGTH_SHORT).show();
         }
+
+        mOnSignedInInitializeCalled = false;
 
         addFirebaseAuthListener();
     }
@@ -370,7 +373,17 @@ public class DecksFragment extends Fragment{
                 firebaseUser = firebaseAuth.getCurrentUser();
                 if(firebaseUser != null){
                     mFirebaseUserId = firebaseUser.getUid();
-                    onSignedInInitialize();
+                    // Even though only one AuthStateListener gets registered, the onAuthStateChanged event
+                    // can still gets triggered more than once which has the effect of creating duplicate
+                    // Decks in the list. To avoid this, we use a boolean to keep track of whether
+                    // onSignedInInitialize() was called or not. This is based on the solution
+                    // from YYY: https://stackoverflow.com/questions/37673616/firebase-android-onauthstatechanged-called-twice
+                    if(!mOnSignedInInitializeCalled) {
+                        Log.d(TAG, "User signed in... calling onSignedInInitialize()");
+                        onSignedInInitialize();
+                    } else {
+                        Log.d(TAG, "User already signed in... not calling onSignedInInitialize()");
+                    }
                 } else {
                     onSignedOutCleanup();
                     startActivityForResult(
@@ -407,6 +420,8 @@ public class DecksFragment extends Fragment{
         });
         mRecyclerView.setAdapter(mDeckListAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        mOnSignedInInitializeCalled = true;
     }
 
     private void onSignedOutCleanup(){
@@ -416,6 +431,8 @@ public class DecksFragment extends Fragment{
         }
 
         removeFirebaseDBListeners();
+
+        mOnSignedInInitializeCalled = false;
     }
 
     private void addFirebaseAuthListener(){
