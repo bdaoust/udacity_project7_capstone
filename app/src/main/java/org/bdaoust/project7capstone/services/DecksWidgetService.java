@@ -52,7 +52,6 @@ public class DecksWidgetService extends RemoteViewsService{
         private List<MTGDeckModel> mMTGDecks;
         private String mFirebaseUserId;
 
-
         DeckRemoteViewsFactory(Context context){
             mMTGDecks = new ArrayList<>();
             mContext = context;
@@ -60,6 +59,7 @@ public class DecksWidgetService extends RemoteViewsService{
             mFirebaseDatabase = FirebaseDatabase.getInstance();
             mFirebaseAuth = FirebaseAuth.getInstance();
 
+            createFirebaseAuthListener();
             createFirebaseDBListeners();
         }
 
@@ -209,7 +209,7 @@ public class DecksWidgetService extends RemoteViewsService{
             updateAllWidgets();
         }
 
-        private void createFirebaseDBListeners() {
+        private void createFirebaseAuthListener(){
             mAuthStateListener = new FirebaseAuth.AuthStateListener() {
                 @Override
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -224,7 +224,9 @@ public class DecksWidgetService extends RemoteViewsService{
                     }
                 }
             };
+        }
 
+        private void createFirebaseDBListeners() {
             mOnDecksChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
