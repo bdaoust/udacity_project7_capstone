@@ -51,6 +51,7 @@ public class DecksWidgetService extends RemoteViewsService{
         private ChildEventListener mOnDecksChildEventListener;
         private List<MTGDeckModel> mMTGDecks;
         private String mFirebaseUserId;
+        private boolean mOnSignedInInitializeCalled;
 
         DeckRemoteViewsFactory(Context context){
             mMTGDecks = new ArrayList<>();
@@ -58,6 +59,7 @@ public class DecksWidgetService extends RemoteViewsService{
 
             mFirebaseDatabase = FirebaseDatabase.getInstance();
             mFirebaseAuth = FirebaseAuth.getInstance();
+            mOnSignedInInitializeCalled = false;
 
             createFirebaseAuthListener();
             createFirebaseDBListeners();
@@ -196,8 +198,8 @@ public class DecksWidgetService extends RemoteViewsService{
             mReferenceDecks = MTGTools.createDeckListReference(mReferenceUserRoot);
 
             mReferenceDecks.addChildEventListener(mOnDecksChildEventListener);
-            //Clearing the list in case onSignedInInitialize() is called a second time without onSignedOutCleanup() having been called.
-            mMTGDecks.clear();
+
+            mOnSignedInInitializeCalled = true;
         }
 
         private void onSignedOutCleanup(){
@@ -207,6 +209,8 @@ public class DecksWidgetService extends RemoteViewsService{
             mMTGDecks.clear();
 
             updateAllWidgets();
+
+            mOnSignedInInitializeCalled = true;
         }
 
         private void createFirebaseAuthListener(){
@@ -218,7 +222,17 @@ public class DecksWidgetService extends RemoteViewsService{
                     firebaseUser = firebaseAuth.getCurrentUser();
                     if(firebaseUser != null) {
                         mFirebaseUserId = firebaseUser.getUid();
-                        onSignedInInitialize();
+                        // Even though only one AuthStateListener gets registered, the onAuthStateChanged event
+                        // can still gets triggered more than once which has the effect of creating duplicate
+                        // Decks in the list. To avoid this, we use a boolean to keep track of whether
+                        // onSignedInInitialize() was called or not. This is based on the solution
+                        // from YYY: https://stackoverflow.com/questions/37673616/firebase-android-onauthstatechanged-called-twice
+                        if(!mOnSignedInInitializeCalled) {
+                            Log.d(TAG, "About to call onSignedInInitialize()");
+                            onSignedInInitialize();
+                        } else {
+                            Log.d(TAG, "User already signed in... not calling onSignedInInitialize()");
+                        }
                     } else {
                         onSignedOutCleanup();
                     }
