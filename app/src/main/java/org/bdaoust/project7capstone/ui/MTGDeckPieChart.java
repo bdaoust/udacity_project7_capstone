@@ -38,7 +38,7 @@ public class MTGDeckPieChart extends SurfaceView {
 
     private HashMap<String, DeckColor> mDeckColors;
 
-    public MTGDeckPieChart(Context context, AttributeSet attributeSet){
+    public MTGDeckPieChart(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
 
         Paint paint;
@@ -117,58 +117,58 @@ public class MTGDeckPieChart extends SurfaceView {
         updateContentDescription();
     }
 
-    public float getWhitePercentage(){
+    public float getWhitePercentage() {
         return mDeckColors.get(KEY_WHITE).mPercentage;
     }
 
-    public void setWhitePercentage(float percentage){
+    public void setWhitePercentage(float percentage) {
         setColorPercentage(KEY_WHITE, percentage);
     }
 
-    public float getBluePercentage(){
+    public float getBluePercentage() {
         return mDeckColors.get(KEY_BLUE).mPercentage;
     }
 
-    public void setBluePercentage(float percentage){
+    public void setBluePercentage(float percentage) {
         setColorPercentage(KEY_BLUE, percentage);
     }
 
-    public float getBlackPercentage(){
+    public float getBlackPercentage() {
         return mDeckColors.get(KEY_BLACK).mPercentage;
     }
 
-    public void setBlackPercentage(float percentage){
+    public void setBlackPercentage(float percentage) {
         setColorPercentage(KEY_BLACK, percentage);
     }
 
-    public float getRedPercentage(){
+    public float getRedPercentage() {
         return mDeckColors.get(KEY_RED).mPercentage;
     }
 
-    public void setRedPercentage(float percentage){
+    public void setRedPercentage(float percentage) {
         setColorPercentage(KEY_RED, percentage);
     }
 
-    public float getGreenPercentage(){
+    public float getGreenPercentage() {
         return mDeckColors.get(KEY_GREEN).mPercentage;
     }
 
-    public void setGreenPercentage(float percentage){
+    public void setGreenPercentage(float percentage) {
         setColorPercentage(KEY_GREEN, percentage);
     }
 
-    private void setColorPercentage(String key, float percentage){
+    private void setColorPercentage(String key, float percentage) {
         setPercentage(key, percentage);
         updateContentDescription();
     }
 
-    private void setPercentage(String key, float percentage){
+    private void setPercentage(String key, float percentage) {
         DeckColor deckColor;
 
-        if(percentage < 0){
+        if (percentage < 0) {
             percentage = 0;
         }
-        if(percentage > 100){
+        if (percentage > 100) {
             percentage = 100;
         }
 
@@ -180,9 +180,9 @@ public class MTGDeckPieChart extends SurfaceView {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        mCenterX = w/2.0f;
-        mCenterY = h/2.0f;
-        mRadius = w/2.0f - mPadding;
+        mCenterX = w / 2.0f;
+        mCenterY = h / 2.0f;
+        mRadius = w / 2.0f - mPadding;
 
         //Adjusting the left, top, right, bottom positions (which will be used to draw the
         // pie chart), to account for the border width and padding.
@@ -210,9 +210,9 @@ public class MTGDeckPieChart extends SurfaceView {
         degreesCovered = 0;
         rectF = new RectF(mLeft, mTop, mRight, mBottom);
 
-        canvas.drawCircle(mCenterX, mCenterY, mRadius+mBorderWidth, mBorderPaint);
+        canvas.drawCircle(mCenterX, mCenterY, mRadius + mBorderWidth, mBorderPaint);
 
-        for(int i = 0; i < deckColorsList.size(); i++){
+        for (int i = 0; i < deckColorsList.size(); i++) {
             DeckColor deckColor;
             float sweepAngle;
 
@@ -223,13 +223,13 @@ public class MTGDeckPieChart extends SurfaceView {
             degreesCovered += sweepAngle;
         }
 
-        if(degreesCovered < 360) {
+        if (degreesCovered < 360) {
             degreesLeft = 360 - degreesCovered;
             canvas.drawArc(rectF, currentAngle, degreesLeft, true, mColorlessPaint);
         }
     }
 
-    private class DeckColor implements Comparable<DeckColor>{
+    private class DeckColor implements Comparable<DeckColor> {
         Paint mPaint;
         Float mPercentage;
 
@@ -244,11 +244,11 @@ public class MTGDeckPieChart extends SurfaceView {
         }
     }
 
-    private float calcSweepAngle(float percentage){
-        return (percentage/100f)*360f;
+    private float calcSweepAngle(float percentage) {
+        return (percentage / 100f) * 360f;
     }
 
-    private void updateContentDescription(){
+    private void updateContentDescription() {
         String deckColorBreakdown;
 
         //Rounded percentages

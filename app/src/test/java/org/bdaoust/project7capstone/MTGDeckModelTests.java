@@ -17,12 +17,12 @@ public class MTGDeckModelTests {
     private float mDelta = 0.25f;
 
     @Before
-    public void setup(){
+    public void setup() {
         mMTGDeck = new MTGDeckModel();
     }
 
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         mMTGDeck = new MTGDeckModel();
 
         assertEquals(null, mMTGDeck.getName());
@@ -33,7 +33,7 @@ public class MTGDeckModelTests {
     }
 
     @Test
-    public void testGetSetName(){
+    public void testGetSetName() {
         String testDeckName;
 
         testDeckName = "Test Deck Name";
@@ -43,7 +43,7 @@ public class MTGDeckModelTests {
     }
 
     @Test
-    public void testGetSetLastUpdatedTimestamp(){
+    public void testGetSetLastUpdatedTimestamp() {
         long lastUpdatedTimestamp;
 
         lastUpdatedTimestamp = 123456;
@@ -52,7 +52,7 @@ public class MTGDeckModelTests {
     }
 
     @Test
-    public void testGetNumbCards(){
+    public void testGetNumbCards() {
         int multiverseId;
         MTGCardModel mtgCard1;
         MTGCardModel mtgCard2;
@@ -88,7 +88,7 @@ public class MTGDeckModelTests {
     }
 
     @Test
-    public void testGetColorPercentages_0Cards(){
+    public void testGetColorPercentages_0Cards() {
         MTGDeckModel.ColorPercentages colorPercentages;
 
         colorPercentages = mMTGDeck.getColorPercentages();
@@ -100,7 +100,7 @@ public class MTGDeckModelTests {
     }
 
     @Test
-    public void testGetColorPercentages_1Card(){
+    public void testGetColorPercentages_1Card() {
         MTGDeckModel.ColorPercentages colorPercentages;
         MTGCardModel mtgCard;
         Card card;
@@ -234,7 +234,7 @@ public class MTGDeckModelTests {
     }
 
     @Test
-    public void testGetColorPercentages_2Cards(){
+    public void testGetColorPercentages_2Cards() {
         MTGDeckModel.ColorPercentages colorPercentages;
         MTGCardModel mtgCard;
         Card card;
@@ -296,7 +296,7 @@ public class MTGDeckModelTests {
     }
 
     @Test
-    public void testGetColorPercentages_3Cards(){
+    public void testGetColorPercentages_3Cards() {
         MTGDeckModel.ColorPercentages colorPercentages;
         MTGCardModel mtgCard;
         Card card;
@@ -326,7 +326,7 @@ public class MTGDeckModelTests {
     }
 
     @Test
-    public void testGetColorPercentages_SampleDeck(){
+    public void testGetColorPercentages_SampleDeck() {
         MTGDeckModel.ColorPercentages colorPercentages;
 
         mMTGDeck = new SampleDeck();

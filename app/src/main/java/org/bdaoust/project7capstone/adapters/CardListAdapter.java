@@ -16,13 +16,13 @@ import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.firebasemodels.MTGCardModel;
 import org.bdaoust.project7capstone.firebasemodels.MTGDeckModel;
 
-public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardItemViewHolder>{
+public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardItemViewHolder> {
 
     private Context mContext;
     private MTGDeckModel mMTGDeck;
     private OnCardClickedListener mOnCardClickedListener;
 
-    public CardListAdapter(Context context, MTGDeckModel mtgDeck){
+    public CardListAdapter(Context context, MTGDeckModel mtgDeck) {
         mContext = context;
         mMTGDeck = mtgDeck;
     }
@@ -62,7 +62,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardIt
                 String firebaseCardKey;
 
                 firebaseCardKey = mtgCard.getFirebaseKey();
-                if(mOnCardClickedListener != null){
+                if (mOnCardClickedListener != null) {
                     mOnCardClickedListener.onCardClicked(firebaseCardKey);
                 }
             }
@@ -74,7 +74,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardIt
         return mMTGDeck.getMTGCards().size();
     }
 
-    public void setOnCardClickedListener (OnCardClickedListener onCardClickedListener) {
+    public void setOnCardClickedListener(OnCardClickedListener onCardClickedListener) {
         mOnCardClickedListener = onCardClickedListener;
     }
 
@@ -82,11 +82,11 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardIt
         void onCardClicked(String firebaseKey);
     }
 
-    class CardItemViewHolder extends RecyclerView.ViewHolder{
+    class CardItemViewHolder extends RecyclerView.ViewHolder {
         ImageView cardImage;
         TextView cardNumbCopies;
 
-        CardItemViewHolder(View itemView){
+        CardItemViewHolder(View itemView) {
             super(itemView);
 
             cardImage = (ImageView) itemView.findViewById(R.id.cardImage);

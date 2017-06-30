@@ -6,5 +6,6 @@ public final class MTGKeys {
     public final static String FIREBASE_CARD_KEY = "firebaseCardKey";
     public final static String FIREBASE_USER_ID = "firebaseUserId";
 
-    private MTGKeys(){}
+    private MTGKeys() {
+    }
 }

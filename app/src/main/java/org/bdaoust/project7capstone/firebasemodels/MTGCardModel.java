@@ -29,11 +29,11 @@ public class MTGCardModel {
     private String mType;
 
     @SuppressWarnings("unused")
-    public MTGCardModel(){
+    public MTGCardModel() {
         mColors = new ArrayList<>();
     }
 
-    public MTGCardModel(Card card){
+    public MTGCardModel(Card card) {
         mArtist = card.getArtist();
         mCmc = card.getCmc();
         mFlavorText = card.getFlavor();
@@ -49,99 +49,99 @@ public class MTGCardModel {
         mType = card.getType();
 
         mColors = new ArrayList<>();
-        if(card.getColors() != null) {
+        if (card.getColors() != null) {
             Collections.addAll(mColors, card.getColors());
         }
     }
 
     @Exclude
-    public String getFirebaseKey(){
+    public String getFirebaseKey() {
         return mFirebaseKey;
     }
 
     @Exclude
-    public void setFirebaseKey(String firebaseKey){
+    public void setFirebaseKey(String firebaseKey) {
         mFirebaseKey = firebaseKey;
     }
 
-    public String getArtist(){
+    public String getArtist() {
         return mArtist;
     }
 
     @SuppressWarnings("unused")
-    public void setArtist(String artist){
+    public void setArtist(String artist) {
         mArtist = artist;
     }
 
-    public double getCmc(){
+    public double getCmc() {
         return mCmc;
     }
 
     @SuppressWarnings("unused")
-    public void setCmc(double cmc){
+    public void setCmc(double cmc) {
         mCmc = cmc;
     }
 
     @SuppressWarnings("WeakerAccess")
-    public List<String> getColors(){
+    public List<String> getColors() {
         return mColors;
     }
 
     @SuppressWarnings("unused")
-    public void setColors(List<String> colors){
+    public void setColors(List<String> colors) {
         mColors = colors;
     }
 
-    public String getFlavorText(){
+    public String getFlavorText() {
         return mFlavorText;
     }
 
     @SuppressWarnings("unused")
-    public void setFlavorText(String flavorText){
+    public void setFlavorText(String flavorText) {
         mFlavorText = flavorText;
     }
 
-    public String getImageUrl(){
+    public String getImageUrl() {
         return mImageUrl;
     }
 
     @SuppressWarnings("unused")
-    public void setImageUrl(String imageUrl){
+    public void setImageUrl(String imageUrl) {
         mImageUrl = imageUrl;
     }
 
-    public int getLoyalty(){
+    public int getLoyalty() {
         return mLoyalty;
     }
 
     @SuppressWarnings("unused")
-    public void setLoyalty(int loyalty){
+    public void setLoyalty(int loyalty) {
         mLoyalty = loyalty;
     }
 
-    public String getManaCost(){
+    public String getManaCost() {
         return mManaCost;
     }
 
     @SuppressWarnings("unused")
-    public void setManaCost(String manaCost){
+    public void setManaCost(String manaCost) {
         mManaCost = manaCost;
     }
 
-    public int getMultiverseId(){
+    public int getMultiverseId() {
         return mMultiverseId;
     }
 
     @SuppressWarnings("unused")
-    public void setMultiverseId(int multiverseId){
+    public void setMultiverseId(int multiverseId) {
         mMultiverseId = multiverseId;
     }
 
-    public String getName(){
+    public String getName() {
         return mName;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         mName = name;
     }
 
@@ -149,51 +149,51 @@ public class MTGCardModel {
         return mNumbCopies;
     }
 
-    public void setNumbCopies(int numbCopies){
+    public void setNumbCopies(int numbCopies) {
         mNumbCopies = numbCopies;
     }
 
-    public String getPower(){
+    public String getPower() {
         return mPower;
     }
 
     @SuppressWarnings("unused")
-    public void setPower(String power){
+    public void setPower(String power) {
         mPower = power;
     }
 
-    public String getSetName(){
+    public String getSetName() {
         return mSetName;
     }
 
     @SuppressWarnings("unused")
-    public void setSetName(String setName){
+    public void setSetName(String setName) {
         mSetName = setName;
     }
 
-    public String getText(){
+    public String getText() {
         return mText;
     }
 
-    public void setText(String text){
+    public void setText(String text) {
         mText = text;
     }
 
-    public String getToughness(){
+    public String getToughness() {
         return mToughness;
     }
 
     @SuppressWarnings("unused")
-    public void setToughness(String toughness){
+    public void setToughness(String toughness) {
         mToughness = toughness;
     }
 
-    public String getType(){
+    public String getType() {
         return mType;
     }
 
     @SuppressWarnings("unused")
-    public void setType(String type){
+    public void setType(String type) {
         mType = type;
     }
 

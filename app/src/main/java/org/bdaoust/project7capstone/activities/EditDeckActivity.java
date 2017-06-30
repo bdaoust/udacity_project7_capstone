@@ -162,13 +162,13 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
 
         newMTGCard = new MTGCardModel(card);
 
-        if(mMTGTempDeck.findCardByMultiverseId(newMTGCard.getMultiverseId()) != null){
+        if (mMTGTempDeck.findCardByMultiverseId(newMTGCard.getMultiverseId()) != null) {
             int numbCopies;
 
             mtgCard = mMTGTempDeck.findCardByMultiverseId(newMTGCard.getMultiverseId());
             numbCopies = mtgCard.getNumbCopies();
 
-            if(numbCopies < 99){
+            if (numbCopies < 99) {
                 numbCopies++;
                 mEditCardListAdapter.updateNumbCardCopies(mTempDeckFirebaseKey, mtgCard.getFirebaseKey(), numbCopies);
             }
@@ -219,7 +219,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         mOnTempDeckNameValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     String deckName;
 
                     deckName = dataSnapshot.getValue(String.class);
@@ -237,7 +237,7 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
             public void onDataChange(DataSnapshot dataSnapshot) {
                 MTGDeckModel mtgDeck;
 
-                if(dataSnapshot.exists()) {
+                if (dataSnapshot.exists()) {
                     mtgDeck = dataSnapshot.getValue(MTGDeckModel.class);
                     mMTGTempDeck.setName(mtgDeck.getName());
                     mReferenceTempDeck.setValue(mtgDeck);
@@ -299,13 +299,13 @@ public class EditDeckActivity extends AppCompatActivity implements SearchCardLis
         };
     }
 
-    private void addFirebaseDBListeners(){
+    private void addFirebaseDBListeners() {
         mReferenceTempDeck.addValueEventListener(mOnTempDeckValueEventListener);
         mReferenceTempDeckName.addValueEventListener(mOnTempDeckNameValueEventListener);
         mReferenceTempDeckCards.addChildEventListener(mOnTempDeckCardsChildEventListener);
     }
 
-    private void removeFirebaseDBListeners(){
+    private void removeFirebaseDBListeners() {
         mReferenceTempDeck.removeEventListener(mOnTempDeckValueEventListener);
         mReferenceTempDeckName.removeEventListener(mOnTempDeckNameValueEventListener);
         mReferenceTempDeckCards.removeEventListener(mOnTempDeckCardsChildEventListener);

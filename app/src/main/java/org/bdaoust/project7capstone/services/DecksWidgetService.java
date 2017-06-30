@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class DecksWidgetService extends RemoteViewsService{
+public class DecksWidgetService extends RemoteViewsService {
 
     private final static String TAG = "DecksWidgetService";
 
@@ -53,7 +53,7 @@ public class DecksWidgetService extends RemoteViewsService{
         private String mFirebaseUserId;
         private boolean mOnSignedInInitializeCalled;
 
-        DeckRemoteViewsFactory(Context context){
+        DeckRemoteViewsFactory(Context context) {
             mMTGDecks = new ArrayList<>();
             mContext = context;
 
@@ -68,7 +68,7 @@ public class DecksWidgetService extends RemoteViewsService{
         @Override
         public void onCreate() {
             mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-            Log.d(TAG,"RemoteViewsFactory CREATED");
+            Log.d(TAG, "RemoteViewsFactory CREATED");
         }
 
         @Override
@@ -79,10 +79,10 @@ public class DecksWidgetService extends RemoteViewsService{
         @Override
         public void onDestroy() {
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
-            if(mReferenceDecks != null) {
+            if (mReferenceDecks != null) {
                 mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
             }
-            Log.d(TAG,"RemoteViewsFactory DESTROYED");
+            Log.d(TAG, "RemoteViewsFactory DESTROYED");
         }
 
         @Override
@@ -116,49 +116,49 @@ public class DecksWidgetService extends RemoteViewsService{
 
             colorPercentages = mtgDeck.getColorPercentages();
 
-            if(colorPercentages.black <= 0){
+            if (colorPercentages.black <= 0) {
                 remoteViews.setViewVisibility(R.id.mtgColorBlackItem, View.GONE);
             } else {
                 remoteViews.setViewVisibility(R.id.mtgColorBlackItem, View.VISIBLE);
-                remoteViews.setTextViewText(R.id.mtgColorBlack, (int)colorPercentages.black + "%");
+                remoteViews.setTextViewText(R.id.mtgColorBlack, (int) colorPercentages.black + "%");
             }
 
-            if(colorPercentages.blue <= 0){
+            if (colorPercentages.blue <= 0) {
                 remoteViews.setViewVisibility(R.id.mtgColorBlueItem, View.GONE);
             } else {
                 remoteViews.setViewVisibility(R.id.mtgColorBlueItem, View.VISIBLE);
-                remoteViews.setTextViewText(R.id.mtgColorBlue, (int)colorPercentages.blue + "%");
+                remoteViews.setTextViewText(R.id.mtgColorBlue, (int) colorPercentages.blue + "%");
             }
 
-            if(colorPercentages.green <= 0){
+            if (colorPercentages.green <= 0) {
                 remoteViews.setViewVisibility(R.id.mtgColorGreenItem, View.GONE);
             } else {
                 remoteViews.setViewVisibility(R.id.mtgColorGreenItem, View.VISIBLE);
-                remoteViews.setTextViewText(R.id.mtgColorGreen, (int)colorPercentages.green + "%");
+                remoteViews.setTextViewText(R.id.mtgColorGreen, (int) colorPercentages.green + "%");
             }
 
-            if(colorPercentages.red <= 0){
+            if (colorPercentages.red <= 0) {
                 remoteViews.setViewVisibility(R.id.mtgColorRedItem, View.GONE);
             } else {
                 remoteViews.setViewVisibility(R.id.mtgColorRedItem, View.VISIBLE);
-                remoteViews.setTextViewText(R.id.mtgColorRed, (int)colorPercentages.red + "%");
+                remoteViews.setTextViewText(R.id.mtgColorRed, (int) colorPercentages.red + "%");
             }
 
-            if(colorPercentages.white <= 0){
+            if (colorPercentages.white <= 0) {
                 remoteViews.setViewVisibility(R.id.mtgColorWhiteItem, View.GONE);
             } else {
                 remoteViews.setViewVisibility(R.id.mtgColorWhiteItem, View.VISIBLE);
-                remoteViews.setTextViewText(R.id.mtgColorWhite, (int)colorPercentages.white + "%");
+                remoteViews.setTextViewText(R.id.mtgColorWhite, (int) colorPercentages.white + "%");
             }
 
             colorless = 100f - colorPercentages.black - colorPercentages.blue - colorPercentages.green
                     - colorPercentages.red - colorPercentages.white;
 
-            if(colorless <= 0){
+            if (colorless <= 0) {
                 remoteViews.setViewVisibility(R.id.mtgColorlessItem, View.GONE);
             } else {
                 remoteViews.setViewVisibility(R.id.mtgColorlessItem, View.VISIBLE);
-                remoteViews.setTextViewText(R.id.mtgColorless, (int)colorless + "%");
+                remoteViews.setTextViewText(R.id.mtgColorless, (int) colorless + "%");
             }
 
 
@@ -193,7 +193,7 @@ public class DecksWidgetService extends RemoteViewsService{
             return false;
         }
 
-        private void onSignedInInitialize(){
+        private void onSignedInInitialize() {
             mReferenceUserRoot = MTGTools.createUserRootReference(mFirebaseDatabase, mFirebaseUserId);
             mReferenceDecks = MTGTools.createDeckListReference(mReferenceUserRoot);
 
@@ -202,8 +202,8 @@ public class DecksWidgetService extends RemoteViewsService{
             mOnSignedInInitializeCalled = true;
         }
 
-        private void onSignedOutCleanup(){
-            if(mReferenceDecks != null) {
+        private void onSignedOutCleanup() {
+            if (mReferenceDecks != null) {
                 mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
             }
             mMTGDecks.clear();
@@ -213,21 +213,21 @@ public class DecksWidgetService extends RemoteViewsService{
             mOnSignedInInitializeCalled = true;
         }
 
-        private void createFirebaseAuthListener(){
+        private void createFirebaseAuthListener() {
             mAuthStateListener = new FirebaseAuth.AuthStateListener() {
                 @Override
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                     FirebaseUser firebaseUser;
 
                     firebaseUser = firebaseAuth.getCurrentUser();
-                    if(firebaseUser != null) {
+                    if (firebaseUser != null) {
                         mFirebaseUserId = firebaseUser.getUid();
                         // Even though only one AuthStateListener gets registered, the onAuthStateChanged event
                         // can still gets triggered more than once which has the effect of creating duplicate
                         // Decks in the list. To avoid this, we use a boolean to keep track of whether
                         // onSignedInInitialize() was called or not. This is based on the solution
                         // from YYY: https://stackoverflow.com/questions/37673616/firebase-android-onauthstatechanged-called-twice
-                        if(!mOnSignedInInitializeCalled) {
+                        if (!mOnSignedInInitializeCalled) {
                             Log.d(TAG, "About to call onSignedInInitialize()");
                             onSignedInInitialize();
                         } else {
@@ -269,16 +269,16 @@ public class DecksWidgetService extends RemoteViewsService{
                     updatedMTGDeck = dataSnapshot.getValue(MTGDeckModel.class);
                     updatedMTGDeck.setFirebaseKey(dataSnapshot.getKey());
 
-                    for(int i = 0; i < mMTGDecks.size(); i++){
+                    for (int i = 0; i < mMTGDecks.size(); i++) {
                         MTGDeckModel mtgDeck;
 
                         mtgDeck = mMTGDecks.get(i);
-                        if(mtgDeck.getFirebaseKey().equals(updatedMTGDeck.getFirebaseKey())){
+                        if (mtgDeck.getFirebaseKey().equals(updatedMTGDeck.getFirebaseKey())) {
                             position = i;
                         }
                     }
 
-                    if(position >= 0){
+                    if (position >= 0) {
                         mMTGDecks.set(position, updatedMTGDeck);
                     }
 
@@ -294,16 +294,16 @@ public class DecksWidgetService extends RemoteViewsService{
                     removedMTGDeck = dataSnapshot.getValue(MTGDeckModel.class);
                     removedMTGDeck.setFirebaseKey(dataSnapshot.getKey());
 
-                    for(int i = 0; i < mMTGDecks.size(); i++){
+                    for (int i = 0; i < mMTGDecks.size(); i++) {
                         MTGDeckModel mtgDeck;
 
                         mtgDeck = mMTGDecks.get(i);
-                        if(mtgDeck.getFirebaseKey().equals(removedMTGDeck.getFirebaseKey())){
+                        if (mtgDeck.getFirebaseKey().equals(removedMTGDeck.getFirebaseKey())) {
                             position = i;
                         }
                     }
 
-                    if(position >= 0){
+                    if (position >= 0) {
                         mMTGDecks.remove(position);
                     }
 
@@ -321,7 +321,7 @@ public class DecksWidgetService extends RemoteViewsService{
             };
         }
 
-        private void updateAllWidgets(){
+        private void updateAllWidgets() {
             ComponentName componentName;
             AppWidgetManager appWidgetManager;
             int[] appWidgetIds;
@@ -330,7 +330,7 @@ public class DecksWidgetService extends RemoteViewsService{
             componentName = new ComponentName(mContext, DecksAppWidgetProvider.class);
             appWidgetIds = appWidgetManager.getAppWidgetIds(componentName);
 
-            for(int appWidgetId: appWidgetIds){
+            for (int appWidgetId : appWidgetIds) {
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.decks);
             }
 

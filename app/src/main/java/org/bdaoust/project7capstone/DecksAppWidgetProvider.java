@@ -13,7 +13,7 @@ import org.bdaoust.project7capstone.activities.MainActivity;
 import org.bdaoust.project7capstone.services.DecksWidgetService;
 import org.bdaoust.project7capstone.tools.MTGKeys;
 
-public class DecksAppWidgetProvider extends AppWidgetProvider{
+public class DecksAppWidgetProvider extends AppWidgetProvider {
 
     public static final String SHOW_DECK_DETAILS_ACTION = "org.bdaoust.project7capstone.SHOW_DECK_DETAILS";
     public static final String EXTRA_FIREBASE_USER_ID = "org.bdaoust.project7capstone.EXTRA_FIREBASE_USER_ID";
@@ -31,7 +31,7 @@ public class DecksAppWidgetProvider extends AppWidgetProvider{
             firebaseDeckKey = intent.getStringExtra(EXTRA_DECK_FIREBASE_KEY);
             isLargeLayout = context.getResources().getBoolean(R.bool.large_layout);
 
-            if(isLargeLayout){
+            if (isLargeLayout) {
                 startActivityIntent = new Intent(context, MainActivity.class);
                 startActivityIntent.putExtra(MTGKeys.FIREBASE_DECK_KEY, firebaseDeckKey);
                 // Adding FLAG_ACTIVITY_CLEAR_TASK and FLAG_ACTIVITY_NEW_TASK to make sure that
@@ -59,7 +59,7 @@ public class DecksAppWidgetProvider extends AppWidgetProvider{
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        for (int appWidgetId: appWidgetIds) {
+        for (int appWidgetId : appWidgetIds) {
             RemoteViews remoteViews;
             Intent decksWidgetServiceIntent;
             Intent showDeckDetailsIntent;

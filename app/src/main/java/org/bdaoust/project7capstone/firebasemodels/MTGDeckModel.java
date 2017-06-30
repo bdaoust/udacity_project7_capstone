@@ -48,12 +48,12 @@ public class MTGDeckModel {
     }
 
     @Exclude
-    public String getFirebaseKey(){
+    public String getFirebaseKey() {
         return mFirebaseKey;
     }
 
     @Exclude
-    public void setFirebaseKey(String firebaseKey){
+    public void setFirebaseKey(String firebaseKey) {
         mFirebaseKey = firebaseKey;
     }
 
@@ -69,34 +69,34 @@ public class MTGDeckModel {
     }
 
     @Exclude
-    public void addCard(MTGCardModel mtgCard){
+    public void addCard(MTGCardModel mtgCard) {
         mMTGCards.add(mtgCard);
         sortMTGCards();
     }
 
     @Exclude
-    public void removeCard(int multiverseId){
+    public void removeCard(int multiverseId) {
         MTGCardModel mtgCardToRemove;
 
         mtgCardToRemove = null;
         for (MTGCardModel mtgCard : mMTGCards) {
-            if(mtgCard.getMultiverseId() == multiverseId){
+            if (mtgCard.getMultiverseId() == multiverseId) {
                 mtgCardToRemove = mtgCard;
             }
         }
 
-        if(mtgCardToRemove != null){
+        if (mtgCardToRemove != null) {
             mMTGCards.remove(mtgCardToRemove);
         }
     }
 
     @Exclude
-    public MTGCardModel findCardByMultiverseId(int multiverseId){
+    public MTGCardModel findCardByMultiverseId(int multiverseId) {
         MTGCardModel foundMTGCard;
 
         foundMTGCard = null;
         for (MTGCardModel mtgCard : mMTGCards) {
-            if(mtgCard.getMultiverseId() == multiverseId){
+            if (mtgCard.getMultiverseId() == multiverseId) {
                 foundMTGCard = mtgCard;
             }
         }
@@ -104,12 +104,12 @@ public class MTGDeckModel {
         return foundMTGCard;
     }
 
-    public int findCardPositionByMultiverseId(int multiverseId){
+    public int findCardPositionByMultiverseId(int multiverseId) {
         int position;
 
         position = -1;
-        for(int i=0; i< mMTGCards.size(); i++){
-            if(mMTGCards.get(i).getMultiverseId() == multiverseId){
+        for (int i = 0; i < mMTGCards.size(); i++) {
+            if (mMTGCards.get(i).getMultiverseId() == multiverseId) {
                 position = i;
             }
         }
@@ -158,7 +158,7 @@ public class MTGDeckModel {
         return mColorPercentages;
     }
 
-    private void sortMTGCards(){
+    private void sortMTGCards() {
         Collections.sort(mMTGCards, new Comparator<MTGCardModel>() {
             @Override
             public int compare(MTGCardModel mtgCard1, MTGCardModel mtgCard2) {

@@ -2,9 +2,9 @@ package org.bdaoust.project7capstone.firebasemodels;
 
 import io.magicthegathering.javasdk.resource.Card;
 
-public class SampleDeck extends MTGDeckModel{
+public class SampleDeck extends MTGDeckModel {
 
-    public SampleDeck(){
+    public SampleDeck() {
         MTGCardModel mtgCard;
         Card card;
 
@@ -137,7 +137,7 @@ public class SampleDeck extends MTGDeckModel{
         card.setCmc(1.0);
         card.setType("Sorcery");
         card.setText("Fireball deals X damage divided evenly, rounded down, among any number of target creatures and/or players."
-                +"\nFireball costs {1} more to cast for each target beyond the first.");
+                + "\nFireball costs {1} more to cast for each target beyond the first.");
         card.setManaCost("{X}{R}");
         card.setColorIdentity(new String[]{"R"});
         card.setColors(new String[]{"Red"});
@@ -178,7 +178,7 @@ public class SampleDeck extends MTGDeckModel{
         card.setCmc(3.0);
         card.setType("Sorcery");
         card.setText("Hammer of Bogardan deals 3 damage to target creature or player."
-        +"\n{2}{R}{R}{R}: Return Hammer of Bogardan from your graveyard to your hand. Activate this ability only during your upkeep.");
+                + "\n{2}{R}{R}{R}: Return Hammer of Bogardan from your graveyard to your hand. Activate this ability only during your upkeep.");
         card.setManaCost("{1}{R}{R}");
         card.setColorIdentity(new String[]{"R"});
         card.setColors(new String[]{"Red"});
@@ -199,7 +199,7 @@ public class SampleDeck extends MTGDeckModel{
         card.setCmc(6.0);
         card.setType("Creature — Dragon");
         card.setText("Flying"
-                +"\nLandfall — Whenever a land enters the battlefield under your control, Akoum Hellkite deals 1 damage to target creature or player. If that land is a Mountain, Akoum Hellkite deals 2 damage to that creature or player instead.");
+                + "\nLandfall — Whenever a land enters the battlefield under your control, Akoum Hellkite deals 1 damage to target creature or player. If that land is a Mountain, Akoum Hellkite deals 2 damage to that creature or player instead.");
         card.setManaCost("{4}{R}{R}");
         card.setColorIdentity(new String[]{"R"});
         card.setColors(new String[]{"Red"});
@@ -220,7 +220,7 @@ public class SampleDeck extends MTGDeckModel{
         card.setCmc(5.0);
         card.setType("Sorcery");
         card.setText("Arc Blade deals 2 damage to target creature or player. Exile Arc Blade with three time counters on it."
-                +"\nSuspend 3—{2}{R} (Rather than cast this card from your hand, you may pay {2}{R} and exile it with three time counters on it. At the beginning of your upkeep, remove a time counter. When the last is removed, cast it without paying its mana cost.)");
+                + "\nSuspend 3—{2}{R} (Rather than cast this card from your hand, you may pay {2}{R} and exile it with three time counters on it. At the beginning of your upkeep, remove a time counter. When the last is removed, cast it without paying its mana cost.)");
         card.setManaCost("{3}{R}{R}");
         card.setColorIdentity(new String[]{"R"});
         card.setColors(new String[]{"Red"});
@@ -261,7 +261,7 @@ public class SampleDeck extends MTGDeckModel{
         card.setCmc(1.0);
         card.setType("Sorcery");
         card.setText("Banefire deals X damage to target creature or player."
-                +"\nIf X is 5 or more, Banefire can't be countered by spells or abilities and the damage can't be prevented.");
+                + "\nIf X is 5 or more, Banefire can't be countered by spells or abilities and the damage can't be prevented.");
         card.setManaCost("{X}{R}");
         card.setColorIdentity(new String[]{"R"});
         card.setColors(new String[]{"Red"});
@@ -282,7 +282,7 @@ public class SampleDeck extends MTGDeckModel{
         card.setCmc(1.0);
         card.setType("Sorcery");
         card.setText("Conflagrate deals X damage divided as you choose among any number of target creatures and/or players."
-                +"\nFlashback—{R}{R}, Discard X cards. (You may cast this card from your graveyard for its flashback cost. Then exile it.)");
+                + "\nFlashback—{R}{R}, Discard X cards. (You may cast this card from your graveyard for its flashback cost. Then exile it.)");
         card.setManaCost("{X}{X}{R}");
         card.setColorIdentity(new String[]{"R"});
         card.setColors(new String[]{"Red"});
@@ -303,7 +303,7 @@ public class SampleDeck extends MTGDeckModel{
         card.setCmc(2.0);
         card.setType("Instant");
         card.setText("Copy target instant or sorcery spell you control. If Increasing Vengeance was cast from a graveyard, copy that spell twice instead. You may choose new targets for the copies."
-                +"\nFlashback {3}{R}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)");
+                + "\nFlashback {3}{R}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)");
         card.setManaCost("{R}{R}");
         card.setColorIdentity(new String[]{"R"});
         card.setColors(new String[]{"Red"});
@@ -324,7 +324,7 @@ public class SampleDeck extends MTGDeckModel{
         card.setCmc(4.0);
         card.setType("Artifact");
         card.setText("Nevinyrral's Disk enters the battlefield tapped."
-        +"\n{1}, {T}: Destroy all artifacts, creatures, and enchantments.");
+                + "\n{1}, {T}: Destroy all artifacts, creatures, and enchantments.");
         card.setManaCost("{4}");
         card.setColorIdentity(null);
         card.setColors(null);
@@ -345,8 +345,8 @@ public class SampleDeck extends MTGDeckModel{
         card.setCmc(4.0);
         card.setType("Planeswalker — Chandra");
         card.setText("+1: Chandra, the Firebrand deals 1 damage to target creature or player."
-                +"\n−2: When you cast your next instant or sorcery spell this turn, copy that spell. You may choose new targets for the copy."
-                +"\n−6: Chandra, the Firebrand deals 6 damage to each of up to six target creatures and/or players.");
+                + "\n−2: When you cast your next instant or sorcery spell this turn, copy that spell. You may choose new targets for the copy."
+                + "\n−6: Chandra, the Firebrand deals 6 damage to each of up to six target creatures and/or players.");
         card.setManaCost("{3}{R}");
         card.setColorIdentity(new String[]{"R"});
         card.setColors(new String[]{"Red"});
@@ -367,8 +367,8 @@ public class SampleDeck extends MTGDeckModel{
         card.setCmc(6.0);
         card.setType("Planeswalker — Chandra");
         card.setText("+1: Discard a card. If a red card is discarded this way, Chandra Ablaze deals 4 damage to target creature or player."
-                +"\n−2: Each player discards his or her hand, then draws three cards."
-                +"\n−7: Cast any number of red instant and/or sorcery cards from your graveyard without paying their mana costs.");
+                + "\n−2: Each player discards his or her hand, then draws three cards."
+                + "\n−7: Cast any number of red instant and/or sorcery cards from your graveyard without paying their mana costs.");
         card.setManaCost("{4}{R}{R}");
         card.setColorIdentity(new String[]{"R"});
         card.setColors(new String[]{"Red"});
@@ -389,8 +389,8 @@ public class SampleDeck extends MTGDeckModel{
         card.setCmc(5.0);
         card.setType("Planeswalker — Chandra");
         card.setText("+1: Chandra Nalaar deals 1 damage to target player."
-                +"\n−X: Chandra Nalaar deals X damage to target creature."
-                +"\n−8: Chandra Nalaar deals 10 damage to target player and each creature he or she controls.");
+                + "\n−X: Chandra Nalaar deals X damage to target creature."
+                + "\n−8: Chandra Nalaar deals 10 damage to target player and each creature he or she controls.");
         card.setManaCost("{3}{R}{R}");
         card.setColorIdentity(new String[]{"R"});
         card.setColors(new String[]{"Red"});
@@ -411,9 +411,9 @@ public class SampleDeck extends MTGDeckModel{
         card.setCmc(4.0);
         card.setType("Planeswalker — Chandra");
         card.setText("+1: Exile the top card of your library. You may cast that card. If you don't, Chandra, Torch of Defiance deals 2 damage to each opponent."
-                +"\n+1: Add {R}{R} to your mana pool."
-                +"\n−3: Chandra, Torch of Defiance deals 4 damage to target creature."
-                +"\n−7: You get an emblem with \"Whenever you cast a spell, this emblem deals 5 damage to target creature or player.\"");
+                + "\n+1: Add {R}{R} to your mana pool."
+                + "\n−3: Chandra, Torch of Defiance deals 4 damage to target creature."
+                + "\n−7: You get an emblem with \"Whenever you cast a spell, this emblem deals 5 damage to target creature or player.\"");
         card.setManaCost("{2}{R}{R}");
         card.setColorIdentity(new String[]{"R"});
         card.setColors(new String[]{"Red"});

@@ -33,7 +33,7 @@ import org.bdaoust.project7capstone.tools.MTGTools;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeckDetailsFragment extends Fragment{
+public class DeckDetailsFragment extends Fragment {
 
     private boolean mIsLargeLayout;
     private String mFirebaseUserId;
@@ -126,7 +126,7 @@ public class DeckDetailsFragment extends Fragment{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_edit:
                 Intent intent;
 
@@ -138,7 +138,7 @@ public class DeckDetailsFragment extends Fragment{
                 return true;
             case R.id.action_delete:
                 mReferenceDeck.removeValue();
-                ((DecksFragment.OnDeckDeletedListener)getActivity()).onDeckDeleted(mFirebaseUserId, mFirebaseDeckKey);
+                ((DecksFragment.OnDeckDeletedListener) getActivity()).onDeckDeleted(mFirebaseUserId, mFirebaseDeckKey);
 
                 return true;
             default:
@@ -146,7 +146,7 @@ public class DeckDetailsFragment extends Fragment{
         }
     }
 
-    private void showCardDetails(String firebaseCardKey){
+    private void showCardDetails(String firebaseCardKey) {
         CardDetailsDialogFragment cardDetailsDialogFragment;
         FragmentManager fragmentManager;
         Bundle bundle;
@@ -160,7 +160,7 @@ public class DeckDetailsFragment extends Fragment{
 
         fragmentManager = getFragmentManager();
 
-        if(mIsLargeLayout){
+        if (mIsLargeLayout) {
             cardDetailsDialogFragment.show(fragmentManager, "CardDetails");
         } else {
             FragmentTransaction fragmentTransaction;
@@ -168,8 +168,8 @@ public class DeckDetailsFragment extends Fragment{
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.add(android.R.id.content, cardDetailsDialogFragment)
-                .addToBackStack(null)
-                .commit();
+                    .addToBackStack(null)
+                    .commit();
         }
 
     }
@@ -208,7 +208,7 @@ public class DeckDetailsFragment extends Fragment{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 long lastUpdatedTimestamp;
 
-                if(dataSnapshot.exists()) {
+                if (dataSnapshot.exists()) {
                     lastUpdatedTimestamp = dataSnapshot.getValue(Long.class);
 
                     // It is possible that a user could have the current Deck open for editing on a different device.
@@ -237,7 +237,7 @@ public class DeckDetailsFragment extends Fragment{
         mOnDeckValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()) {
+                if (!dataSnapshot.exists()) {
                     ((DecksFragment.OnDeckDeletedListener) getActivity()).onDeckDeleted(mFirebaseUserId, mFirebaseDeckKey);
                 }
             }
@@ -249,13 +249,13 @@ public class DeckDetailsFragment extends Fragment{
 
     }
 
-    private void addFirebaseDBListeners(){
+    private void addFirebaseDBListeners() {
         mReferenceCards.addChildEventListener(mOnCardsChildEventListener);
         mReferenceDeckLastUpdated.addValueEventListener(mOnLastUpdatedValueEventListener);
         mReferenceDeck.addValueEventListener(mOnDeckValueEventListener);
     }
 
-    private void removeFirebaseDBListeners(){
+    private void removeFirebaseDBListeners() {
         mReferenceCards.removeEventListener(mOnCardsChildEventListener);
         mReferenceDeckLastUpdated.removeEventListener(mOnLastUpdatedValueEventListener);
         mReferenceDeck.removeEventListener(mOnDeckValueEventListener);

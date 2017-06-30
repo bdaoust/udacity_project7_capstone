@@ -23,7 +23,7 @@ public class MTGSampleDeckFetcher {
     private boolean mIsDownloadSuccessful;
     private final static String TAG = "MTGSampleDeckFetcher";
 
-    public MTGSampleDeckFetcher(Resources resources){
+    public MTGSampleDeckFetcher(Resources resources) {
         mResources = resources;
     }
 
@@ -55,7 +55,7 @@ public class MTGSampleDeckFetcher {
         downloadCard(393821, 1);// 1 x Chandra Nalaar
         downloadCard(417683, 1); // 1 x Chandra, Torch of Defiance
 
-        if(mDeckCards.size() == mNumbCardsRequested){
+        if (mDeckCards.size() == mNumbCardsRequested) {
             mIsDownloadSuccessful = true;
         }
 
@@ -66,7 +66,7 @@ public class MTGSampleDeckFetcher {
         return mtgDeck;
     }
 
-    public boolean isDownloadSuccessful(){
+    public boolean isDownloadSuccessful() {
         return mIsDownloadSuccessful;
     }
 
@@ -74,7 +74,7 @@ public class MTGSampleDeckFetcher {
         int numbRetries = 2;
         boolean cardDownloaded = false;
 
-        if(mDeckCards.size() < mNumbCardsRequested){
+        if (mDeckCards.size() < mNumbCardsRequested) {
             return;
         }
 

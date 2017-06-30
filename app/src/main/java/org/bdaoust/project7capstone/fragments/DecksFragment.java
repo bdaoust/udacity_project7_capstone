@@ -47,7 +47,7 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_CANCELED;
 
-public class DecksFragment extends Fragment{
+public class DecksFragment extends Fragment {
 
     private CreateDeckDialogFragment mCreateDeckDialogFragment;
     private View mEmptyDeckListView;
@@ -91,7 +91,7 @@ public class DecksFragment extends Fragment{
 
         // Solution for keeping track of the selected position is based on
         // Project Sunshine (https://github.com/udacity/Sunshine-Version-2/blob/sunshine_master/app/src/main/java/com/example/android/sunshine/app/ForecastFragment.java)
-        if(savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)){
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mSelectedPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
 
@@ -144,7 +144,7 @@ public class DecksFragment extends Fragment{
         intentFilter = new IntentFilter("org.bdaoust.project7capstone.NOTIFY_SAMPLE_DECK_DOWNLOAD_FAILED");
         getActivity().registerReceiver(mSampleDeckDownloadFailedBroadcastReceiver, intentFilter);
 
-        if(!isConnected()){
+        if (!isConnected()) {
             mProgressBar.setVisibility(View.GONE);
             Toast.makeText(getContext(), R.string.no_network_connection, Toast.LENGTH_SHORT).show();
         }
@@ -161,7 +161,7 @@ public class DecksFragment extends Fragment{
         getActivity().unregisterReceiver(mSampleDeckDownloadFailedBroadcastReceiver);
 
         mMTGDecks.clear();
-        if(mDeckListAdapter != null) {
+        if (mDeckListAdapter != null) {
             mDeckListAdapter.notifyDataSetChanged();
         }
 
@@ -173,12 +173,12 @@ public class DecksFragment extends Fragment{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if(mDownloadSampleDeckWhenActivityCreated){
+        if (mDownloadSampleDeckWhenActivityCreated) {
             downloadSampleDeck();
             mDownloadSampleDeckWhenActivityCreated = false;
         }
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             // We are only interested in getting the firebaseDeckKey in the event that this is the first time the
             // Fragment is being created (i.e. not being recreated from a rotation) given that on rotation
             // we will fetch the selected Deck position from the savedInstanceState since the user might
@@ -189,13 +189,12 @@ public class DecksFragment extends Fragment{
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == RC_SIGN_IN){
-            if(resultCode == RESULT_CANCELED){
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_CANCELED) {
                 getActivity().finish();
             }
         }
@@ -208,7 +207,7 @@ public class DecksFragment extends Fragment{
             Snackbar snackbar;
 
             mProgressBar.setVisibility(View.GONE);
-            if(mMTGDecks.size() == 0) {
+            if (mMTGDecks.size() == 0) {
                 mEmptyDeckListView.setVisibility(View.VISIBLE);
             }
 
@@ -224,10 +223,10 @@ public class DecksFragment extends Fragment{
         }
     }
 
-    private void downloadSampleDeck(){
+    private void downloadSampleDeck() {
         Intent initSampleDeck;
 
-        if(getContext() != null) {
+        if (getContext() != null) {
             initSampleDeck = new Intent(getContext(), InitSampleDeckService.class);
             initSampleDeck.putExtra(MTGKeys.FIREBASE_USER_ID, mFirebaseUserId);
             getActivity().startService(initSampleDeck);
@@ -269,21 +268,21 @@ public class DecksFragment extends Fragment{
                 position = mDeckListAdapter.findMTGDeckPositionByFirebaseKey(mtgDeck.getFirebaseKey());
                 mDeckListAdapter.notifyItemInserted(position);
 
-                if(mtgDeck.getFirebaseKey().equals(mNewlyCreatedDeckFirebaseKey)){
+                if (mtgDeck.getFirebaseKey().equals(mNewlyCreatedDeckFirebaseKey)) {
                     // New Deck Created
-                    if(position != -1) {
+                    if (position != -1) {
                         mDeckListAdapter.selectDeck(position);
                         mNewlyCreatedDeckFirebaseKey = "";
                     }
-                } else if(mtgDeck.getFirebaseKey().equals(mWidgetSelectedDeckFirebaseKey)){
+                } else if (mtgDeck.getFirebaseKey().equals(mWidgetSelectedDeckFirebaseKey)) {
                     // Deck Selected from Widget
-                    if(position != -1) {
+                    if (position != -1) {
                         mDeckListAdapter.selectDeck(position);
                         mWidgetSelectedDeckFirebaseKey = "";
                     }
-                } else if(mIsFirstDeckAdded) {
+                } else if (mIsFirstDeckAdded) {
                     // First Deck Added to the Deck list
-                    ((OnFirstDeckAddedListener)getActivity()).onFirstDeckAdded(mFirebaseUserId, dataSnapshot.getKey());
+                    ((OnFirstDeckAddedListener) getActivity()).onFirstDeckAdded(mFirebaseUserId, dataSnapshot.getKey());
                     mIsFirstDeckAdded = false;
                 }
 
@@ -291,7 +290,7 @@ public class DecksFragment extends Fragment{
                 mProgressBar.setVisibility(View.GONE);
 
 
-                if(position == mSelectedPosition){
+                if (position == mSelectedPosition) {
                     mRecyclerView.scrollToPosition(position);
                 }
 
@@ -306,7 +305,7 @@ public class DecksFragment extends Fragment{
                 updatedMTGDeck.setFirebaseKey(dataSnapshot.getKey());
                 position = mDeckListAdapter.findMTGDeckPositionByFirebaseKey(updatedMTGDeck.getFirebaseKey());
 
-                if(position != -1){
+                if (position != -1) {
                     mMTGDecks.set(position, updatedMTGDeck);
                     mDeckListAdapter.notifyItemChanged(position);
                 }
@@ -321,16 +320,16 @@ public class DecksFragment extends Fragment{
                 deletedMTGDeck.setFirebaseKey(dataSnapshot.getKey());
                 position = mDeckListAdapter.findMTGDeckPositionByFirebaseKey(deletedMTGDeck.getFirebaseKey());
 
-                if(position != -1){
+                if (position != -1) {
                     mMTGDecks.remove(position);
                     mDeckListAdapter.notifyItemRemoved(position);
                 }
 
-                if(mMTGDecks.size() == 0){
+                if (mMTGDecks.size() == 0) {
                     mEmptyDeckListView.setVisibility(View.VISIBLE);
                 }
 
-                ((DecksFragment.OnDeckDeletedListener)getActivity()).onDeckDeleted(mFirebaseUserId, deletedMTGDeck.getFirebaseKey());
+                ((DecksFragment.OnDeckDeletedListener) getActivity()).onDeckDeleted(mFirebaseUserId, deletedMTGDeck.getFirebaseKey());
             }
 
             @Override
@@ -345,13 +344,13 @@ public class DecksFragment extends Fragment{
         mOnSampleDeckWasSavedValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    Log.d(TAG,"Sample Deck was already saved!");
+                if (dataSnapshot.exists()) {
+                    Log.d(TAG, "Sample Deck was already saved!");
 
-                    if(mMTGDecks.size() == 0){
+                    if (mMTGDecks.size() == 0) {
                         mEmptyDeckListView.setVisibility(View.VISIBLE);
                     }
-                } else if(isConnected()){
+                } else if (isConnected()) {
                     downloadSampleDeck();
                 }
             }
@@ -364,21 +363,21 @@ public class DecksFragment extends Fragment{
 
     }
 
-    private void createFirebaseAuthListener(){
+    private void createFirebaseAuthListener() {
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser firebaseUser;
 
                 firebaseUser = firebaseAuth.getCurrentUser();
-                if(firebaseUser != null){
+                if (firebaseUser != null) {
                     mFirebaseUserId = firebaseUser.getUid();
                     // Even though only one AuthStateListener gets registered, the onAuthStateChanged event
                     // can still gets triggered more than once which has the effect of creating duplicate
                     // Decks in the list. To avoid this, we use a boolean to keep track of whether
                     // onSignedInInitialize() was called or not. This is based on the solution
                     // from YYY: https://stackoverflow.com/questions/37673616/firebase-android-onauthstatechanged-called-twice
-                    if(!mOnSignedInInitializeCalled) {
+                    if (!mOnSignedInInitializeCalled) {
                         Log.d(TAG, "User signed in... calling onSignedInInitialize()");
                         onSignedInInitialize();
                     } else {
@@ -401,7 +400,7 @@ public class DecksFragment extends Fragment{
         };
     }
 
-    private void onSignedInInitialize(){
+    private void onSignedInInitialize() {
         DatabaseReference mReferenceUserRoot;
 
         mReferenceUserRoot = MTGTools.createUserRootReference(mFirebaseDatabase, mFirebaseUserId);
@@ -414,7 +413,7 @@ public class DecksFragment extends Fragment{
             @Override
             public void onDeckSelected(String firebaseUserId, String firebaseKey, int position) {
                 mSelectedPosition = position;
-                ((OnDeckSelectedListener)getActivity()).onDeckSelected(mFirebaseUserId, firebaseKey, position);
+                ((OnDeckSelectedListener) getActivity()).onDeckSelected(mFirebaseUserId, firebaseKey, position);
                 mRecyclerView.scrollToPosition(position);
             }
         });
@@ -424,9 +423,9 @@ public class DecksFragment extends Fragment{
         mOnSignedInInitializeCalled = true;
     }
 
-    private void onSignedOutCleanup(){
+    private void onSignedOutCleanup() {
         mMTGDecks.clear();
-        if(mDeckListAdapter != null) {
+        if (mDeckListAdapter != null) {
             mDeckListAdapter.notifyDataSetChanged();
         }
 
@@ -435,31 +434,31 @@ public class DecksFragment extends Fragment{
         mOnSignedInInitializeCalled = false;
     }
 
-    private void addFirebaseAuthListener(){
-        if(!mFirebaseAuthListenerAdded){
+    private void addFirebaseAuthListener() {
+        if (!mFirebaseAuthListenerAdded) {
             mFirebaseAuth.addAuthStateListener(mAuthStateListener);
             mFirebaseAuthListenerAdded = true;
         }
     }
 
-    private void removeFirebaseAuthListener(){
-        if(mFirebaseAuthListenerAdded) {
+    private void removeFirebaseAuthListener() {
+        if (mFirebaseAuthListenerAdded) {
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
             mFirebaseAuthListenerAdded = false;
         }
     }
 
-    private void addFirebaseDBListeners(){
+    private void addFirebaseDBListeners() {
         mReferenceDecks.addChildEventListener(mOnDecksChildEventListener);
         mReferenceSampleDeckWasSaved.addListenerForSingleValueEvent(mOnSampleDeckWasSavedValueEventListener);
     }
 
-    private void removeFirebaseDBListeners(){
-        if(mReferenceDecks != null) {
+    private void removeFirebaseDBListeners() {
+        if (mReferenceDecks != null) {
             mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
         }
 
-        if(mReferenceSampleDeckWasSaved != null) {
+        if (mReferenceSampleDeckWasSaved != null) {
             mReferenceSampleDeckWasSaved.removeEventListener(mOnSampleDeckWasSavedValueEventListener);
         }
     }

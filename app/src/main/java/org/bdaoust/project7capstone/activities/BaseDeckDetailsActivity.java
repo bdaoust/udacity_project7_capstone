@@ -20,7 +20,7 @@ import org.bdaoust.project7capstone.fragments.DeckDetailsFragment;
 import org.bdaoust.project7capstone.R;
 import org.bdaoust.project7capstone.tools.MTGTools;
 
-public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksFragment.OnDeckDeletedListener{
+public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksFragment.OnDeckDeletedListener {
 
     private ActionBar mActionBar;
     private DatabaseReference mReferenceDeckName;
@@ -38,11 +38,11 @@ public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksF
 
         setContentView(R.layout.activity_deck_details);
 
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mActionBar = getSupportActionBar();
 
-        if(mActionBar != null) {
+        if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -54,7 +54,7 @@ public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksF
 
         createFirebaseDBListeners();
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             FragmentManager fragmentManager;
             FragmentTransaction fragmentTransaction;
             DeckDetailsFragment deckDetailsFragment;
@@ -74,13 +74,13 @@ public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksF
         }
     }
 
-    private void createFirebaseDBListeners(){
+    private void createFirebaseDBListeners() {
         mOnDeckNameValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String deckName;
 
-                if(dataSnapshot.exists()) {
+                if (dataSnapshot.exists()) {
                     deckName = dataSnapshot.getValue(String.class);
 
                     if (mActionBar != null) {
@@ -109,11 +109,11 @@ public class BaseDeckDetailsActivity extends AppCompatActivity implements DecksF
         removeFirebaseDBListeners();
     }
 
-    private void addFirebaseDBListeners(){
+    private void addFirebaseDBListeners() {
         mReferenceDeckName.addValueEventListener(mOnDeckNameValueEventListener);
     }
 
-    private void removeFirebaseDBListeners(){
+    private void removeFirebaseDBListeners() {
         mReferenceDeckName.removeEventListener(mOnDeckNameValueEventListener);
     }
 

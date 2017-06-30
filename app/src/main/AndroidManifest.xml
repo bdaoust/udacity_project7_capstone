@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.MainActivity" android:launchMode="singleTop">
+        <activity
+            android:name=".activities.MainActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,19 +24,29 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.DeckDetailsActivity" android:parentActivityName=".activities.MainActivity" android:launchMode="singleTop"/>
-        <activity android:name=".activities.EditDeckActivity" android:parentActivityName=".activities.DeckDetailsActivity" android:launchMode="singleTop"/>
+        <activity
+            android:name=".activities.DeckDetailsActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activities.EditDeckActivity"
+            android:parentActivityName=".activities.DeckDetailsActivity"
+            android:launchMode="singleTop" />
 
-        <service android:name=".services.InitSampleDeckService" android:exported="false" />
+        <service
+            android:name=".services.InitSampleDeckService"
+            android:exported="false" />
 
-        <service android:name=".services.DecksWidgetService"
+        <service
+            android:name=".services.DecksWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <receiver android:name="DecksAppWidgetProvider" >
+        <receiver android:name="DecksAppWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
+            <meta-data
+                android:name="android.appwidget.provider"
                 android:resource="@xml/decks_appwidget_info" />
         </receiver>
     </application>

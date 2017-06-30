@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="MTGDeckPieChart">
-        <attr name="whitePercentage" format="float"/>
-        <attr name="bluePercentage" format="float"/>
-        <attr name="blackPercentage" format="float"/>
-        <attr name="redPercentage" format="float"/>
-        <attr name="greenPercentage" format="float"/>
+        <attr name="whitePercentage" format="float" />
+        <attr name="bluePercentage" format="float" />
+        <attr name="blackPercentage" format="float" />
+        <attr name="redPercentage" format="float" />
+        <attr name="greenPercentage" format="float" />
     </declare-styleable>
 </resources>

@@ -34,7 +34,7 @@ public class MTGCardsFetcher {
         };
     }
 
-    public void setSets(String sets){
+    public void setSets(String sets) {
         mSets = sets;
     }
 

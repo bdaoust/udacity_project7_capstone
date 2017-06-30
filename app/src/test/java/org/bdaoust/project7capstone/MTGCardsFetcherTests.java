@@ -29,7 +29,7 @@ public class MTGCardsFetcherTests {
     private static final String LIST_OF_SETS = "LEA|LEB|ARN|2ED|CED|CEI|pDRC|ATQ|3ED|LEG|DRK|FEM|pMEI|pLGM|4ED|ICE|CHR|HML|ALL|RQS|pARL|pCEL|MIR|MGB|ITP|VIS|5ED|pPOD|POR|VAN|WTH|pPRE|TMP|STH|PO2|pJGP|EXO|UGL|pALP|USG|ATH|ULG|6ED|PTK|UDS|S99|pGRU|pWOR|pWOS|MMQ|BRB|pSUS|pFNM|pELP|NMS|S00|PCY|BTD|INV|PLS|7ED|pMPR|APC|ODY|DKM|TOR|JUD|ONS|LGN|SCG|pREL|8ED|MRD|DST|5DN|CHK|UNH|BOK|SOK|9ED|RAV|p2HG|pGTW|GPT|pCMP|DIS|CSP|CST|V11|TSP|TSB|pHHO|PLC|pPRO|pGPX|FUT|10E|pMGD|MED|LRW|EVG|pLPA|MOR|p15A|DDH|SHM|pSUM|EVE|DRB|ME2|pWPN|ALA|DD2|CON|DDC|ARB|M10|V09|HOP|ME3|ZEN|DDD|H09|WWK|DDE|ROE|DPA|ARC|M11|V10|DDF|SOM|PD2|ME4|MBS|DDG|NPH|CMD|M12|ISD|PD3|DKA|DDI|AVR|PC2|M13|V12|DDJ|RTR|CM1|GTC|DDK|pWCQ|DGM|MMA|M14|V13|DDL|THS|C13|BNG|DDM|JOU|MD1|CNS|VMA|M15|CPK|V14|DDN|C15|KTK|C14|DD3_DVD|DD3_EVG|DD3_GVL|DD3_JVC|FRF_UGIN|FRF|DDO|DTK|TPR|MM2|ORI|V15|DDP|BFZ|EXP|OGW|DDQ|W16|SOI|EMA|EMN|V16|CN2|DDR|KLD|MPS|C16|PCA|AER|MM3|DDS|AKH|MPS_AKH";
 
     @Before
-    public void setup(){
+    public void setup() {
         mTestStartedTimestamp = System.currentTimeMillis();
     }
 
@@ -59,7 +59,7 @@ public class MTGCardsFetcherTests {
         mCards = mCardsLists.get(0);
 
 
-        for(int i=0; i< mCards.size(); i++){
+        for (int i = 0; i < mCards.size(); i++) {
             Card card;
 
             card = mCards.get(i);
@@ -95,7 +95,7 @@ public class MTGCardsFetcherTests {
         mCards = mCardsLists.get(1);
         multiverseIds = new ArraySet<>();
 
-        for(int i=0; i< mCards.size(); i++){
+        for (int i = 0; i < mCards.size(); i++) {
             Card card;
 
             card = mCards.get(i);
@@ -113,7 +113,7 @@ public class MTGCardsFetcherTests {
         mCards = mCardsLists.get(2);
         multiverseIds = new ArraySet<>();
 
-        for(int i=0; i< mCards.size(); i++){
+        for (int i = 0; i < mCards.size(); i++) {
             Card card;
 
             card = mCards.get(i);
@@ -133,7 +133,7 @@ public class MTGCardsFetcherTests {
         mCards = mCardsLists.get(4);
         multiverseIds = new ArraySet<>();
 
-        for(int i=0; i< mCards.size(); i++){
+        for (int i = 0; i < mCards.size(); i++) {
             Card card;
 
             card = mCards.get(i);
@@ -151,7 +151,7 @@ public class MTGCardsFetcherTests {
         mCards = mCardsLists.get(5);
         multiverseIds = new ArraySet<>();
 
-        for(int i=0; i< mCards.size(); i++){
+        for (int i = 0; i < mCards.size(); i++) {
             Card card;
 
             card = mCards.get(i);
@@ -197,7 +197,7 @@ public class MTGCardsFetcherTests {
         mCards = mCardsLists.get(12);
         multiverseIds = new ArraySet<>();
 
-        for(int i=0; i< mCards.size(); i++){
+        for (int i = 0; i < mCards.size(); i++) {
             Card card;
 
             card = mCards.get(i);
@@ -222,7 +222,7 @@ public class MTGCardsFetcherTests {
         mCards = mCardsLists.get(15);
         multiverseIds = new ArraySet<>();
 
-        for(int i=0; i< mCards.size(); i++){
+        for (int i = 0; i < mCards.size(); i++) {
             Card card;
 
             card = mCards.get(i);
@@ -246,7 +246,7 @@ public class MTGCardsFetcherTests {
         mtgCardsFetcher = new MTGCardsFetcher();
         mtgCardsFetcher.setSets(LIST_OF_SETS);
 
-        try{
+        try {
             mCardsLists = mtgCardsFetcher.fetch(searchTerm);
             mRequestCompleted = true;
         } catch (HttpRequestFailedException e) {
@@ -257,16 +257,16 @@ public class MTGCardsFetcherTests {
     private void waitForTaskToComplete() throws InterruptedException {
         long timeSpent = 0;
 
-        while(!mRequestCompleted && !mRequestFailed && (timeSpent < TIMEOUT)){
+        while (!mRequestCompleted && !mRequestFailed && (timeSpent < TIMEOUT)) {
             timeSpent = System.currentTimeMillis() - mTestStartedTimestamp;
             Thread.sleep(20);
         }
 
-        if(mRequestFailed) {
+        if (mRequestFailed) {
             fail("Test failed due to network failure");
         }
 
-        if(timeSpent >= TIMEOUT){
+        if (timeSpent >= TIMEOUT) {
             fail("Test failed due to timeout");
         }
     }

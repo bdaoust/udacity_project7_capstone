@@ -18,7 +18,7 @@
             android:layout_width="@dimen/icon_button_size"
             android:layout_height="@dimen/icon_button_size"
             android:src="@drawable/ic_expand_less_black_36dp"
-            android:contentDescription="@string/action_increment_card_copies"/>
+            android:contentDescription="@string/action_increment_card_copies" />
 
         <TextView
             android:id="@+id/cardNumbCopies"
@@ -37,7 +37,7 @@
             android:layout_width="@dimen/icon_button_size"
             android:layout_height="@dimen/icon_button_size"
             android:src="@drawable/ic_expand_more_black_36dp"
-            android:contentDescription="@string/action_decrement_card_copies"/>
+            android:contentDescription="@string/action_decrement_card_copies" />
     </LinearLayout>
 
     <ImageView
@@ -57,21 +57,23 @@
         android:layout_toLeftOf="@+id/actionDeleteCardCopies"
         android:layout_toEndOf="@id/cardImage"
         android:layout_toRightOf="@id/cardImage"
-        android:orientation="vertical" >
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/cardName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/edit_card_list_item_card_name_text_size"
             android:textStyle="bold"
-            android:text="@string/edit_card_list_item_card_name_placeholder"/>
+            android:text="@string/edit_card_list_item_card_name_placeholder" />
+
         <TextView
             android:id="@+id/setName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/edit_card_list_item_set_name_text_size"
             android:textStyle="italic"
-            android:text="@string/edit_card_list_item_set_name_placeholder"/>
+            android:text="@string/edit_card_list_item_set_name_placeholder" />
     </LinearLayout>
 
     <ImageButton

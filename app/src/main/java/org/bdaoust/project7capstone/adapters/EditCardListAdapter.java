@@ -27,7 +27,7 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
     private MTGDeckModel mMTGDeck;
     private DatabaseReference mUserRootReference;
 
-    public EditCardListAdapter(Context context, MTGDeckModel mtgDeck, String firebaseUserId){
+    public EditCardListAdapter(Context context, MTGDeckModel mtgDeck, String firebaseUserId) {
         FirebaseDatabase firebaseDatabase;
 
         mContext = context;
@@ -64,13 +64,13 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
         holder.setName.setText(String.valueOf(mtgCard.getSetName()));
         holder.itemView.setTag(mtgCard.getFirebaseKey());
 
-        if(numbCopies == 1){
+        if (numbCopies == 1) {
             disableButton(holder.decrementButton);
         } else {
             enableButton(holder.decrementButton);
         }
 
-        if(numbCopies == 99){
+        if (numbCopies == 99) {
             disableButton(holder.incrementButton);
         } else {
             enableButton(holder.incrementButton);
@@ -82,7 +82,7 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
                 int numbCopies;
 
                 numbCopies = mtgCard.getNumbCopies();
-                if(numbCopies < 99){
+                if (numbCopies < 99) {
                     numbCopies++;
                     updateNumbCardCopies(mMTGDeck.getFirebaseKey(), mtgCard.getFirebaseKey(), numbCopies);
                 }
@@ -96,7 +96,7 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
                 int numbCopies;
 
                 numbCopies = mtgCard.getNumbCopies();
-                if(numbCopies > 1){
+                if (numbCopies > 1) {
                     numbCopies--;
                     updateNumbCardCopies(mMTGDeck.getFirebaseKey(), mtgCard.getFirebaseKey(), numbCopies);
                 }
@@ -121,25 +121,25 @@ public class EditCardListAdapter extends RecyclerView.Adapter<EditCardListAdapte
         return mMTGDeck.getMTGCards().size();
     }
 
-    public void updateNumbCardCopies(String firebaseDeckKey, String firebaseCardKey, int numbCopies){
+    public void updateNumbCardCopies(String firebaseDeckKey, String firebaseCardKey, int numbCopies) {
         DatabaseReference cardNumbCopiesReference;
 
         cardNumbCopiesReference = MTGTools.createTempDeckCardNumbCopiesReference(mUserRootReference, firebaseDeckKey, firebaseCardKey);
         cardNumbCopiesReference.setValue(numbCopies);
     }
 
-    private void disableButton(ImageButton button){
+    private void disableButton(ImageButton button) {
         setDrawableTint(button.getDrawable(), R.color.icon_button_disabled_tint_color);
     }
 
-    private void enableButton(ImageButton button){
+    private void enableButton(ImageButton button) {
         setDrawableTint(button.getDrawable(), R.color.icon_button_tint_color);
     }
 
-    private void setDrawableTint(Drawable drawable, int tintColorResource){
+    private void setDrawableTint(Drawable drawable, int tintColorResource) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             drawable.setTint(mContext.getResources().getColor(tintColorResource, mContext.getTheme()));
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //noinspection deprecation
             drawable.setTint(mContext.getResources().getColor(tintColorResource));
         }

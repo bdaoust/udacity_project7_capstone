@@ -35,13 +35,14 @@
             android:layout_height="wrap_content"
             android:src="@drawable/sad_face"
             tools:ignore="contentDescription" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/empty_deck_list"
             android:textColor="@color/empty_list_text_color"
             android:textSize="@dimen/empty_list_text_size"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -54,5 +55,5 @@
         android:layout_marginRight="@dimen/fab_margin"
         android:contentDescription="@string/action_create_deck"
         android:src="@drawable/ic_add_black_48dp"
-        app:fabSize="normal"/>
+        app:fabSize="normal" />
 </FrameLayout>

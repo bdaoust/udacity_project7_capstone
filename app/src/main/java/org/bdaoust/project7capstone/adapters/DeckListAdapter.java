@@ -110,7 +110,7 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
         mOnDeckSelectedListener = onDeckSelectedListener;
     }
 
-    public void selectDeck(int position){
+    public void selectDeck(int position) {
         String firebaseKey;
 
         notifyItemChanged(mSelectedPosition);
@@ -123,14 +123,14 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckIt
         }
     }
 
-    public int findMTGDeckPositionByFirebaseKey(String firebaseKey){
+    public int findMTGDeckPositionByFirebaseKey(String firebaseKey) {
         int position = -1;
 
-        for(int i= 0; i < mMTGDecks.size(); i++){
+        for (int i = 0; i < mMTGDecks.size(); i++) {
             MTGDeckModel mtgDeck;
 
             mtgDeck = mMTGDecks.get(i);
-            if(mtgDeck.getFirebaseKey().equals(firebaseKey)){
+            if (mtgDeck.getFirebaseKey().equals(firebaseKey)) {
                 position = i;
                 break;
             }

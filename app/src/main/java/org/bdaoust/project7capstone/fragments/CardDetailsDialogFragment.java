@@ -141,13 +141,13 @@ public class CardDetailsDialogFragment extends DialogFragment {
         });
     }
 
-    private void showCardsList(){
+    private void showCardsList() {
         if (mCardsList != null && (mCardsList.getVisibility() == View.INVISIBLE)) {
             mCardsList.setVisibility(View.VISIBLE);
         }
     }
 
-    private void hideCardsList(){
+    private void hideCardsList() {
         if (mCardsList != null) {
             mCardsList.setVisibility(View.INVISIBLE);
         }
@@ -176,7 +176,7 @@ public class CardDetailsDialogFragment extends DialogFragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 MTGCardModel mtgCard;
 
-                if(dataSnapshot.exists()) {
+                if (dataSnapshot.exists()) {
                     mtgCard = dataSnapshot.getValue(MTGCardModel.class);
 
 
@@ -241,7 +241,7 @@ public class CardDetailsDialogFragment extends DialogFragment {
                         mCardLoyalty.setVisibility(View.GONE);
                     }
                 } else {
-                    if(mToolbar != null) {
+                    if (mToolbar != null) {
                         getActivity().onBackPressed();
                     } else {
                         dismiss();

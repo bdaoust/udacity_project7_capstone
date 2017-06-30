@@ -39,7 +39,7 @@ public class InitSampleDeckService extends IntentService {
         mtgSampleDeckFetcher = new MTGSampleDeckFetcher(getResources());
         mtgDeck = mtgSampleDeckFetcher.fetch();
 
-        if(mtgSampleDeckFetcher.isDownloadSuccessful() && !userId.equals("")) {
+        if (mtgSampleDeckFetcher.isDownloadSuccessful() && !userId.equals("")) {
             firebaseDatabase = FirebaseDatabase.getInstance();
             referenceUserRoot = MTGTools.createUserRootReference(firebaseDatabase, userId);
             referenceDecks = MTGTools.createDeckListReference(referenceUserRoot);

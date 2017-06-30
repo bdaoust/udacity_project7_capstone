@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#D32F2F</color>
     <color name="colorAccent">#FFFF00</color>
     <color name="otherColorAccent">#FF5252</color>
-    
+
     <color name="empty_list_background">#DDD</color>
     <color name="empty_list_text_color">#999</color>
 

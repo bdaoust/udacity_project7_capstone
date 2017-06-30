@@ -165,10 +165,10 @@ public class SearchCardsDialogFragment extends DialogFragment implements LoaderM
 
         loaderManager = getLoaderManager();
         loader = loaderManager.getLoader(mCurrentLoaderId);
-        mtgCardSearchLoader = (MTGCardSearchLoader)loader;
+        mtgCardSearchLoader = (MTGCardSearchLoader) loader;
 
         if (loadFromCache) {
-            if(mtgCardSearchLoader.requestFailed()) {
+            if (mtgCardSearchLoader.requestFailed()) {
                 Log.d(TAG, "Last request failed, retrying request #: " + mCurrentLoaderId);
                 loaderManager.restartLoader(mCurrentLoaderId, bundle, this);
             } else {
@@ -181,7 +181,7 @@ public class SearchCardsDialogFragment extends DialogFragment implements LoaderM
                 // In order to reduce unnecessary network requests, the MTGCardSearchLoader waits (~500ms) before
                 // executing a new search. This allows us to cancel "old" search requests in the event that the
                 // user is typing quickly, and that the MTGCardSearchLoader is still waiting.
-                if(mtgCardSearchLoader.isWaitingToSearch()){
+                if (mtgCardSearchLoader.isWaitingToSearch()) {
                     Log.v(TAG, "Cancelling loader #: " + mtgCardSearchLoader.getId());
                     mtgCardSearchLoader.cancelLoad();
                 }
@@ -225,7 +225,7 @@ public class SearchCardsDialogFragment extends DialogFragment implements LoaderM
             Log.d(TAG, "Ignoring data from Loader #: " + loader.getId());
         } else {
             if (cardsList.size() == 0) {
-                if(((MTGCardSearchLoader)loader).requestFailed()){
+                if (((MTGCardSearchLoader) loader).requestFailed()) {
                     showToastWhenReady(R.string.error_loading_search_results);
                 } else {
                     showToastWhenReady(R.string.no_cards_found);

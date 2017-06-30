@@ -39,11 +39,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:ignore="UseCompoundDrawables">
+
             <ImageView
                 android:layout_width="@dimen/widget_color_info_item_image_size"
                 android:layout_height="@dimen/widget_color_info_item_image_size"
                 android:contentDescription="@string/widget_label_color_black"
-                android:background="@drawable/widget_label_black_background"/>
+                android:background="@drawable/widget_label_black_background" />
+
             <TextView
                 android:id="@+id/mtgColorBlack"
                 style="@style/WidgetColorInfoItemText"
@@ -57,11 +59,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:ignore="UseCompoundDrawables">
+
             <ImageView
                 android:layout_width="@dimen/widget_color_info_item_image_size"
                 android:layout_height="@dimen/widget_color_info_item_image_size"
                 android:contentDescription="@string/widget_label_color_blue"
-                android:background="@drawable/widget_label_blue_background"/>
+                android:background="@drawable/widget_label_blue_background" />
+
             <TextView
                 android:id="@+id/mtgColorBlue"
                 style="@style/WidgetColorInfoItemText"
@@ -75,11 +79,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:ignore="UseCompoundDrawables">
+
             <ImageView
                 android:layout_width="@dimen/widget_color_info_item_image_size"
                 android:layout_height="@dimen/widget_color_info_item_image_size"
                 android:contentDescription="@string/widget_label_color_green"
-                android:background="@drawable/widget_label_green_background"/>
+                android:background="@drawable/widget_label_green_background" />
+
             <TextView
                 android:id="@+id/mtgColorGreen"
                 style="@style/WidgetColorInfoItemText"
@@ -93,11 +99,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:ignore="UseCompoundDrawables">
+
             <ImageView
                 android:layout_width="@dimen/widget_color_info_item_image_size"
                 android:layout_height="@dimen/widget_color_info_item_image_size"
                 android:contentDescription="@string/widget_label_color_red"
-                android:background="@drawable/widget_label_red_background"/>
+                android:background="@drawable/widget_label_red_background" />
+
             <TextView
                 android:id="@+id/mtgColorRed"
                 style="@style/WidgetColorInfoItemText"
@@ -111,11 +119,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:ignore="UseCompoundDrawables">
+
             <ImageView
                 android:layout_width="@dimen/widget_color_info_item_image_size"
                 android:layout_height="@dimen/widget_color_info_item_image_size"
                 android:contentDescription="@string/widget_label_color_white"
-                android:background="@drawable/widget_label_white_background"/>
+                android:background="@drawable/widget_label_white_background" />
+
             <TextView
                 android:id="@+id/mtgColorWhite"
                 style="@style/WidgetColorInfoItemText"
@@ -129,11 +139,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:ignore="UseCompoundDrawables">
+
             <ImageView
                 android:layout_width="@dimen/widget_color_info_item_image_size"
                 android:layout_height="@dimen/widget_color_info_item_image_size"
                 android:contentDescription="@string/widget_label_colorless"
-                android:background="@drawable/widget_label_colorless_background"/>
+                android:background="@drawable/widget_label_colorless_background" />
+
             <TextView
                 android:id="@+id/mtgColorless"
                 style="@style/WidgetColorInfoItemText"

@@ -18,7 +18,7 @@ import org.bdaoust.project7capstone.fragments.DecksFragment;
 import org.bdaoust.project7capstone.R;
 
 public class BaseMainActivity extends AppCompatActivity implements DecksFragment.OnDeckSelectedListener,
-        DecksFragment.OnFirstDeckAddedListener, DecksFragment.OnDeckDeletedListener{
+        DecksFragment.OnFirstDeckAddedListener, DecksFragment.OnDeckDeletedListener {
 
     private boolean mIsLargeLayout;
     private boolean mIsActivityInitialCreation;
@@ -35,7 +35,7 @@ public class BaseMainActivity extends AppCompatActivity implements DecksFragment
 
         mIsLargeLayout = getResources().getBoolean(R.bool.large_layout);
 
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mIsActivityInitialCreation = savedInstanceState == null;
@@ -59,7 +59,7 @@ public class BaseMainActivity extends AppCompatActivity implements DecksFragment
         }
     }
 
-    private void loadDetailFragment(String firebaseUserId, String firebaseKey){
+    private void loadDetailFragment(String firebaseUserId, String firebaseKey) {
         FragmentManager fragmentManager;
         FragmentTransaction fragmentTransaction;
         Bundle bundle;
@@ -80,7 +80,7 @@ public class BaseMainActivity extends AppCompatActivity implements DecksFragment
 
     @Override
     public void onDeckSelected(String firebaseUserId, String firebaseKey, int position) {
-        if(mIsLargeLayout){
+        if (mIsLargeLayout) {
             loadDetailFragment(firebaseUserId, firebaseKey);
         } else {
             Intent intent;
@@ -96,20 +96,20 @@ public class BaseMainActivity extends AppCompatActivity implements DecksFragment
 
     @Override
     public void onFirstDeckAdded(String firebaseUserId, String firebaseKey) {
-        if(mIsLargeLayout && mIsActivityInitialCreation) {
+        if (mIsLargeLayout && mIsActivityInitialCreation) {
             Log.d(TAG, "Initial Activity Creation... Loading First Deck");
             loadDetailFragment(firebaseUserId, firebaseKey);
         }
     }
 
     @SuppressWarnings("unused")
-    protected boolean isLargeLayout(){
+    protected boolean isLargeLayout() {
         return mIsLargeLayout;
     }
 
     @Override
     public void onDeckDeleted(String firebaseUserId, String firebaseKey) {
-        if(mIsLargeLayout && firebaseKey.equals(mLoadedDeckFirebaseKey)){
+        if (mIsLargeLayout && firebaseKey.equals(mLoadedDeckFirebaseKey)) {
             FragmentManager fragmentManager;
             FragmentTransaction fragmentTransaction;
 

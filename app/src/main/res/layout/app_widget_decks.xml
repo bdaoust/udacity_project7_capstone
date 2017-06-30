@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/decks"
         android:layout_width="match_parent"
@@ -9,6 +10,7 @@
         android:gravity="center"
         android:background="#fff"
         android:loopViews="true" />
+
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/empty_view"
         android:layout_width="match_parent"

@@ -23,14 +23,14 @@ import java.util.List;
 
 import io.magicthegathering.javasdk.resource.Card;
 
-public class SearchCardListAdapter extends RecyclerView.Adapter<SearchCardListAdapter.SearchCardItemViewHolder>{
+public class SearchCardListAdapter extends RecyclerView.Adapter<SearchCardListAdapter.SearchCardItemViewHolder> {
 
     private Context mContext;
     private List<List<Card>> mCardsLists;
     private OnCardAddedListener mOnCardAddedListener;
     private HashMap<String, Integer> mSpinnerPositionCache;
 
-    public SearchCardListAdapter(Context context, List<List<Card>> cardsLists){
+    public SearchCardListAdapter(Context context, List<List<Card>> cardsLists) {
         mContext = context;
         mCardsLists = cardsLists;
         mSpinnerPositionCache = new HashMap<>();
@@ -62,7 +62,7 @@ public class SearchCardListAdapter extends RecyclerView.Adapter<SearchCardListAd
 
         //All cards will have the same name so we can get the name from the first element
         cardName = cards.get(0).getName();
-        if(mSpinnerPositionCache.containsKey(cardName)) {
+        if (mSpinnerPositionCache.containsKey(cardName)) {
             spinnerPosition = mSpinnerPositionCache.get(cardName);
         }
 
@@ -74,7 +74,7 @@ public class SearchCardListAdapter extends RecyclerView.Adapter<SearchCardListAd
         holder.cardName.setText(cardName);
 
         setNames = new ArrayList<>();
-        for(int i = 0; i < cards.size(); i++){
+        for (int i = 0; i < cards.size(); i++) {
             setNames.add(cards.get(i).getSetName());
         }
 
@@ -102,7 +102,7 @@ public class SearchCardListAdapter extends RecyclerView.Adapter<SearchCardListAd
         holder.addCardBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mOnCardAddedListener != null) {
+                if (mOnCardAddedListener != null) {
                     int position;
 
                     position = holder.setNames.getSelectedItemPosition();
@@ -117,7 +117,7 @@ public class SearchCardListAdapter extends RecyclerView.Adapter<SearchCardListAd
         return mCardsLists.size();
     }
 
-    public void clearSpinnerPositionCache(){
+    public void clearSpinnerPositionCache() {
         mSpinnerPositionCache.clear();
     }
 
@@ -130,7 +130,7 @@ public class SearchCardListAdapter extends RecyclerView.Adapter<SearchCardListAd
         SearchCardItemViewHolder(View itemView) {
             super(itemView);
 
-            cardImage = (ImageView)itemView.findViewById(R.id.cardImage);
+            cardImage = (ImageView) itemView.findViewById(R.id.cardImage);
             cardName = (TextView) itemView.findViewById(R.id.cardName);
             setNames = (Spinner) itemView.findViewById(R.id.setNames);
             addCardBtn = (ImageButton) itemView.findViewById(R.id.actionAddCard);

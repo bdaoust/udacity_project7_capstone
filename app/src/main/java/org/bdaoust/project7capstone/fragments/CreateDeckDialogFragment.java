@@ -25,7 +25,7 @@ import org.bdaoust.project7capstone.tools.MTGTools;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CreateDeckDialogFragment extends DialogFragment{
+public class CreateDeckDialogFragment extends DialogFragment {
 
     private DatabaseReference mReferenceDecks;
     private ChildEventListener mOnDecksChildEventListener;
@@ -67,9 +67,9 @@ public class CreateDeckDialogFragment extends DialogFragment{
                 inputDeckName = mEditDeckName.getText().toString();
                 inputDeckName = inputDeckName.trim();
 
-                if(mDeckNames.contains(inputDeckName.toLowerCase())){
+                if (mDeckNames.contains(inputDeckName.toLowerCase())) {
                     Toast.makeText(getContext(), R.string.deck_name_already_exists, Toast.LENGTH_SHORT).show();
-                } else if (inputDeckName.equals("")){
+                } else if (inputDeckName.equals("")) {
                     Toast.makeText(getContext(), R.string.deck_name_cant_be_null, Toast.LENGTH_SHORT).show();
                 } else {
                     MTGDeckModel mtgDeck;
@@ -83,7 +83,7 @@ public class CreateDeckDialogFragment extends DialogFragment{
                     newDeckReference.setValue(mtgDeck);
                     firebaseKey = newDeckReference.getKey();
 
-                    if(mOnDeckCreatedListener != null){
+                    if (mOnDeckCreatedListener != null) {
                         mOnDeckCreatedListener.onDeckCreated(mFirebaseUserId, firebaseKey);
                     }
 
@@ -147,15 +147,15 @@ public class CreateDeckDialogFragment extends DialogFragment{
         mDeckNames.clear();
     }
 
-    public void setOnDeckCreatedListener(DecksFragment.OnDeckCreatedListener onDeckCreatedListener){
+    public void setOnDeckCreatedListener(DecksFragment.OnDeckCreatedListener onDeckCreatedListener) {
         mOnDeckCreatedListener = onDeckCreatedListener;
     }
 
-    private void addFirebaseDBListeners(){
+    private void addFirebaseDBListeners() {
         mReferenceDecks.addChildEventListener(mOnDecksChildEventListener);
     }
 
-    private void removeFirebaseDBListeners(){
+    private void removeFirebaseDBListeners() {
         mReferenceDecks.removeEventListener(mOnDecksChildEventListener);
     }
 }

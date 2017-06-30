@@ -34,7 +34,7 @@
         android:layout_marginRight="@dimen/icon_button_size"
         android:layout_below="@id/cardName"
         android:layout_toEndOf="@id/cardImage"
-        android:layout_toRightOf="@id/cardImage"/>
+        android:layout_toRightOf="@id/cardImage" />
 
     <ImageButton
         android:id="@+id/actionAddCard"
