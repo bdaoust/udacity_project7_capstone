@@ -3,6 +3,10 @@
 MTG Manager is an easy to use [Magic the Gathering]( http://magic.wizards.com/en) deck manager app that allows you to create and manage various MTG decks, add or remove cards and specify the number of copies of a given card in a deck. MTG Manager uses the [MTG API](https://magicthegathering.io/) to get card information, and all card images are retrieved from Wizard of the Coast's [Gatherer](http://gatherer.wizards.com/Pages/Default.aspx) tool. 
 All card images are *&copy; Wizards of the Coast*.
 
+# Project Goal
+
+The goal of this app is to demonstrate the skills learned through the Udacity Android Developer Nanodegree program. More specifically, MTG Manager showcases the ability to develop an app that follows Material Design guidelines, adapts to various screen sizes, adds support for accessibility, and integrates a third-party library.
+
 # Screenshots
 
 ##### Phone
